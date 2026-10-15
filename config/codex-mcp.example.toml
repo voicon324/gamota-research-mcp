@@ -1,0 +1,18 @@
+# Example only. Copy this server entry into a Codex config after confirming
+# the absolute path to this checkout. This does not enable the server by itself.
+#
+# The smoke uses a disposable SQLite database and synthetic fixture provider.
+# Do not change the provider to apple_rss for this host-integration gate.
+
+[mcp_servers.gamota_research]
+command = "uv"
+args = [
+  "run",
+  "--project",
+  "/ABSOLUTE/PATH/TO/gamota-research-mcp",
+  "python",
+  "-m",
+  "gamota_research.mcp_server",
+]
+cwd = "/ABSOLUTE/PATH/TO/gamota-research-mcp"
+env = { GAMOTA_RESEARCH_DB = "/tmp/gamota-research-codex-smoke.sqlite3", GAMOTA_STORE_PROVIDER = "fixture" }

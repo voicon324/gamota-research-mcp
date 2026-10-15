@@ -1,0 +1,91 @@
+{
+  "generated_for_testing": true,
+  "provider": "synthetic-store-fixture",
+  "source_mode": "FIXTURE",
+  "store_games": [
+    {
+      "game_id": "synthetic-orbit-quest",
+      "store_app_id": "fixture.app.orbit-quest",
+      "title": "Orbit Quest (synthetic test game)",
+      "store": "google_play",
+      "country": "VN",
+      "developer": "Synthetic Fixture Studio",
+      "publisher": "Synthetic Fixture Publisher",
+      "genre": "RPG",
+      "store_url": "fixture://gamota/store/apps/orbit-quest",
+      "source_url": "fixture://gamota/store/apps/orbit-quest",
+      "provider": "synthetic-store-fixture",
+      "source_mode": "FIXTURE",
+      "observed_at": "2026-10-15T00:00:00+00:00",
+      "metadata": {
+        "generated_for_testing": true
+      }
+    },
+    {
+      "game_id": "synthetic-tile-garden",
+      "store_app_id": "fixture.app.tile-garden",
+      "title": "Tile Garden (synthetic test game)",
+      "store": "google_play",
+      "country": "VN",
+      "developer": "Synthetic Fixture Studio",
+      "publisher": "Synthetic Fixture Publisher",
+      "genre": "Puzzle",
+      "store_url": "fixture://gamota/store/apps/tile-garden",
+      "source_url": "fixture://gamota/store/apps/tile-garden",
+      "provider": "synthetic-store-fixture",
+      "source_mode": "FIXTURE",
+      "observed_at": "2026-10-15T00:00:00+00:00",
+      "metadata": {
+        "generated_for_testing": true
+      }
+    }
+  ],
+  "chart_snapshots": [
+    {
+      "store": "google_play",
+      "country": "VN",
+      "chart_type": "top_free",
+      "observed_at": "2026-10-01T00:00:00+00:00",
+      "source_url": "fixture://gamota/store/google_play/VN/top_free/2026-10-01",
+      "items": [
+        {
+          "game_id": "synthetic-orbit-quest",
+          "store_app_id": "fixture.app.orbit-quest",
+          "title": "Orbit Quest (synthetic test game)",
+          "rank": 20,
+          "genre": "RPG"
+        },
+        {
+          "game_id": "synthetic-tile-garden",
+          "store_app_id": "fixture.app.tile-garden",
+          "title": "Tile Garden (synthetic test game)",
+          "rank": 4,
+          "genre": "Puzzle"
+        }
+      ]
+    },
+    {
+      "store": "google_play",
+      "country": "VN",
+      "chart_type": "top_free",
+      "observed_at": "2026-10-15T00:00:00+00:00",
+      "source_url": "fixture://gamota/store/google_play/VN/top_free/2026-10-15",
+      "items": [
+        {
+          "game_id": "synthetic-orbit-quest",
+          "store_app_id": "fixture.app.orbit-quest",
+          "title": "Orbit Quest (synthetic test game)",
+          "rank": 8,
+          "genre": "RPG"
+        },
+        {
+          "game_id": "synthetic-tile-garden",
+          "store_app_id": "fixture.app.tile-garden",
+          "title": "Tile Garden (synthetic test game)",
+          "rank": 6,
+          "genre": "Puzzle"
+        }
+      ]
+    }
+  ]
+}

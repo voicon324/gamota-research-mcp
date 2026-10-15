@@ -1,0 +1,40 @@
+# Mission 2 Evaluation Inventory and Results
+
+This inventory maps the executable behavioral evaluations to the official Mission 2 case categories. The eight tests below establish scenario coverage and assertions. Results below were observed on 2026-10-15 against the current working tree; they are test outcomes, not live market findings.
+
+| Case | Category | Research scenario | Expected behavior asserted by test | Actual result | Pass/Fail | Learning | Evidence |
+|---|---|---|---|---|---|---|---|
+| E1 | GOOD | Assess a mobile-game genre signal using two current independent roots | Validation completes; claim is VALID/STRONG; trace includes both source URLs; lineage finds two supporting independent roots | Passed | PASS | Good path preserves two independent roots and claim trace. | `tests/evals/test_good_research.py::test_good_research_completes_with_two_current_roots_and_a_trace` |
+| E2 | HARD / UNCERTAIN | “Which genre is best?” without decision criterion or market scope | Run requests clarification, records a blocking AMBIGUITY issue and creates no claim | Passed | PASS | Ambiguity blocks unsupported claims and requests scope clarification. | `tests/evals/test_ambiguity.py::test_blocking_ambiguity_requests_clarification_without_fabricating_claim` |
+| E3 | HARD / CONFLICT | Comparable signals point in opposite directions | Validator records a conflict, caps confidence at WEAK and marks the report PARTIAL | Passed | PASS | Conflicting comparable evidence lowers confidence and leaves the run partial. | `tests/evals/test_conflicting_evidence.py::test_opposite_comparable_signals_produce_conflict_and_cap_confidence` |
+| E4 | FAILURE / NUMERIC GUARDRAIL | Claim states 25% growth while linked evidence states 18% | Unsupported numeric assertion is reported; claim is INVALID/INSUFFICIENT and report is INSUFFICIENT_DATA | Passed | PASS | Unsupported numeric claims are rejected. | `tests/evals/test_numeric_hallucination.py::test_claim_percentage_not_present_in_linked_evidence_is_rejected` |
+| E5 | GUARDRAIL / SOURCE LINEAGE | Three articles repeat one original report | Lineage identifies one independent root; SHARED_ORIGIN is reported; confidence is MODERATE, not STRONG | Passed | PASS | Repeated coverage of one root does not count as independent corroboration. | `tests/evals/test_shared_origin.py::test_three_articles_citing_one_report_count_as_one_independent_root` |
+| E6 | HARD / STALE DATA | Evidence is from 2023 while freshness cutoff is 2025 | Evidence remains traceable, is flagged STALE_EVIDENCE and cannot receive more than WEAK confidence | Passed | PASS | Stale evidence remains traceable but cannot support strong confidence. | `tests/evals/test_stale_evidence.py::test_stale_evidence_remains_traceable_but_cannot_receive_strong_confidence` |
+| E7 | FAILURE / SOURCE AVAILABILITY | Source retrieval times out | SOURCE_FAILURE is persisted and inspectable; run becomes INSUFFICIENT_DATA | Passed | PASS | Retrieval failure is recorded without losing run inspectability. | `tests/evals/test_source_failure.py::test_source_failure_is_recorded_and_run_remains_inspectable` |
+| E8 | FAILURE / METRIC GUARDRAIL | Store chart rank is used to support a revenue-growth claim | METRIC_SUPPORT_MISMATCH is reported; claim is INVALID/INSUFFICIENT and report is INSUFFICIENT_DATA | Passed | PASS | Store rank cannot substantiate a revenue-growth claim. | `tests/evals/test_store_rank_guardrail.py::test_store_rank_evidence_cannot_support_revenue_claim` |
+
+Observed commands on 2026-10-15: `uv run pytest tests/evals -q` → **8 passed in 3.22s**; `uv run pytest -q` → **94 passed in 28.37s**.
+
+## Real Codex-host MCP smoke
+
+The smoke used Codex CLI model `gpt-6-sol`, the real connected `gamota_research` MCP server (15 discovered tools), fixture provider, `--approve-for-me` for write calls, and a dedicated SQLite database. The first chart call returned the synthetic game at rank 20 (2026-10-01); the second returned rank 8 (2026-10-15); history reported movement 20→8 (`rank_change=12`). The source, evidence, and claim were persisted from snapshot 2. Evidence metadata explicitly mapped the required contract slot. Finalization returned run `COMPLETE`, claim `VALID/MODERATE`, complete coverage, no missing slots, and no issues. A new Codex host process then read back the finalized run, exact slot metadata, trace, and lineage from the same database successfully. All data in this smoke is synthetic and is not a market finding.
+
+Run ID: `6236bff5-0a0a-41b7-a094-472684d58d45`; source ID: `1b5c51a3-a8bc-449a-bdc9-bb97f26d289e`; evidence ID: `05743041-fcaa-444f-800c-ea241646a510`; claim ID: `e6fd4017-3d29-4965-8466-8a2da8e81b9a`; snapshot 1 ID: `89b901df-dabd-4779-bddd-842034ff5a15`; snapshot 2 ID: `7d7046f7-76f6-4dee-9ca7-b0dd2fa2adeb`. Database: `/tmp/gamota-research-codex-smoke-20261015-direct-1545.sqlite3`.
+
+## Result entry procedure
+
+1. Run the evaluation suite against the exact working tree and record the command, exit code, and per-case outcome.
+2. For each case, fill **Actual** from observed test output (or a current MCP run artifact), then mark Pass/Fail against the stated expectation.
+3. Write **Learning** as a concise interpretation of that observed outcome. Do not claim market findings from synthetic fixtures.
+4. Keep the test code and this report aligned. If the observed behavior differs from the assertion intent, report the failure and investigate before changing the expectation.
+
+## Separate end-to-end product-run evidence
+
+These unit-level behavioral evaluations do not prove that two different research questions have completed the full host-native loop. Add two actual run artifacts after execution:
+
+| Run | Question | Search/source evidence | Grounded claims and trace | Uncertainty/limitations | Result artifact |
+|---|---|---|---|---|---|
+| R1 — good case | PENDING | PENDING | PENDING | PENDING | PENDING |
+| R2 — hard/conflicting/uncertain case | PENDING | PENDING | PENDING | PENDING | PENDING |
+
+The run artifacts must distinguish live sources from synthetic fixtures and preserve enough URLs, quotes, claim/evidence links and validation output for a reviewer to verify the conclusion.
