@@ -59,3 +59,44 @@ Stop and disable the service, restore the previous ingress route/configuration, 
 ## Verification helper
 
 `verify.sh` uses curl and Python's MCP client. Set `MCP_URL` and `GAMOTA_MCP_BEARER_TOKEN` in the protected shell environment, then execute the script. It prints status and tool count, never the token. A successful result is not evidence of public availability until run from the intended network path.
+
+## Static research UI
+
+The evaluator-facing website is a static React/Vite build. Nginx serves it at `/`; the authenticated Python service remains at `/mcp`. Node is needed only to build locally, not at runtime. The page presents canonical R1/R2 artifacts; it does not claim to perform web search itself and never receives the MCP bearer token.
+
+Build from the repository root:
+
+```bash
+cd web
+npm ci
+npm run build
+```
+
+Deploy the contents of `web/dist/` to `/var/www/gamota-research-mcp/` (readable by Nginx). Update only the existing TLS server's `location /` to serve that directory and fall back to `index.html`:
+
+```nginx
+root /var/www/gamota-research-mcp;
+index index.html;
+
+location / {
+    try_files $uri $uri/ /index.html;
+}
+```
+
+Keep the exact existing `location = /mcp` block, including upstream, auth, headers and streaming timeouts, unchanged. Keep the port 80 ACME challenge and HTTPS redirect unchanged. Validate and reload Nginx only:
+
+```bash
+sudo nginx -t
+sudo systemctl reload nginx
+```
+
+UI smoke checks:
+
+```bash
+curl -fsS -o /dev/null -w 'root=%{http_code}\n' https://52.64.163.35/
+curl -sS -o /dev/null -w 'mcp=%{http_code}\n' https://52.64.163.35/mcp
+```
+
+Expected: `/` is `200`; unauthenticated `/mcp` remains `401`. Also open the root in a browser and switch between R1 and R2; verify source links, scope/lineage warnings and endpoint status. Then run `./deploy/verify.sh` with the bearer token in the protected operator environment to confirm authenticated initialization and 15-tool discovery. A frontend-only release must not restart `gamota-research-mcp.service`.
+
+For rollback, restore the previous Nginx `location /` body and run `sudo nginx -t && sudo systemctl reload nginx`; the MCP block and systemd service need no change.

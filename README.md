@@ -12,6 +12,12 @@ The host agent (such as Codex or Claude) plans the research and performs web sea
 
 The fixture store provider is synthetic test data. The Apple RSS provider is a separate explicit live store-data option; it is not used by the fixture smoke. Neither provider changes the host agent's responsibility for web research. Values in automated tests and fixture demonstrations are not market findings.
 
+## Online research desk
+
+The public UI at [https://52.64.163.35/](https://52.64.163.35/) presents two real research runs, their bounded conclusions, claim-to-source traces, provenance caveats and the research workflow. It is a static presentation surface served by Nginx. Switching between R1 and R2 uses the canonical artifacts under `artifacts/real_research/`; it does not start a new search or imply live market data. The page can check that `/mcp` responds with the expected unauthenticated `401` and includes a copyable Codex connection template. The bearer token is never stored in or sent by the UI.
+
+The agent (Codex or Claude) uses its own search tools and connects to the hosted Streamable HTTP MCP endpoint at [https://52.64.163.35/mcp](https://52.64.163.35/mcp). The static UI and MCP route share the HTTPS origin but remain separate: Nginx serves `/` and proxies `/mcp` to the authenticated Python service. See [deployment operations](deploy/README_DEPLOY.md#static-research-ui) for publishing UI updates without restarting MCP.
+
 The official Mission 2 rubric was read from the authenticated portal on 2026-10-15. Implementation and submission evidence are tracked separately; current status and remaining proof are in the [evidence map](docs/mission2-evidence-map.md). The [evaluation report](docs/mission2-evaluation-report.md) records eight executable behavioral cases and two completed real-web research trials. AI usage and decisions are recorded in the [AI evidence log](docs/ai-evidence-log.md).
 
 ## Run locally
