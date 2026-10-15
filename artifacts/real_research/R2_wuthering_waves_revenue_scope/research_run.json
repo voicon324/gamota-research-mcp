@@ -1,0 +1,712 @@
+{
+  "data_mode": "REAL_WEB_RESEARCH",
+  "fixture_used": false,
+  "host_search_used": true,
+  "implementation_commit": "63922f41e398f7e1ad040878669dc48dded41581",
+  "research_run": {
+    "question": "Can public evidence substantiate at least US$100M worldwide iOS+Google Play mobile revenue for Wuthering Waves in its contract-defined first 30 launch days?",
+    "id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+    "status": "PARTIAL",
+    "created_at": "2026-10-15T08:49:00.010836+00:00",
+    "finalized_at": "2026-10-15T08:52:48.007785+00:00",
+    "stop_reason": "BUDGET_EXHAUSTED",
+    "metadata": {
+      "research_contract": {
+        "assumptions": [
+          "third-party analytics estimates are estimates, not official Kuro audited revenue",
+          "never infer first-month values from later cumulative milestones"
+        ],
+        "decision_goal": "determine if exact >=US$100M worldwide mobile-only first-30-day benchmark is substantiated",
+        "domain_tool_budget": 1,
+        "evidence_slots": [
+          "official_or_high_quality_launch_date",
+          "first_month_mobile_only_revenue_estimate",
+          "platform_scope_of_revenue_estimate",
+          "revenue_definition_gross_or_net",
+          "cross_source_revenue_estimate",
+          "known_measurement_limitations",
+          "conflicting_or_noncomparable_estimates"
+        ],
+        "freshness_cutoff": null,
+        "geography": [
+          "worldwide"
+        ],
+        "metrics": [
+          "mobile revenue USD",
+          "platform scope",
+          "gross/net definition",
+          "launch date"
+        ],
+        "planned_query_budget": 5,
+        "question": "Can public evidence substantiate at least US$100M worldwide iOS+Google Play mobile revenue for Wuthering Waves in its contract-defined first 30 launch days?",
+        "research_round_budget": 1,
+        "segments": [],
+        "time_scope": "2024-05-22 through 2024-06-20 inclusive (30 calendar dates; launch day is day 1)"
+      },
+      "research_progress": {
+        "domain_tool_call_count": 0,
+        "reported_search_count": 5,
+        "research_round": 1
+      }
+    }
+  },
+  "research_contract": {
+    "question": "Can public evidence substantiate at least US$100M worldwide iOS+Google Play mobile revenue for Wuthering Waves in its contract-defined first 30 launch days?",
+    "decision_goal": "determine if exact >=US$100M worldwide mobile-only first-30-day benchmark is substantiated",
+    "geography": [
+      "worldwide"
+    ],
+    "time_scope": "2024-05-22 through 2024-06-20 inclusive (30 calendar dates; launch day is day 1)",
+    "metrics": [
+      "mobile revenue USD",
+      "platform scope",
+      "gross/net definition",
+      "launch date"
+    ],
+    "segments": [],
+    "assumptions": [
+      "third-party analytics estimates are estimates, not official Kuro audited revenue",
+      "never infer first-month values from later cumulative milestones"
+    ],
+    "evidence_slots": [
+      "official_or_high_quality_launch_date",
+      "first_month_mobile_only_revenue_estimate",
+      "platform_scope_of_revenue_estimate",
+      "revenue_definition_gross_or_net",
+      "cross_source_revenue_estimate",
+      "known_measurement_limitations",
+      "conflicting_or_noncomparable_estimates"
+    ],
+    "freshness_cutoff": null,
+    "planned_query_budget": 5,
+    "domain_tool_budget": 1,
+    "research_round_budget": 1
+  },
+  "budget_status": {
+    "reported_search_count": 5,
+    "domain_tool_call_count": 0,
+    "research_round": 1,
+    "planned_query_budget": 5,
+    "domain_tool_budget": 1,
+    "research_round_budget": 1,
+    "query_budget_exhausted": true,
+    "domain_budget_exhausted": false,
+    "round_budget_exhausted": true,
+    "within_budget": true
+  },
+  "evidence_slot_coverage": {
+    "required": [
+      "official_or_high_quality_launch_date",
+      "first_month_mobile_only_revenue_estimate",
+      "platform_scope_of_revenue_estimate",
+      "revenue_definition_gross_or_net",
+      "cross_source_revenue_estimate",
+      "known_measurement_limitations",
+      "conflicting_or_noncomparable_estimates"
+    ],
+    "covered": [
+      "official_or_high_quality_launch_date",
+      "platform_scope_of_revenue_estimate",
+      "revenue_definition_gross_or_net",
+      "cross_source_revenue_estimate",
+      "known_measurement_limitations",
+      "conflicting_or_noncomparable_estimates"
+    ],
+    "missing": [
+      "first_month_mobile_only_revenue_estimate"
+    ],
+    "required_count": 7,
+    "covered_count": 6,
+    "complete": false
+  },
+  "claims": [
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "The cited June mobile estimate reports $41.9 million in net revenue.",
+      "id": "fd6c7e10-7b20-48be-94e6-03874baaa83a",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "mobile_revenue_usd_net_june",
+      "metadata": {}
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "The cited launch source reports May 22nd, 2024 as the global launch date.",
+      "id": "bac4c731-1d95-4d88-b77d-33d60db31de5",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "launch_date",
+      "metadata": {}
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "The cited June mobile estimate reports $59.9 million in gross revenue.",
+      "id": "0fce1532-7789-4292-a627-c64b3565af60",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "mobile_revenue_usd_gross_june",
+      "metadata": {}
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "The cited combined-platform estimate reports over $110.2 million across PC and mobile.",
+      "id": "f68c93b0-33c1-4358-9e09-ecc9a7235965",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "pc_plus_mobile_revenue_usd_cumulative",
+      "metadata": {}
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "A later cited mobile estimate reports mobile gross revenue surpassed $100 million.",
+      "id": "65ed93c6-8eaa-415b-97b9-190ff7000e6d",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "mobile_revenue_usd_gross_cumulative",
+      "metadata": {}
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "The cited AppMagic estimate covers Apple’s App Store and the Google Play Store.",
+      "id": "a4f86011-12a6-44d7-9940-0ee4673311c6",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "platform_scope",
+      "metadata": {}
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "text": "The cited AppMagic estimates exclude spending on non-mobile platforms, third-party Android stores, web shops, and ad revenue.",
+      "id": "20827136-6345-47cf-880e-9f1128ebf747",
+      "claim_type": "FACT",
+      "status": "VALID",
+      "confidence_level": "MODERATE",
+      "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+      "target_metric": "measurement_exclusions",
+      "metadata": {}
+    }
+  ],
+  "issues": [
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "code": "MISSING_EVIDENCE",
+      "message": "No directly sourced worldwide iOS App Store plus Google Play mobile revenue estimate was found for exactly 2024-05-22 through 2024-06-20 inclusive. June calendar-month, June 17 PC+mobile, and July cumulative figures cannot establish this benchmark.",
+      "id": "8add5a81-5dc2-43aa-ba31-7c5e355116e2",
+      "severity": "WARNING",
+      "status": "OPEN",
+      "related_claim_id": null,
+      "source_id": null,
+      "evidence_id": null,
+      "created_at": "2026-10-15T08:51:59.474379+00:00",
+      "metadata": {
+        "evidence_slots": [
+          "first_month_mobile_only_revenue_estimate"
+        ],
+        "exact_period_end": "2024-06-20",
+        "exact_period_start": "2024-05-22",
+        "status": "OPEN"
+      }
+    },
+    {
+      "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "code": "GAP",
+      "message": "Required evidence slot is not covered: first_month_mobile_only_revenue_estimate.",
+      "id": "a7407beb-8dc9-572c-991d-b00ff3de3466",
+      "severity": "BLOCKING",
+      "status": "OPEN",
+      "related_claim_id": null,
+      "source_id": null,
+      "evidence_id": null,
+      "created_at": "2026-10-15T08:52:47.902937+00:00",
+      "metadata": {
+        "major": true,
+        "origin": "validator",
+        "required_evidence_slot": "first_month_mobile_only_revenue_estimate"
+      }
+    }
+  ],
+  "validate_only_result": {
+    "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+    "status": "PARTIAL",
+    "confidence": "WEAK",
+    "stop_reason": "BUDGET_EXHAUSTED",
+    "claims": [
+      {
+        "claim_id": "fd6c7e10-7b20-48be-94e6-03874baaa83a",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "bac4c731-1d95-4d88-b77d-33d60db31de5",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "0fce1532-7789-4292-a627-c64b3565af60",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "f68c93b0-33c1-4358-9e09-ecc9a7235965",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "65ed93c6-8eaa-415b-97b9-190ff7000e6d",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "a4f86011-12a6-44d7-9940-0ee4673311c6",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "20827136-6345-47cf-880e-9f1128ebf747",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      }
+    ],
+    "issues": [
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "code": "MISSING_EVIDENCE",
+        "message": "No directly sourced worldwide iOS App Store plus Google Play mobile revenue estimate was found for exactly 2024-05-22 through 2024-06-20 inclusive. June calendar-month, June 17 PC+mobile, and July cumulative figures cannot establish this benchmark.",
+        "id": "8add5a81-5dc2-43aa-ba31-7c5e355116e2",
+        "severity": "WARNING",
+        "status": "OPEN",
+        "related_claim_id": null,
+        "source_id": null,
+        "evidence_id": null,
+        "created_at": "2026-10-15T08:51:59.474379+00:00",
+        "metadata": {
+          "evidence_slots": [
+            "first_month_mobile_only_revenue_estimate"
+          ],
+          "exact_period_end": "2024-06-20",
+          "exact_period_start": "2024-05-22",
+          "status": "OPEN"
+        }
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "code": "GAP",
+        "message": "Required evidence slot is not covered: first_month_mobile_only_revenue_estimate.",
+        "id": "a7407beb-8dc9-572c-991d-b00ff3de3466",
+        "severity": "BLOCKING",
+        "status": "OPEN",
+        "related_claim_id": null,
+        "source_id": null,
+        "evidence_id": null,
+        "created_at": "2026-10-15T08:52:41.108218+00:00",
+        "metadata": {
+          "origin": "validator",
+          "major": true,
+          "required_evidence_slot": "first_month_mobile_only_revenue_estimate"
+        }
+      }
+    ],
+    "validate_only": true,
+    "finalize_allowed": false,
+    "evidence_slot_coverage": {
+      "required": [
+        "official_or_high_quality_launch_date",
+        "first_month_mobile_only_revenue_estimate",
+        "platform_scope_of_revenue_estimate",
+        "revenue_definition_gross_or_net",
+        "cross_source_revenue_estimate",
+        "known_measurement_limitations",
+        "conflicting_or_noncomparable_estimates"
+      ],
+      "covered": [
+        "official_or_high_quality_launch_date",
+        "platform_scope_of_revenue_estimate",
+        "revenue_definition_gross_or_net",
+        "cross_source_revenue_estimate",
+        "known_measurement_limitations",
+        "conflicting_or_noncomparable_estimates"
+      ],
+      "missing": [
+        "first_month_mobile_only_revenue_estimate"
+      ],
+      "required_count": 7,
+      "covered_count": 6,
+      "complete": false
+    },
+    "missing_evidence_slots": [
+      "first_month_mobile_only_revenue_estimate"
+    ],
+    "budget_status": {
+      "reported_search_count": 5,
+      "domain_tool_call_count": 0,
+      "research_round": 1,
+      "planned_query_budget": 5,
+      "domain_tool_budget": 1,
+      "research_round_budget": 1,
+      "query_budget_exhausted": true,
+      "domain_budget_exhausted": false,
+      "round_budget_exhausted": true,
+      "within_budget": true
+    }
+  },
+  "finalize_result": {
+    "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+    "status": "PARTIAL",
+    "confidence": "WEAK",
+    "stop_reason": "BUDGET_EXHAUSTED",
+    "claims": [
+      {
+        "claim_id": "fd6c7e10-7b20-48be-94e6-03874baaa83a",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "bac4c731-1d95-4d88-b77d-33d60db31de5",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "0fce1532-7789-4292-a627-c64b3565af60",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "f68c93b0-33c1-4358-9e09-ecc9a7235965",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "65ed93c6-8eaa-415b-97b9-190ff7000e6d",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "a4f86011-12a6-44d7-9940-0ee4673311c6",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      },
+      {
+        "claim_id": "20827136-6345-47cf-880e-9f1128ebf747",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement."
+      }
+    ],
+    "issues": [
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "code": "MISSING_EVIDENCE",
+        "message": "No directly sourced worldwide iOS App Store plus Google Play mobile revenue estimate was found for exactly 2024-05-22 through 2024-06-20 inclusive. June calendar-month, June 17 PC+mobile, and July cumulative figures cannot establish this benchmark.",
+        "id": "8add5a81-5dc2-43aa-ba31-7c5e355116e2",
+        "severity": "WARNING",
+        "status": "OPEN",
+        "related_claim_id": null,
+        "source_id": null,
+        "evidence_id": null,
+        "created_at": "2026-10-15T08:51:59.474379+00:00",
+        "metadata": {
+          "evidence_slots": [
+            "first_month_mobile_only_revenue_estimate"
+          ],
+          "exact_period_end": "2024-06-20",
+          "exact_period_start": "2024-05-22",
+          "status": "OPEN"
+        }
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "code": "GAP",
+        "message": "Required evidence slot is not covered: first_month_mobile_only_revenue_estimate.",
+        "id": "a7407beb-8dc9-572c-991d-b00ff3de3466",
+        "severity": "BLOCKING",
+        "status": "OPEN",
+        "related_claim_id": null,
+        "source_id": null,
+        "evidence_id": null,
+        "created_at": "2026-10-15T08:52:47.902937+00:00",
+        "metadata": {
+          "major": true,
+          "origin": "validator",
+          "required_evidence_slot": "first_month_mobile_only_revenue_estimate"
+        }
+      }
+    ]
+  },
+  "mcp_tool_call_counts": {
+    "create_research_run": 1,
+    "finalize_research_run": 2,
+    "get_claim_trace": 14,
+    "get_research_run": 2,
+    "record_research_issue": 1,
+    "save_research_claim": 7,
+    "save_research_evidence": 10,
+    "save_research_source": 4,
+    "set_research_contract": 1,
+    "update_research_progress": 1
+  },
+  "host_search_queries_used": 5,
+  "source_pages_read": 4,
+  "source_records": [],
+  "claim_trace_count": 7,
+  "get_research_run_response": {
+    "research_run": {
+      "question": "Can public evidence substantiate at least US$100M worldwide iOS+Google Play mobile revenue for Wuthering Waves in its contract-defined first 30 launch days?",
+      "id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+      "status": "PARTIAL",
+      "created_at": "2026-10-15T08:49:00.010836+00:00",
+      "finalized_at": "2026-10-15T08:52:48.007785+00:00",
+      "stop_reason": "BUDGET_EXHAUSTED",
+      "metadata": {
+        "research_contract": {
+          "assumptions": [
+            "third-party analytics estimates are estimates, not official Kuro audited revenue",
+            "never infer first-month values from later cumulative milestones"
+          ],
+          "decision_goal": "determine if exact >=US$100M worldwide mobile-only first-30-day benchmark is substantiated",
+          "domain_tool_budget": 1,
+          "evidence_slots": [
+            "official_or_high_quality_launch_date",
+            "first_month_mobile_only_revenue_estimate",
+            "platform_scope_of_revenue_estimate",
+            "revenue_definition_gross_or_net",
+            "cross_source_revenue_estimate",
+            "known_measurement_limitations",
+            "conflicting_or_noncomparable_estimates"
+          ],
+          "freshness_cutoff": null,
+          "geography": [
+            "worldwide"
+          ],
+          "metrics": [
+            "mobile revenue USD",
+            "platform scope",
+            "gross/net definition",
+            "launch date"
+          ],
+          "planned_query_budget": 5,
+          "question": "Can public evidence substantiate at least US$100M worldwide iOS+Google Play mobile revenue for Wuthering Waves in its contract-defined first 30 launch days?",
+          "research_round_budget": 1,
+          "segments": [],
+          "time_scope": "2024-05-22 through 2024-06-20 inclusive (30 calendar dates; launch day is day 1)"
+        },
+        "research_progress": {
+          "domain_tool_call_count": 0,
+          "reported_search_count": 5,
+          "research_round": 1
+        }
+      }
+    },
+    "research_contract": {
+      "question": "Can public evidence substantiate at least US$100M worldwide iOS+Google Play mobile revenue for Wuthering Waves in its contract-defined first 30 launch days?",
+      "decision_goal": "determine if exact >=US$100M worldwide mobile-only first-30-day benchmark is substantiated",
+      "geography": [
+        "worldwide"
+      ],
+      "time_scope": "2024-05-22 through 2024-06-20 inclusive (30 calendar dates; launch day is day 1)",
+      "metrics": [
+        "mobile revenue USD",
+        "platform scope",
+        "gross/net definition",
+        "launch date"
+      ],
+      "segments": [],
+      "assumptions": [
+        "third-party analytics estimates are estimates, not official Kuro audited revenue",
+        "never infer first-month values from later cumulative milestones"
+      ],
+      "evidence_slots": [
+        "official_or_high_quality_launch_date",
+        "first_month_mobile_only_revenue_estimate",
+        "platform_scope_of_revenue_estimate",
+        "revenue_definition_gross_or_net",
+        "cross_source_revenue_estimate",
+        "known_measurement_limitations",
+        "conflicting_or_noncomparable_estimates"
+      ],
+      "freshness_cutoff": null,
+      "planned_query_budget": 5,
+      "domain_tool_budget": 1,
+      "research_round_budget": 1
+    },
+    "budget_status": {
+      "reported_search_count": 5,
+      "domain_tool_call_count": 0,
+      "research_round": 1,
+      "planned_query_budget": 5,
+      "domain_tool_budget": 1,
+      "research_round_budget": 1,
+      "query_budget_exhausted": true,
+      "domain_budget_exhausted": false,
+      "round_budget_exhausted": true,
+      "within_budget": true
+    },
+    "evidence_slot_coverage": {
+      "required": [
+        "official_or_high_quality_launch_date",
+        "first_month_mobile_only_revenue_estimate",
+        "platform_scope_of_revenue_estimate",
+        "revenue_definition_gross_or_net",
+        "cross_source_revenue_estimate",
+        "known_measurement_limitations",
+        "conflicting_or_noncomparable_estimates"
+      ],
+      "covered": [
+        "official_or_high_quality_launch_date",
+        "platform_scope_of_revenue_estimate",
+        "revenue_definition_gross_or_net",
+        "cross_source_revenue_estimate",
+        "known_measurement_limitations",
+        "conflicting_or_noncomparable_estimates"
+      ],
+      "missing": [
+        "first_month_mobile_only_revenue_estimate"
+      ],
+      "required_count": 7,
+      "covered_count": 6,
+      "complete": false
+    },
+    "claims": [
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited June mobile estimate reports $41.9 million in net revenue.",
+        "id": "fd6c7e10-7b20-48be-94e6-03874baaa83a",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "mobile_revenue_usd_net_june",
+        "metadata": {}
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited launch source reports May 22nd, 2024 as the global launch date.",
+        "id": "bac4c731-1d95-4d88-b77d-33d60db31de5",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "launch_date",
+        "metadata": {}
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited June mobile estimate reports $59.9 million in gross revenue.",
+        "id": "0fce1532-7789-4292-a627-c64b3565af60",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "mobile_revenue_usd_gross_june",
+        "metadata": {}
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited combined-platform estimate reports over $110.2 million across PC and mobile.",
+        "id": "f68c93b0-33c1-4358-9e09-ecc9a7235965",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "pc_plus_mobile_revenue_usd_cumulative",
+        "metadata": {}
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "A later cited mobile estimate reports mobile gross revenue surpassed $100 million.",
+        "id": "65ed93c6-8eaa-415b-97b9-190ff7000e6d",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "mobile_revenue_usd_gross_cumulative",
+        "metadata": {}
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited AppMagic estimate covers Apple’s App Store and the Google Play Store.",
+        "id": "a4f86011-12a6-44d7-9940-0ee4673311c6",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "platform_scope",
+        "metadata": {}
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited AppMagic estimates exclude spending on non-mobile platforms, third-party Android stores, web shops, and ad revenue.",
+        "id": "20827136-6345-47cf-880e-9f1128ebf747",
+        "claim_type": "FACT",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "target_metric": "measurement_exclusions",
+        "metadata": {}
+      }
+    ],
+    "issues": [
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "code": "MISSING_EVIDENCE",
+        "message": "No directly sourced worldwide iOS App Store plus Google Play mobile revenue estimate was found for exactly 2024-05-22 through 2024-06-20 inclusive. June calendar-month, June 17 PC+mobile, and July cumulative figures cannot establish this benchmark.",
+        "id": "8add5a81-5dc2-43aa-ba31-7c5e355116e2",
+        "severity": "WARNING",
+        "status": "OPEN",
+        "related_claim_id": null,
+        "source_id": null,
+        "evidence_id": null,
+        "created_at": "2026-10-15T08:51:59.474379+00:00",
+        "metadata": {
+          "evidence_slots": [
+            "first_month_mobile_only_revenue_estimate"
+          ],
+          "exact_period_end": "2024-06-20",
+          "exact_period_start": "2024-05-22",
+          "status": "OPEN"
+        }
+      },
+      {
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "code": "GAP",
+        "message": "Required evidence slot is not covered: first_month_mobile_only_revenue_estimate.",
+        "id": "a7407beb-8dc9-572c-991d-b00ff3de3466",
+        "severity": "BLOCKING",
+        "status": "OPEN",
+        "related_claim_id": null,
+        "source_id": null,
+        "evidence_id": null,
+        "created_at": "2026-10-15T08:52:47.902937+00:00",
+        "metadata": {
+          "major": true,
+          "origin": "validator",
+          "required_evidence_slot": "first_month_mobile_only_revenue_estimate"
+        }
+      }
+    ]
+  }
+}

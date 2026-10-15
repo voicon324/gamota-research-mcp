@@ -76,6 +76,8 @@ GAMOTA_STORE_PROVIDER=fixture \
 "$FINAL_ENV/bin/python" -m gamota_research.mcp_server
 ```
 
+For the AITC hosted deployment, follow [`deploy/README_DEPLOY.md`](../deploy/README_DEPLOY.md). It enables Streamable HTTP using `GAMOTA_TRANSPORT=streamable-http`; stdio remains the default. The deployment template binds to `127.0.0.1`, requires a static bearer token and the final public MCP resource URL, and expects TLS at the approved ingress. Do not attach a demo or evidence database to the hosted service.
+
 Use a new, dedicated database path per disposable smoke. Keep Gate F and Gate G evidence databases immutable. The fixture provider is synthetic data; do not describe it as a market observation.
 
 ## 6. Verify the MCP surface and schemas

@@ -13,7 +13,18 @@ This inventory maps the executable behavioral evaluations to the official Missio
 | E7 | FAILURE / SOURCE AVAILABILITY | Source retrieval times out | SOURCE_FAILURE is persisted and inspectable; run becomes INSUFFICIENT_DATA | Passed | PASS | Retrieval failure is recorded without losing run inspectability. | `tests/evals/test_source_failure.py::test_source_failure_is_recorded_and_run_remains_inspectable` |
 | E8 | FAILURE / METRIC GUARDRAIL | Store chart rank is used to support a revenue-growth claim | METRIC_SUPPORT_MISMATCH is reported; claim is INVALID/INSUFFICIENT and report is INSUFFICIENT_DATA | Passed | PASS | Store rank cannot substantiate a revenue-growth claim. | `tests/evals/test_store_rank_guardrail.py::test_store_rank_evidence_cannot_support_revenue_claim` |
 
-Observed commands on 2026-10-15: `uv run pytest tests/evals -q` → **8 passed in 3.22s**; `uv run pytest -q` → **94 passed in 28.37s**.
+Observed commands on 2026-10-15 before HTTP transport work: `uv run pytest tests/evals -q` → **8 passed in 3.22s**; `uv run pytest -q` → **94 passed in 28.37s**. After adding HTTP bearer-auth coverage, `.venv/bin/python -m pytest tests/evals -q` → **8 passed in 13.24s** and `.venv/bin/python -m pytest -q` → **97 passed in 47.86s**. The post-HTTP wheel `gamota_research_mcp-0.1.0-py3-none-any.whl` (SHA-256 `2381cb8774c829341881dc05261fb23e0539c08dce8eee106856e24e96c60a62`) was installed into a clean Python 3.13.11 environment; copied tests passed **8 evals** and **97 tests**. The deployment-helper smoke against MCP SDK 2.3.0 returned `401` with no token, `401` with a wrong bearer, authenticated initialize `PASS`, and 15 tools discovered. A separate isolated authenticated call created a research run and read it back successfully.
+
+## Real web-research end-to-end scenarios
+
+These are bounded host-native research trials, separate from the eight automated tests above. The result is evaluated against the question-specific expected behavior; a `PARTIAL` repository status is a pass for R2 because the required first-30-day evidence is genuinely missing and the validator safely blocks a complete result.
+
+| Case | Category | Expected | Actual | Pass/Fail | Learning | Evidence |
+|---|---|---|---|---|---|---|
+| R1 | GOOD — Pokémon TCG Pocket worldwide traction | Verify launch and download milestone from primary sources; keep downloads distinct from users/revenue; allow a bounded deeper-teardown decision; all required slots covered and claims grounded | Run `8b431e81-015c-4e77-98fb-ee69d0a1d754` finalized COMPLETE; 4/4 claims VALID; 5/5 slots covered; 3 searches; 0 domain calls; trace/source IDs consistent | PASS | Primary official milestone evidence supports a global traction signal, but not Vietnam market fit, revenue or profitability. | [`R1 research summary`](../artifacts/real_research/R1_pokemon_tcg_pocket_traction/research_summary.md), [`run JSON`](../artifacts/real_research/R1_pokemon_tcg_pocket_traction/research_run.json), [`traces`](../artifacts/real_research/R1_pokemon_tcg_pocket_traction/trace.json) |
+| R2 | HARD — Wuthering Waves revenue scope conflict | Preserve platform, period and gross/net distinctions; do not infer the exact first-30-day mobile benchmark from other windows; all factual claims grounded; leave the exact slot missing and stop safely | Run `d5bf9f0f-a484-43d6-9385-4a9f65aec47e` finalized PARTIAL/WEAK; 7/7 claims VALID; 6/7 slots covered; 5 searches; 0 domain calls; one MISSING_EVIDENCE warning and one expected major blocking GAP for the same required slot | PASS | Missing required evidence must remain visible. The major GAP correctly prevents COMPLETE; this is expected by `tests/test_stop_conditions.py::test_missing_required_evidence_slot_creates_blocking_gap_and_partial`. | [`R2 research summary`](../artifacts/real_research/R2_wuthering_waves_revenue_scope/research_summary.md), [`run JSON`](../artifacts/real_research/R2_wuthering_waves_revenue_scope/research_run.json), [`traces`](../artifacts/real_research/R2_wuthering_waves_revenue_scope/trace.json) |
+
+The earlier R1 attempt `7190ff9b-c401-405a-9901-804deace19ce` is diagnostic only: it finalized INSUFFICIENT_DATA because three claims linked evidence with different target metrics. It is not merged into or substituted for the canonical R1 artifact. The earlier R2 diagnostic run `7cd54b61-25d2-47f2-a27d-b3fdb53e081f` remains untouched; its validation-only forensic result identified unsupported numeric tokens in immutable claim text. Both diagnostics demonstrate why failed runs are retained separately from accepted artifacts.
 
 ## Real Codex-host MCP smoke
 
@@ -30,11 +41,4 @@ Run ID: `6236bff5-0a0a-41b7-a094-472684d58d45`; source ID: `1b5c51a3-a8bc-449a-b
 
 ## Separate end-to-end product-run evidence
 
-These unit-level behavioral evaluations do not prove that two different research questions have completed the full host-native loop. Add two actual run artifacts after execution:
-
-| Run | Question | Search/source evidence | Grounded claims and trace | Uncertainty/limitations | Result artifact |
-|---|---|---|---|---|---|
-| R1 — good case | PENDING | PENDING | PENDING | PENDING | PENDING |
-| R2 — hard/conflicting/uncertain case | PENDING | PENDING | PENDING | PENDING | PENDING |
-
-The run artifacts must distinguish live sources from synthetic fixtures and preserve enough URLs, quotes, claim/evidence links and validation output for a reviewer to verify the conclusion.
+These research artifacts use live public sources; the separate fixture smoke remains synthetic. Each artifact preserves URLs, quotes, source quality, claim/evidence links, slot coverage and validator output for review.

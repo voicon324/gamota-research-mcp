@@ -1,0 +1,22 @@
+[Unit]
+Description=Gamota Research MCP (Streamable HTTP)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=REPLACE_WITH_SERVICE_USER
+Group=REPLACE_WITH_SERVICE_USER
+WorkingDirectory=REPLACE_WITH_INSTALL_DIRECTORY
+EnvironmentFile=/etc/gamota-research-mcp/environment
+ExecStart=REPLACE_WITH_INSTALL_DIRECTORY/.venv/bin/python -m gamota_research.mcp_server
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=REPLACE_WITH_PERSISTENT_DB_DIRECTORY
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,430 @@
+{
+  "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+  "traces": [
+    {
+      "claim": {
+        "id": "fd6c7e10-7b20-48be-94e6-03874baaa83a",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited June mobile estimate reports $41.9 million in net revenue.",
+        "claim_type": "FACT",
+        "target_metric": "mobile_revenue_usd_net_june",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "c74c5962-b416-4809-940b-8e0158829e6b",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "f77e412c-def4-4484-ab0f-dd921e16b675",
+            "root_source_id": "f77e412c-def4-4484-ab0f-dd921e16b675",
+            "quote": "The game almost matched the revenue of Genshin Impact, earning $41.9 million in June",
+            "locator": "L33; net definition at L16",
+            "observed_at": "2026-10-15",
+            "metric": "mobile_revenue_usd_net_june",
+            "value": "41900000",
+            "unit": "USD",
+            "market": "worldwide",
+            "period_start": "2024-06-01",
+            "period_end": "2024-06-30",
+            "scope": "AppMagic mobile app revenue; June calendar month",
+            "method": "AppMagic estimate net of store commissions and taxes per same page L16; third-party model",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "conflicting_or_noncomparable_estimates"
+              ],
+              "quality": "secondary analytics digest; AppMagic estimate",
+              "underlying_estimator": "AppMagic"
+            }
+          },
+          "source": {
+            "id": "f77e412c-def4-4484-ab0f-dd921e16b675",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://gamedevreports.substack.com/p/appmagic-top-mobile-games-by-revenue-66e",
+            "title": "AppMagic: Top Mobile Games by Revenue and Downloads in June 2024",
+            "publisher": "GameDev Reports / Dmitriy Byshonkov",
+            "published_at": "2024-07-03",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "f77e412c-def4-4484-ab0f-dd921e16b675",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "quality": "specialist analytics digest citing AppMagic; not audited publisher revenue",
+              "underlying_estimator": "AppMagic"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "claim": {
+        "id": "0fce1532-7789-4292-a627-c64b3565af60",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited June mobile estimate reports $59.9 million in gross revenue.",
+        "claim_type": "FACT",
+        "target_metric": "mobile_revenue_usd_gross_june",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "0d9c3727-0bf5-495a-875a-bd36bc28fac6",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "quote": "According to AppMagic, Wuthering Waves generated $59.9 million in June alone",
+            "locator": "L32; gross definition at L36",
+            "observed_at": "2026-10-15",
+            "metric": "mobile_revenue_usd_gross_june",
+            "value": "59900000",
+            "unit": "USD",
+            "market": "worldwide",
+            "period_start": "2024-06-01",
+            "period_end": "2024-06-30",
+            "scope": "App Store and Google Play; June calendar month",
+            "method": "AppMagic estimate, described as gross by PocketGamer.biz L36",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "conflicting_or_noncomparable_estimates"
+              ],
+              "quality": "specialist trade press citing AppMagic estimate",
+              "underlying_estimator": "AppMagic"
+            }
+          },
+          "source": {
+            "id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://www.pocketgamer.biz/wuthering-waves-sails-past-100-million-in-under-two-months/",
+            "title": "Wuthering Waves sails past $100 million in under two months",
+            "publisher": "PocketGamer.biz",
+            "published_at": "2024-07-16",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "parent_group": "Steel Media / Pocket Gamer network",
+              "quality": "specialist trade press citing third-party analytics; not audited publisher revenue",
+              "underlying_estimator": "AppMagic"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "claim": {
+        "id": "bac4c731-1d95-4d88-b77d-33d60db31de5",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited launch source reports May 22nd, 2024 as the global launch date.",
+        "claim_type": "FACT",
+        "target_metric": "launch_date",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "e8f6d68d-dcbe-468a-94d0-58429b9e1ab0",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "quote": "the game’s official launch on May 22nd, 2024",
+            "locator": "L22",
+            "observed_at": "2026-10-15",
+            "metric": "launch_date",
+            "value": "2024-05-22",
+            "unit": "calendar date",
+            "market": "worldwide",
+            "period_start": "2024-05-22",
+            "period_end": "2024-05-22",
+            "scope": "global launch",
+            "method": "PocketGamer.biz report of official launch date",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "official_or_high_quality_launch_date"
+              ],
+              "quality": "specialist trade press; secondary launch date",
+              "source_lineage": "Steel Media / Pocket Gamer network"
+            }
+          },
+          "source": {
+            "id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://www.pocketgamer.biz/wuthering-waves-sails-past-100-million-in-under-two-months/",
+            "title": "Wuthering Waves sails past $100 million in under two months",
+            "publisher": "PocketGamer.biz",
+            "published_at": "2024-07-16",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "parent_group": "Steel Media / Pocket Gamer network",
+              "quality": "specialist trade press citing third-party analytics; not audited publisher revenue",
+              "underlying_estimator": "AppMagic"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "claim": {
+        "id": "65ed93c6-8eaa-415b-97b9-190ff7000e6d",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "A later cited mobile estimate reports mobile gross revenue surpassed $100 million.",
+        "claim_type": "FACT",
+        "target_metric": "mobile_revenue_usd_gross_cumulative",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "a11f7500-eaef-4451-bb2d-93e5291c0d43",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "quote": "Wuthering Waves has surpassed $100 million in mobile gross revenue ($70m net) across Apple’s App Store and the Google Play Store, according to AppMagic estimates.",
+            "locator": "L21; article date L9",
+            "observed_at": "2026-10-15",
+            "metric": "mobile_revenue_usd_gross_cumulative",
+            "value": "100000000",
+            "unit": "USD (surpassed)",
+            "market": "worldwide",
+            "period_start": "2024-05-22",
+            "period_end": "2024-07-16",
+            "scope": "iOS App Store plus Google Play worldwide; cumulative by July 16 article",
+            "method": "AppMagic estimate as reported by PocketGamer.biz; milestone dated after contract window",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "conflicting_or_noncomparable_estimates"
+              ],
+              "quality": "specialist trade press citing AppMagic estimate",
+              "underlying_estimator": "AppMagic"
+            }
+          },
+          "source": {
+            "id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://www.pocketgamer.biz/wuthering-waves-sails-past-100-million-in-under-two-months/",
+            "title": "Wuthering Waves sails past $100 million in under two months",
+            "publisher": "PocketGamer.biz",
+            "published_at": "2024-07-16",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "parent_group": "Steel Media / Pocket Gamer network",
+              "quality": "specialist trade press citing third-party analytics; not audited publisher revenue",
+              "underlying_estimator": "AppMagic"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "claim": {
+        "id": "f68c93b0-33c1-4358-9e09-ecc9a7235965",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited combined-platform estimate reports over $110.2 million across PC and mobile.",
+        "claim_type": "FACT",
+        "target_metric": "pc_plus_mobile_revenue_usd_cumulative",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "06f813a8-3afe-49c4-94d9-ad04ac4e3c00",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "9a62a30b-3630-4d86-9e72-61cda135ff57",
+            "root_source_id": "9a62a30b-3630-4d86-9e72-61cda135ff57",
+            "quote": "GameLook, which estimated Wuthering Waves’ life-to-date revenue at over 800 million yuan ($110.2 million).",
+            "locator": "L47-48 (platform scope in L48)",
+            "observed_at": "2026-10-15",
+            "metric": "pc_plus_mobile_revenue_usd_cumulative",
+            "value": "110200000",
+            "unit": "USD (over)",
+            "market": "worldwide",
+            "period_start": "2024-05-22",
+            "period_end": "2024-06-17",
+            "scope": "PC plus mobile, life-to-date as reported June 17; worldwide estimate",
+            "method": "GameLook estimate as reported by Game World Observer; not mobile-only",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "cross_source_revenue_estimate",
+                "conflicting_or_noncomparable_estimates"
+              ],
+              "quality": "secondary report of GameLook estimate",
+              "underlying_estimator": "GameLook"
+            }
+          },
+          "source": {
+            "id": "9a62a30b-3630-4d86-9e72-61cda135ff57",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://gameworldobserver.com/2024/06/17/wuthering-waves-110-million-revenue-pc-and-mobile",
+            "title": "Wuthering Waves already generated over $110 million across mobile and PC, Chinese media estimates",
+            "publisher": "Game World Observer",
+            "published_at": "2024-06-17",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "9a62a30b-3630-4d86-9e72-61cda135ff57",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "parent_group": "WN Media Group",
+              "quality": "secondary report of modelled estimate; not audited publisher revenue",
+              "underlying_estimator": "GameLook for PC+mobile; AppMagic for mobile comparator"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "claim": {
+        "id": "20827136-6345-47cf-880e-9f1128ebf747",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited AppMagic estimates exclude spending on non-mobile platforms, third-party Android stores, web shops, and ad revenue.",
+        "claim_type": "FACT",
+        "target_metric": "measurement_exclusions",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "425af09d-fbf6-4b98-b100-d8c8fd53220e",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "quote": "Estimates do not account for player spending on non-mobile platforms, third-party Android stores, web shop revenue or ad revenue.",
+            "locator": "L36",
+            "observed_at": "2026-10-15",
+            "metric": "measurement_exclusions",
+            "value": "non-mobile platforms; third-party Android stores; web shops; ad revenue excluded",
+            "unit": "method limitation",
+            "market": "worldwide",
+            "period_start": null,
+            "period_end": null,
+            "scope": "AppMagic figures in article",
+            "method": "Explicit methodology limitation in PocketGamer.biz report",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "known_measurement_limitations"
+              ],
+              "quality": "secondary report citing AppMagic"
+            }
+          },
+          "source": {
+            "id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://www.pocketgamer.biz/wuthering-waves-sails-past-100-million-in-under-two-months/",
+            "title": "Wuthering Waves sails past $100 million in under two months",
+            "publisher": "PocketGamer.biz",
+            "published_at": "2024-07-16",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "parent_group": "Steel Media / Pocket Gamer network",
+              "quality": "specialist trade press citing third-party analytics; not audited publisher revenue",
+              "underlying_estimator": "AppMagic"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "claim": {
+        "id": "a4f86011-12a6-44d7-9940-0ee4673311c6",
+        "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+        "text": "The cited AppMagic estimate covers Apple’s App Store and the Google Play Store.",
+        "claim_type": "FACT",
+        "target_metric": "platform_scope",
+        "status": "VALID",
+        "confidence_level": "MODERATE",
+        "confidence_rationale": "Claim is valid, but it does not meet every STRONG confidence requirement.",
+        "metadata": {}
+      },
+      "evidence": [
+        {
+          "relation": "SUPPORTS",
+          "evidence": {
+            "id": "0e90ec7c-568d-441a-9c18-4bdf140edb66",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "quote": "across Apple’s App Store and the Google Play Store, according to AppMagic estimates.",
+            "locator": "L21",
+            "observed_at": "2026-10-15",
+            "metric": "platform_scope",
+            "value": "Apple App Store and Google Play Store",
+            "unit": "store coverage",
+            "market": "worldwide",
+            "period_start": null,
+            "period_end": null,
+            "scope": "AppMagic cumulative mobile estimate in article",
+            "method": "Explicit store coverage in PocketGamer.biz report",
+            "source_mode": "LIVE",
+            "metadata": {
+              "evidence_slots": [
+                "platform_scope_of_revenue_estimate"
+              ],
+              "quality": "secondary report citing AppMagic"
+            }
+          },
+          "source": {
+            "id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "run_id": "d5bf9f0f-a484-43d6-9385-4a9f65aec47e",
+            "url": "https://www.pocketgamer.biz/wuthering-waves-sails-past-100-million-in-under-two-months/",
+            "title": "Wuthering Waves sails past $100 million in under two months",
+            "publisher": "PocketGamer.biz",
+            "published_at": "2024-07-16",
+            "accessed_at": "2026-10-15",
+            "source_type": "NEWS",
+            "parent_source_id": null,
+            "root_source_id": "50718db5-61b0-470b-abfd-84570ec18ae0",
+            "provenance_status": "DERIVED",
+            "metadata": {
+              "parent_group": "Steel Media / Pocket Gamer network",
+              "quality": "specialist trade press citing third-party analytics; not audited publisher revenue",
+              "underlying_estimator": "AppMagic"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

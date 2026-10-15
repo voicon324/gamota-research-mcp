@@ -1,9 +1,13 @@
 from __future__ import annotations
 
 import os
+import secrets
 from pathlib import Path
 
 from mcp.server import MCPServer
+from mcp.server.auth.provider import AccessToken, TokenVerifier
+from mcp.server.auth.settings import AuthSettings
+from pydantic import AnyHttpUrl
 
 from .db import Database
 from .domain.apple_rss_provider import AppleRssStoreProvider
@@ -15,12 +19,54 @@ from .service import ResearchService
 from .validator import Validator
 
 
+class StaticBearerTokenVerifier(TokenVerifier):
+    """Verify a pre-shared bearer token without logging or exposing its value."""
+
+    def __init__(self, token: str, resource_url: str) -> None:
+        self._token = token
+        self._resource_url = resource_url
+
+    async def verify_token(self, token: str) -> AccessToken | None:
+        if not secrets.compare_digest(token, self._token):
+            return None
+        return AccessToken(
+            token=token,
+            client_id="gamota-mission2",
+            scopes=["gamota:research"],
+            resource=self._resource_url,
+        )
+
+
+def _http_auth_settings(token: str | None, resource_url: str | None):
+    if not token and not resource_url:
+        return None, None
+    if not token or not resource_url:
+        raise ValueError(
+            "GAMOTA_MCP_BEARER_TOKEN and GAMOTA_PUBLIC_MCP_URL must both be configured"
+        )
+    verifier = StaticBearerTokenVerifier(token, resource_url)
+    settings = AuthSettings(
+        issuer_url=AnyHttpUrl("https://auth.example.com"),
+        resource_server_url=AnyHttpUrl(resource_url),
+        required_scopes=["gamota:research"],
+        validate_token_resource=True,
+    )
+    return verifier, settings
+
+
 def create_mcp_server(
-    service: ResearchService, store_service: StoreService | None = None
+    service: ResearchService,
+    store_service: StoreService | None = None,
+    *,
+    http_bearer_token: str | None = None,
+    public_mcp_url: str | None = None,
 ) -> MCPServer:
+    verifier, auth = _http_auth_settings(http_bearer_token, public_mcp_url)
     server = MCPServer(
         name="gamota-research",
         version="0.1.0",
+        token_verifier=verifier,
+        auth=auth,
         instructions=(
             "Use the host's native web search for public-source discovery; this MCP "
             "stores and validates research evidence rather than providing generic web search. "
@@ -57,6 +103,9 @@ def _build_store_provider(fixture_path: Path):
 
 
 def main() -> None:
+    transport = os.environ.get("GAMOTA_TRANSPORT", "stdio").strip().casefold()
+    if transport not in {"stdio", "streamable-http"}:
+        raise ValueError("GAMOTA_TRANSPORT must be 'stdio' or 'streamable-http'")
     database = Database(_database_path())
     repository = ResearchRepository(database)
     service = ResearchService(repository)
@@ -66,9 +115,29 @@ def main() -> None:
         / "store_fixture.json"
     )
     store_service = StoreService(repository, _build_store_provider(fixture_path))
-    server = create_mcp_server(service, store_service)
+    server = create_mcp_server(
+        service,
+        store_service,
+        http_bearer_token=os.environ.get("GAMOTA_MCP_BEARER_TOKEN")
+        if transport == "streamable-http"
+        else None,
+        public_mcp_url=os.environ.get("GAMOTA_PUBLIC_MCP_URL")
+        if transport == "streamable-http"
+        else None,
+    )
     try:
-        server.run()
+        if transport == "streamable-http":
+            if not os.environ.get("GAMOTA_MCP_BEARER_TOKEN"):
+                raise ValueError("GAMOTA_MCP_BEARER_TOKEN is required for HTTP transport")
+            if not os.environ.get("GAMOTA_PUBLIC_MCP_URL"):
+                raise ValueError("GAMOTA_PUBLIC_MCP_URL is required for HTTP transport")
+            server.run(
+                transport="streamable-http",
+                host=os.environ.get("GAMOTA_HOST", "127.0.0.1"),
+                port=int(os.environ.get("PORT", "8000")),
+            )
+        else:
+            server.run(transport="stdio")
     finally:
         database.close()
 
