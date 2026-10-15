@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "reports": [
+    {
+      "id": "pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-traction-brief-8b431e81-33ffa0f7",
+      "title": "Pokémon TCG Pocket · Global Traction Brief",
+      "game": "Pokémon TCG Pocket",
+      "as_of": "2026-10-15",
+      "confidence": "low",
+      "research_status": "COMPLETE",
+      "path": "./pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-traction-brief-8b431e81-33ffa0f7/report.json"
+    }
+  ]
+}

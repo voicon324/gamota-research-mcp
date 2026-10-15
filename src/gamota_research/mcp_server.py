@@ -15,6 +15,7 @@ from .domain.fixture_provider import FixtureStoreProvider
 from .domain.store_service import StoreService
 from .mcp_tools import register_research_tools
 from .repository import ResearchRepository
+from .reports import ReportService
 from .service import ResearchService
 from .validator import Validator
 
@@ -60,6 +61,7 @@ def create_mcp_server(
     *,
     http_bearer_token: str | None = None,
     public_mcp_url: str | None = None,
+    report_service: ReportService | None = None,
 ) -> MCPServer:
     verifier, auth = _http_auth_settings(http_bearer_token, public_mcp_url)
     server = MCPServer(
@@ -70,6 +72,13 @@ def create_mcp_server(
         instructions=(
             "Use the host's native web search for public-source discovery; this MCP "
             "stores and validates research evidence rather than providing generic web search. "
+            "Workflow: create_research_run, set_research_contract, search/fetch with host tools, "
+            "save_research_source, save_research_evidence, then save_research_claim with linked "
+            "evidence. Use claim_type ESTIMATE for third-party estimates and RECOMMENDATION "
+            "for evidence-linked actions. Record gaps/conflicts, call finalize_research_run, "
+            "then publish_game_decision_brief with a concise host-authored verdict. Partial or "
+            "insufficient-data findings are valid; never fill missing evidence with guesses. "
+            "Read published reports with list_published_reports/get_published_report. "
             "Persist sources and evidence before saving claims. The store provider defaults "
             "to FIXTURE; set GAMOTA_STORE_PROVIDER=apple_rss explicitly for LIVE Apple RSS. "
             "Apple RSS exposes Vietnam Top Free/Top Paid Apps, not a games-only or "
@@ -79,7 +88,17 @@ def create_mcp_server(
         ),
     )
     register_research_tools(
-        server, service, Validator(service.repository), store_service
+        server,
+        service,
+        Validator(service.repository),
+        store_service,
+        report_service or ReportService(
+            service.repository,
+            os.environ.get(
+                "GAMOTA_REPORTS_DIR",
+                str(Path.cwd() / "web" / "public" / "reports"),
+            ),
+        ),
     )
     return server
 
@@ -109,6 +128,13 @@ def main() -> None:
     database = Database(_database_path())
     repository = ResearchRepository(database)
     service = ResearchService(repository)
+    reports_dir = Path(
+        os.environ.get(
+            "GAMOTA_REPORTS_DIR",
+            str(Path.cwd() / "web" / "public" / "reports"),
+        )
+    ).expanduser()
+    report_service = ReportService(repository, reports_dir)
     fixture_path = (
         Path(__file__).resolve().parent
         / "fixtures"
@@ -124,6 +150,7 @@ def main() -> None:
         public_mcp_url=os.environ.get("GAMOTA_PUBLIC_MCP_URL")
         if transport == "streamable-http"
         else None,
+        report_service=report_service,
     )
     try:
         if transport == "streamable-http":

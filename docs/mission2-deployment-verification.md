@@ -4,6 +4,19 @@ Verification date: 2026-10-15
 Endpoint: <https://52.64.163.35/mcp>
 Transport: MCP Streamable HTTP over HTTPS with static bearer authentication
 
+## MVP report release
+
+The MVP release now serves the report library at <https://52.64.163.35/> and report artifacts at <https://52.64.163.35/reports/>. The frontend remains static; the MCP writes published report JSON and Markdown into a separate persistent directory that Nginx exposes read-only.
+
+| Check | Result |
+|---|---|
+| Website `/` | HTTP 200 |
+| Unauthenticated `/mcp` | HTTP 401 |
+| Published report manifest `/reports/index.json` | HTTP 200; seeded with a report compiled from the existing Pokémon TCG Pocket research run |
+| Authenticated MCP initialize | PASS |
+| Authenticated tool discovery | PASS — 18 tools |
+| Report tools | `publish_game_decision_brief`, `list_published_reports`, `get_published_report` |
+
 ## External MCP smoke
 
 The verifier was run from the development machine against the public endpoint, outside the EC2 instance:
@@ -13,7 +26,7 @@ The verifier was run from the development machine against the public endpoint, o
 | Request without bearer token | HTTP 401, expected |
 | Request with wrong bearer token | HTTP 401, expected |
 | Authenticated MCP initialize | PASS |
-| Authenticated tool discovery | PASS — 15 tools |
+| Authenticated tool discovery | PASS — 15 tools (pre-MVP baseline) |
 
 The bearer value and Authorization headers are intentionally omitted from this record, screenshots, video and repository.
 

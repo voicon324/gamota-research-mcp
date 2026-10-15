@@ -15,4 +15,4 @@ args = [
   "gamota_research.mcp_server",
 ]
 cwd = "/ABSOLUTE/PATH/TO/gamota-research-mcp"
-env = { GAMOTA_RESEARCH_DB = "/tmp/gamota-research-codex-smoke.sqlite3", GAMOTA_STORE_PROVIDER = "fixture" }
+env = { GAMOTA_RESEARCH_DB = "/tmp/gamota-research-codex-smoke.sqlite3", GAMOTA_REPORTS_DIR = "/tmp/gamota-research-codex-smoke-reports", GAMOTA_STORE_PROVIDER = "fixture" }

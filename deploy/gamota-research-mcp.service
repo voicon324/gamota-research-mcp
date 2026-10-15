@@ -16,7 +16,7 @@ NoNewPrivileges=true
 PrivateTmp=true
 ProtectSystem=strict
 ProtectHome=true
-ReadWritePaths=REPLACE_WITH_PERSISTENT_DB_DIRECTORY
+ReadWritePaths=REPLACE_WITH_PERSISTENT_DB_DIRECTORY /var/lib/gamota-research-mcp/published-reports
 
 [Install]
 WantedBy=multi-user.target

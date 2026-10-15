@@ -20,6 +20,9 @@ EXPECTED_TOOLS = {
     "get_research_run",
     "get_claim_trace",
     "get_claim_lineage_audit",
+    "publish_game_decision_brief",
+    "list_published_reports",
+    "get_published_report",
 }
 
 
@@ -81,7 +84,11 @@ def test_mcp_protocol_exposes_research_lifecycle_and_preserves_core_behavior(
             assert "validate_only" in finalize_tool.input_schema["properties"]
             tool_names = {tool.name for tool in tool_list.tools}
             assert "web_search" not in tool_names
-            assert not any("game" in name or "store" in name for name in tool_names)
+            assert not any(
+                ("game" in name or "store" in name)
+                and name != "publish_game_decision_brief"
+                for name in tool_names
+            )
 
             run_result = await _call(
                 session,

@@ -54,6 +54,7 @@ class SourceMode(StringEnum):
 
 class ClaimType(StringEnum):
     FACT = "FACT"
+    ESTIMATE = "ESTIMATE"
     INFERENCE = "INFERENCE"
     RECOMMENDATION = "RECOMMENDATION"
 

@@ -19,7 +19,7 @@ In Codex, ask it to run this checklist through the connected `gamota_research` M
 
 ## Assertions and sequence
 
-1. Confirm Codex discovers exactly 15 tools, including `create_research_run`, `set_research_contract`, `search_store_apps`, `get_store_chart_snapshot`, `get_store_chart_history`, `save_research_source`, `save_research_evidence`, `save_research_claim`, `finalize_research_run`, `get_claim_trace`, `get_claim_lineage_audit`, and `get_research_run`.
+1. Confirm Codex discovers exactly 18 tools, including `create_research_run`, `set_research_contract`, `search_store_apps`, `get_store_chart_snapshot`, `get_store_chart_history`, `save_research_source`, `save_research_evidence`, `save_research_claim`, `finalize_research_run`, `get_claim_trace`, `get_claim_lineage_audit`, `get_research_run`, `publish_game_decision_brief`, `list_published_reports`, and `get_published_report`.
 2. Call `create_research_run` with question: `Verify synthetic fixture store-rank evidence through the real Codex host.` Save the returned `run_id`.
 3. Call `set_research_contract` for that run with:
    - `decision_goal`: `Verify Codex can persist and validate synthetic store-rank evidence through Gamota MCP.`

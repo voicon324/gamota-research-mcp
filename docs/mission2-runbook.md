@@ -82,7 +82,7 @@ Use a new, dedicated database path per disposable smoke. Keep Gate F and Gate G 
 
 ## 6. Verify the MCP surface and schemas
 
-Connect with an MCP client and call `list_tools`. The expected surface has exactly these 15 tools:
+Connect with an MCP client and call `list_tools`. The expected surface has exactly these 18 tools:
 
 1. `create_research_run`
 2. `set_research_contract`
@@ -99,6 +99,9 @@ Connect with an MCP client and call `list_tools`. The expected surface has exact
 13. `get_game_details`
 14. `get_store_chart_snapshot`
 15. `get_store_chart_history`
+16. `publish_game_decision_brief`
+17. `list_published_reports`
+18. `get_published_report`
 
 Inspect schemas from the connected server rather than relying on a cached client view. Check that `save_research_claim` includes `existing_claim_id`; `finalize_research_run` includes `validate_only`; and `stop_reason` is optional when `validate_only=true` while normal finalization still requires a valid explicit reason.
 
@@ -110,7 +113,8 @@ Inspect schemas from the connected server rather than relying on a cached client
 4. Save claims linked to evidence. The validator checks grounding, metric compatibility, freshness, evidence slots, comparability, conflicts and provenance.
 5. Use `get_claim_trace` to inspect claim → evidence → source. Use `get_claim_lineage_audit` to inspect direct documents and independent roots.
 6. Call `finalize_research_run(validate_only=true)` to assess without persistence. Compare database hashes before and after if demonstrating purity.
-7. Only if the assessment is clean and `finalize_allowed=true`, finalize with the appropriate explicit stop reason, then read back the run, claim trace and lineage.
+7. If the assessment is complete and `finalize_allowed=true`, finalize with the appropriate explicit stop reason. If evidence is incomplete, still finalize with the matching stop reason so the PARTIAL/INSUFFICIENT_DATA result and its gaps are preserved; do not present it as complete. Read back the run, claim trace and lineage.
+8. For reports, use `claim_type=ESTIMATE` for third-party estimates and `claim_type=RECOMMENDATION` for evidence-linked actions. After finalization, call `publish_game_decision_brief`; partial/insufficient-data runs can publish with unknowns visible. Read the result with `get_published_report`.
 
 Budget semantics: a counter exactly at its limit means exhausted but remains within budget; only a counter greater than its limit is over budget. Validation-only is a pure assessment. For an existing claim, `save_research_claim(existing_claim_id=...)` preserves that claim and its evidence links; it may repair a null `target_metric` only under the tool's constrained rules and does not silently replace claim meaning.
 
@@ -149,13 +153,13 @@ For the final acceptance smoke, configure Codex to launch the final verified env
 
 Run only after official rubric reconciliation (H2) and any resulting changes. Ask Codex through the real connected MCP server to:
 
-1. List all tools and report the count (expected: exactly 15).
+1. List all tools and report the count (expected: exactly 18).
 2. Inspect the fresh schemas, including the finalization and existing-claim fields above.
 3. Call `create_research_run` once with `Mission 2 final Codex MCP smoke test.`
 4. Return the run ID; read the run back and verify it persisted in the dedicated Codex smoke DB.
 5. Do not finalize the disposable smoke run.
 
-Acceptance requires evidence from the actual Codex host: connection established, 15 tools listed, one successful MCP call and returned run ID, plus persistence readback. A direct Python MCP client alone does not satisfy this gate. The older fixture workflow in `tests/manual/codex_host_smoke.md` is an optional broader host integration check and must remain clearly labeled synthetic.
+Acceptance requires evidence from the actual Codex host: connection established, 18 tools listed, one successful MCP call and returned run ID, plus persistence readback. A direct Python MCP client alone does not satisfy this gate. The older fixture workflow in `tests/manual/codex_host_smoke.md` is an optional broader host integration check and must remain clearly labeled synthetic.
 
 ## 12. Troubleshooting
 

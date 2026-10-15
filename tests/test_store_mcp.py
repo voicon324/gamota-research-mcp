@@ -25,6 +25,9 @@ EXPECTED_TOOLS = {
     "get_research_run",
     "get_claim_trace",
     "get_claim_lineage_audit",
+    "publish_game_decision_brief",
+    "list_published_reports",
+    "get_published_report",
     "search_store_apps",
     "get_game_details",
     "get_store_chart_snapshot",
@@ -83,7 +86,7 @@ def test_game_store_tools_run_through_mcp_and_feed_metric_guardrail(repository):
         async with _protocol_session(server) as session:
             listed = await session.list_tools()
             assert {tool.name for tool in listed.tools} == EXPECTED_TOOLS
-            assert len(listed.tools) == 15
+            assert len(listed.tools) == 18
 
             created = await _call(
                 session,

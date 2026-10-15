@@ -1,0 +1,279 @@
+{
+  "schema_version": "1.0",
+  "report": {
+    "id": "pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-traction-brief-8b431e81-33ffa0f7",
+    "type": "game_decision_brief",
+    "title": "Pokémon TCG Pocket · Global Traction Brief",
+    "game": "Pokémon TCG Pocket",
+    "as_of": "2026-10-15",
+    "status": "published",
+    "research_run_id": "8b431e81-015c-4e77-98fb-ee69d0a1d754",
+    "research_status": "COMPLETE",
+    "created_at": "2026-10-15T08:22:44.037508+00:00",
+    "finalized_at": "2026-10-15T08:26:13.894169+00:00"
+  },
+  "scope": {
+    "question": "By 2025-02-27, had Pokémon Trading Card Game Pocket exceeded 100 million worldwide mobile downloads within 120 days of global launch, as a signal to prioritize a deeper competitor/product teardown?",
+    "decision_goal": "Prioritize only a deeper teardown of digital collectible-card/mobile TCG products if the worldwide mobile download milestone is supported; do not infer Vietnam demand, revenue, retention, profitability, or cloning suitability.",
+    "period": {
+      "global_launch_date": "2024-10-30",
+      "milestone_announcement_date": "2025-02-27",
+      "window_days": 120
+    },
+    "markets": [
+      "Worldwide"
+    ],
+    "platforms": [
+      "iOS",
+      "Android"
+    ],
+    "assumptions": [
+      "Downloads are cumulative mobile downloads, distinct from users, players, or active users.",
+      "Native Codex public-web search is the only discovery method; Gamota MCP is the persistent evidence substrate.",
+      "Actual domain tool calls must remain zero."
+    ]
+  },
+  "summary": {
+    "verdict": "DeNA reported over 100 million worldwide mobile downloads by 2025-02-27, 120 elapsed days after the 2024-10-30 global launch. This supports a bounded decision to prioritize a deeper TCG teardown; it does not establish Vietnam demand, revenue, retention, or profitability.",
+    "confidence": "low"
+  },
+  "findings": [
+    {
+      "id": "969dbff0-bc16-4c04-b9ea-a30cffe1218b",
+      "statement": "Pokémon Trading Card Game Pocket globally launched on 2024-10-30.",
+      "type": "fact",
+      "confidence": "low",
+      "evidence_ids": [
+        "babf839c-8c62-4a9e-80f3-79b43e17f06c"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "eab17215-e04e-496a-9f24-7e3b1b1bd5d8",
+      "statement": "The official Pokémon Trading Card Game Pocket mobile launch covered iOS and Android.",
+      "type": "fact",
+      "confidence": "low",
+      "evidence_ids": [
+        "1f71b3ca-dd79-4785-a6b0-2aa7cad2fee6"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "9b9b792e-2433-4a45-a3ff-6eabd5e1dfce",
+      "statement": "By DeNA's 2025-02-27 announcement, Pokémon Trading Card Game Pocket had exceeded 100 million cumulative worldwide mobile downloads.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "0045d892-23da-43a1-9673-5e43b1c39a24",
+        "768d91d4-f2d2-43e8-97dc-1195ee4100eb"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "f265c6a2-5a04-4396-8201-b02540548e4e",
+      "statement": "The traction evidence in this research is worldwide in geographic scope.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "1d9bf508-c7d8-47f3-aa46-23d67d9f0b52"
+      ],
+      "validation": "valid",
+      "implication": null
+    }
+  ],
+  "recommendations": [],
+  "unknowns": [],
+  "metrics": [
+    {
+      "metric": "global_launch_date",
+      "value": "2024-10-30",
+      "unit": "date",
+      "data_type": "reported",
+      "market": "worldwide",
+      "period": null,
+      "scope": "global mobile launch",
+      "evidence_ids": [
+        "babf839c-8c62-4a9e-80f3-79b43e17f06c"
+      ]
+    },
+    {
+      "metric": "supported_mobile_platforms",
+      "value": "iOS/Android",
+      "unit": "platforms",
+      "data_type": "reported",
+      "market": "worldwide",
+      "period": null,
+      "scope": "official mobile launch",
+      "evidence_ids": [
+        "1f71b3ca-dd79-4785-a6b0-2aa7cad2fee6"
+      ]
+    },
+    {
+      "metric": "worldwide_mobile_downloads",
+      "value": ">100,000,000",
+      "unit": "cumulative mobile downloads",
+      "data_type": "reported",
+      "market": "worldwide",
+      "period": null,
+      "scope": "worldwide; iOS and Android mobile app",
+      "evidence_ids": [
+        "0045d892-23da-43a1-9673-5e43b1c39a24",
+        "768d91d4-f2d2-43e8-97dc-1195ee4100eb"
+      ]
+    },
+    {
+      "metric": "geographic_scope",
+      "value": "worldwide",
+      "unit": "geographic scope",
+      "data_type": "reported",
+      "market": "worldwide",
+      "period": null,
+      "scope": "worldwide traction evidence",
+      "evidence_ids": [
+        "1d9bf508-c7d8-47f3-aa46-23d67d9f0b52"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "567d04cc-7c99-4d82-aa07-6517c5c60e76",
+      "url": "https://dena.com/intl/news/4743/",
+      "title": "Pokémon Trading Card Game Pocket the new Pokémon game for mobile devices officially launches today, Wednesday, October 30!",
+      "publisher": "DeNA Co., Ltd.",
+      "published_at": "2024-10-30",
+      "accessed_at": "2026-10-15",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "567d04cc-7c99-4d82-aa07-6517c5c60e76"
+    },
+    {
+      "id": "92e776ee-12db-46ee-8424-417544bead74",
+      "url": "https://dena.com/intl/news/4752/",
+      "title": "Here’s the latest information about Pokémon Trading Card Game Pocket, a Pokémon Trading Card Game app for mobile devices! New Triumphant Light themed booster packs releasing on Friday, February 28! Over 100 Million Downloads Worldwide!",
+      "publisher": "DeNA Co., Ltd.",
+      "published_at": "2025-02-27",
+      "accessed_at": "2026-10-15",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "92e776ee-12db-46ee-8424-417544bead74"
+    },
+    {
+      "id": "637fe083-9c70-4b74-b015-a8b4c60d040b",
+      "url": "https://www.pocketgamer.biz/pokmon-tcg-pocket-surpasses-100-million-downloads/",
+      "title": "Pokémon TCG Pocket surpasses 100 million downloads",
+      "publisher": "PocketGamer.biz",
+      "published_at": "2025-02-28",
+      "accessed_at": "2026-10-15",
+      "provenance_status": "DERIVED",
+      "root_source_id": "92e776ee-12db-46ee-8424-417544bead74"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "babf839c-8c62-4a9e-80f3-79b43e17f06c",
+      "source_id": "567d04cc-7c99-4d82-aa07-6517c5c60e76",
+      "excerpt": "officially launches today, Wednesday, October 30, 2024 in the App Store and Google Play.",
+      "locator": "DeNA launch release, lines 263-276; Product Information lines 315-317",
+      "retrieved_at": "2024-10-30",
+      "metric": "global_launch_date",
+      "value": "2024-10-30",
+      "unit": "date",
+      "market": "worldwide",
+      "period_start": null,
+      "period_end": null,
+      "scope": "global mobile launch",
+      "method": "Direct reading of DeNA official launch announcement",
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "969dbff0-bc16-4c04-b9ea-a30cffe1218b"
+      ]
+    },
+    {
+      "id": "1f71b3ca-dd79-4785-a6b0-2aa7cad2fee6",
+      "source_id": "567d04cc-7c99-4d82-aa07-6517c5c60e76",
+      "excerpt": "Supported OS iOS/Android",
+      "locator": "DeNA launch release, Product Information lines 333-337",
+      "retrieved_at": "2024-10-30",
+      "metric": "supported_mobile_platforms",
+      "value": "iOS/Android",
+      "unit": "platforms",
+      "market": "worldwide",
+      "period_start": null,
+      "period_end": null,
+      "scope": "official mobile launch",
+      "method": "Direct reading of DeNA official Product Information",
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "eab17215-e04e-496a-9f24-7e3b1b1bd5d8"
+      ]
+    },
+    {
+      "id": "0045d892-23da-43a1-9673-5e43b1c39a24",
+      "source_id": "92e776ee-12db-46ee-8424-417544bead74",
+      "excerpt": "Pokémon Trading Card Game Pocket has reached over 100 million downloads worldwide.",
+      "locator": "DeNA 2025-02-27 release, date lines 263-269 and milestone lines 318-322",
+      "retrieved_at": "2025-02-27",
+      "metric": "worldwide_mobile_downloads",
+      "value": ">100,000,000",
+      "unit": "cumulative mobile downloads",
+      "market": "worldwide",
+      "period_start": null,
+      "period_end": null,
+      "scope": "worldwide; iOS and Android mobile app",
+      "method": "Direct reading of publisher announcement",
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "9b9b792e-2433-4a45-a3ff-6eabd5e1dfce"
+      ]
+    },
+    {
+      "id": "768d91d4-f2d2-43e8-97dc-1195ee4100eb",
+      "source_id": "637fe083-9c70-4b74-b015-a8b4c60d040b",
+      "excerpt": "Pokémon Trading Card Game Pocket has surpassed 100 million downloads.",
+      "locator": "PocketGamer.biz, date line 9; milestone lines 17-18 and DeNA attribution line 29",
+      "retrieved_at": "2025-02-27",
+      "metric": "worldwide_mobile_downloads",
+      "value": ">100,000,000",
+      "unit": "cumulative mobile downloads",
+      "market": "worldwide",
+      "period_start": null,
+      "period_end": null,
+      "scope": "worldwide, as attributed to DeNA in article",
+      "method": "Independent industry publication reporting DeNA's stated milestone",
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "9b9b792e-2433-4a45-a3ff-6eabd5e1dfce"
+      ]
+    },
+    {
+      "id": "1d9bf508-c7d8-47f3-aa46-23d67d9f0b52",
+      "source_id": "92e776ee-12db-46ee-8424-417544bead74",
+      "excerpt": "Over 100 Million Downloads Worldwide!",
+      "locator": "DeNA 2025-02-27 release, section heading line 319 and milestone statement line 321",
+      "retrieved_at": "2025-02-27",
+      "metric": "geographic_scope",
+      "value": "worldwide",
+      "unit": "geographic scope",
+      "market": "worldwide",
+      "period_start": null,
+      "period_end": null,
+      "scope": "worldwide traction evidence",
+      "method": "Direct reading of geographic qualifier in official milestone release",
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "f265c6a2-5a04-4396-8201-b02540548e4e"
+      ]
+    }
+  ]
+}

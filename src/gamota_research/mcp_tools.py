@@ -11,6 +11,7 @@ from .enums import ClaimType, EvidenceRelation, IssueSeverity, IssueType, Proven
 from .enums import SourceMode, SourceType, StopReason
 from .domain.store_service import StoreService
 from .service import ResearchService
+from .reports import ReportService
 from .validator import Validator
 
 
@@ -38,6 +39,7 @@ def register_research_tools(
     service: ResearchService,
     validator: Validator,
     store_service: StoreService | None = None,
+    report_service: ReportService | None = None,
 ) -> None:
     """Register MCP adapters for the existing research service and validator."""
 
@@ -373,6 +375,61 @@ def register_research_tools(
         if audit is None:
             raise ToolError(f"Claim not found: {claim_id}")
         return audit
+
+    if report_service is not None:
+
+        @server.tool(
+            description=(
+                "Publish an immutable Game Decision Brief from a finalized research run. "
+                "The verdict is host-authored; findings and recommendations are built "
+                "only from validated, evidence-linked claims. The report is written to "
+                "the configured public reports directory for the website to read."
+            )
+        )
+        def publish_game_decision_brief(
+            run_id: str,
+            title: str,
+            game: str,
+            verdict: str,
+            platforms: list[str] | None = None,
+            markets: list[str] | None = None,
+        ) -> dict[str, Any]:
+            try:
+                report = report_service.publish_game_decision_brief(
+                    run_id=run_id,
+                    title=title,
+                    game=game,
+                    verdict=verdict,
+                    platforms=platforms,
+                    markets=markets,
+                )
+            except (TypeError, ValueError, KeyError) as error:
+                raise ToolError(str(error)) from error
+            return {
+                "report_id": report["report"]["id"],
+                "report_path": f"{report['report']['id']}/report.json",
+                "markdown_path": f"{report['report']['id']}/report.md",
+                "published": True,
+                "research_status": report["report"]["research_status"],
+                "finding_count": len(report["findings"]),
+                "recommendation_count": len(report["recommendations"]),
+                "unknown_count": len(report["unknowns"]),
+                "evidence_count": len(report["evidence"]),
+            }
+
+        @server.tool(description="List published Game Decision Brief metadata for the report library.")
+        def list_published_reports() -> dict[str, Any]:
+            try:
+                return report_service.list_reports()
+            except (OSError, ValueError) as error:
+                raise ToolError(f"Could not read published report manifest: {error}") from error
+
+        @server.tool(description="Read a published report, including findings, sources, and evidence excerpts.")
+        def get_published_report(report_id: str) -> dict[str, Any]:
+            try:
+                return report_service.get_report(report_id)
+            except (OSError, ValueError, KeyError) as error:
+                raise ToolError(str(error)) from error
 
     if store_service is not None:
 

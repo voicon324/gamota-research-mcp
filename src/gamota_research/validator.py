@@ -212,7 +212,7 @@ class Validator:
             if (
                 claim_metric is None
                 and metric_support_items
-                and claim_type in {"FACT", "INFERENCE"}
+                and claim_type in {"FACT", "ESTIMATE", "INFERENCE"}
             ):
                 first_support = min(
                     metric_support_items,

@@ -46,7 +46,12 @@ def test_mcp_stdio_server_initializes_lists_tools_and_accepts_a_call(tmp_path):
                         "get_store_chart_snapshot",
                         "get_store_chart_history",
                     }
-                    assert len(discovered) == 15
+                    assert len(discovered) == 18
+                    assert {
+                        "publish_game_decision_brief",
+                        "list_published_reports",
+                        "get_published_report",
+                    } <= discovered
                     assert existing <= discovered
                     assert domain <= discovered
                     result = await session.call_tool(
