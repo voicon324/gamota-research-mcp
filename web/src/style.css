@@ -8,3 +8,15 @@
 @media(max-width:900px){.published-layout,.published-layout.has-report{grid-template-columns:1fr}.report-library-list{grid-template-columns:repeat(2,minmax(0,1fr))}.report-reader{min-height:250px}}
 @media(max-width:600px){.published-section{padding:35px 0}.published-layout{gap:12px}.report-library-list{grid-template-columns:1fr}.report-search input{width:135px}.reader-heading h3{font-size:20px}.report-reader{padding:15px}}
 .metric-signal{border-top:1px solid #31414c}.metric-signal>button{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 3px;background:none;border:0;text-align:left;cursor:pointer}.metric-signal>button>span{display:grid;grid-template-columns:1fr auto;align-items:center;gap:5px 12px}.metric-signal b{font:10px var(--mono);color:#c1cdd1;text-transform:capitalize}.metric-signal strong{font:600 13px var(--display);color:#edf3f4}.metric-signal strong small{font-size:9px;color:#a1afb5}.metric-signal em{grid-column:1/-1;font:8px var(--mono);font-style:normal;color:#83929a;text-transform:capitalize}.metric-signal>button>svg{color:#91a0a9;flex:none}.metric-evidence{padding:0 10px 11px;border-left:1px solid #536f68;margin-left:3px}.metric-evidence p{font-size:9px;line-height:1.6;color:#d4dfe2}.metric-evidence small{display:block;font:8px var(--mono);color:#82939c}.metric-evidence a{display:inline-flex;align-items:center;gap:5px;color:var(--mint);font-size:9px;margin-top:6px}.reader-sources ul{padding-left:18px;color:#93a1aa;font-size:9px;line-height:1.7}
+
+.nav-item small{margin-left:auto;color:#778791;font:9px var(--mono)}
+.reference-cases{padding:16px 0 28px;border-bottom:1px solid var(--line)}
+.reference-summary{list-style:none;display:flex;justify-content:space-between;align-items:center;gap:18px;padding:15px 17px;border:1px solid #2d3d48;border-radius:5px;background:#151f28;cursor:pointer}
+.reference-summary::-webkit-details-marker{display:none}
+.reference-summary>svg{color:#92a0a9;flex:none;transition:transform .18s}
+.reference-cases[open] .reference-summary>svg{transform:rotate(180deg)}
+.reference-copy{display:grid;gap:5px}
+.reference-copy .section-kicker{color:#93a2ab;font-size:9px}
+.reference-copy>b{font:600 15px var(--display);color:#dce5e8}
+.reference-copy>small{font-size:10px;color:#8b9aa3;line-height:1.5}
+.reference-content{padding-top:22px}

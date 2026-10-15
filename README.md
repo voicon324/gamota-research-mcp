@@ -20,7 +20,7 @@ The fixture store provider is synthetic test data. The Apple RSS provider is a s
 
 ## Online research desk
 
-The public UI at [https://52.64.163.35/](https://52.64.163.35/) includes the two real research case studies plus a published-report library. The library reads the canonical manifest and reports from `/reports/`; selecting a finding opens its evidence and source. Publishing a report through MCP does not start a web search itself. The page can check that `/mcp` responds with the expected unauthenticated `401` and includes a copyable Codex connection template. The bearer token is never stored in or sent by the UI.
+The public UI at [https://52.64.163.35/](https://52.64.163.35/) centers the published-report library, which reads the canonical manifest and reports from `/reports/`; selecting a finding opens its evidence and source. Historical R1/R2 research examples sit in a collapsed reference section and are labeled as examples rather than MCP-published reports. Publishing through MCP does not start a web search itself. The page can check that `/mcp` responds with the expected unauthenticated `401` and includes a copyable Codex connection template. The bearer token is never stored in or sent by the UI.
 
 The agent (Codex or Claude) uses its own search tools and connects to the hosted Streamable HTTP MCP endpoint at [https://52.64.163.35/mcp](https://52.64.163.35/mcp). The static UI and MCP route share the HTTPS origin but remain separate: Nginx serves `/` and proxies `/mcp` to the authenticated Python service. See [deployment operations](deploy/README_DEPLOY.md#static-research-ui) for publishing UI updates without restarting MCP.
 
