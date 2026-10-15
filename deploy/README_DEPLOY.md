@@ -1,6 +1,15 @@
-# AITC server deployment handoff
+# AITC server deployment and operations
 
-This bundle enables Streamable HTTP while preserving stdio. Production transfer and execution are manual by design: the operator must review this package against the server's `connect-server` and `production-deploy-guard` skills, fill in the `VERIFY_AT_G4` values below, and run the steps in the approved workflow. The agent has not connected to or changed the server.
+This bundle enables Streamable HTTP while preserving stdio. It also documents the current hosted deployment and retains the installation, verification and rollback procedure for future operations.
+
+## Current deployment status (2026-10-15)
+
+- Public MCP endpoint: `https://52.64.163.35/mcp` (bearer authentication required).
+- The systemd application service and Nginx reverse proxy are active; the application binds to loopback behind Nginx.
+- HTTPS is enabled with a Let's Encrypt IP certificate; automated renewal is configured.
+- External MCP verification: unauthenticated request `401`; wrong bearer `401`; authenticated initialize `PASS`; authenticated discovery `15 tools`.
+- The deployed checkout was read-only verified at revision `415e59513596fabd375cff2fbcc73817eb23375a`, clean, with both service and Nginx active.
+- The bearer value, private key, environment contents and Authorization headers are intentionally omitted. See [`../docs/mission2-deployment-verification.md`](../docs/mission2-deployment-verification.md) for sanitized evidence.
 
 ## Confirmed contract
 

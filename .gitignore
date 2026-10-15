@@ -15,3 +15,5 @@ build/
 *.egg-info/
 .ruff_cache/
 .mypy_cache/
+/presentation/remotion/
+/artifacts/submission/mission2-presentation.mp4

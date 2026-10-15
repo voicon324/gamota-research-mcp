@@ -1,6 +1,6 @@
 # Mission 2 MVP Evaluator Runbook
 
-> The official Mission 2 rubric was read from the authenticated portal on 2026-10-15. H2 remains GAP while the evaluation report, two-question demo evidence and submission artifacts are completed. See `mission2-evidence-map.md` for criterion status and `mission2-evaluation-report.md` for the case inventory.
+> The official Mission 2 rubric was read from the authenticated portal on 2026-10-15. The hosted MCP endpoint is live and externally verified; see [`mission2-deployment-verification.md`](mission2-deployment-verification.md). H2 remains GAP only for the owner-dependent Mission 1 Q2 evidence and final submission audit. See `mission2-evidence-map.md` for criterion status and `mission2-evaluation-report.md` for the case inventory.
 
 ## 1. Prerequisites
 

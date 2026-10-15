@@ -1,10 +1,10 @@
 # Mission 2 Evidence Map
 
-> **Official rubric verified:** 2026-10-15 from the authenticated `portal.agentlize.dev/mission/2` page. Research, Codex fixture-smoke, local HTTP smoke, public GitHub repository and Remotion presentation video are recorded; production deployment and owner-provided Mission 1 rationale remain open.
+> **Official rubric verified:** 2026-10-15 from the authenticated `portal.agentlize.dev/mission/2` page. Research, Codex fixture-smoke, local and hosted HTTP verification, and the public GitHub repository are recorded. The hosted endpoint is live. The presentation MP4 is a separate submission artifact; video source is not published. Owner-provided Mission 1 rationale remains open.
 
 ## Executive result
 
-The technical MVP evidence currently covers the implementation and gates listed below. Canonical real-web research artifacts R1 and R2 now cover two distinct questions. The standout system behavior is that it preserves source lineage and refuses to turn incompatible platform/time/definition figures into an unsupported benchmark. The separate deterministic lineage demonstration shows that **three citations can represent only one independent evidentiary root**. The official rubric also requires an evaluation report in a specific format, three written answers, an AI usage log, a public repository, an online demo or reason for not deploying, and a short presentation. Remaining items are tracked below and in `mission2-evaluation-report.md`.
+The technical MVP evidence currently covers the implementation and gates listed below. Canonical real-web research artifacts R1 and R2 now cover two distinct questions. The standout system behavior is that it preserves source lineage and refuses to turn incompatible platform/time/definition figures into an unsupported benchmark. The separate deterministic lineage demonstration shows that **three citations can represent only one independent evidentiary root**. The official rubric also requires an evaluation report in a specific format, three written answers, an AI usage log, a public repository, an online demo or reason for not deploying, and a short presentation. The hosted MCP endpoint is live and externally verified; sanitized evidence is in `mission2-deployment-verification.md`. Remaining items are tracked below and in `mission2-evaluation-report.md`.
 
 The official rubric has been read and reconciled. H2 remains open for submission artifacts and owner-provided Mission 1 context; a Codex-host fixture smoke and two actual research runs are recorded.
 
@@ -84,25 +84,25 @@ The submission must answer three questions: (Q1) what the MVP chose to implement
 | Each case has Expected → Actual → Pass/Fail → Learning | PASS — evaluation report | Eight executable cases and two real research trials each have the required fields. |
 | Q1 selected slice and feasibility | DRAFT | README Q1 draft; owner review remains. |
 | Q2 Mission 1 decision change and trigger | GAP — owner input | Requires the actual Mission 1 decision and evidence that changed it. No inference made. |
-| Q3 limitation, cause and next priority | PARTIAL | R2 demonstrates the limitation: numeric token validation is strict and required evidence gaps force PARTIAL. Further improvement priority is robust date/amount normalization and deployed HTTP transport, without weakening validation. |
+| Q3 limitation, cause and next priority | PARTIAL | R2 demonstrates strict scope/date/metric grounding when required evidence is unavailable. Next technical priority: better date/amount normalization and source handling without weakening safe-stop behavior. |
 | AI Evidence Log | PARTIAL | `docs/ai-evidence-log.md` records known tools/tasks and marks unknowns. Owner verification is pending where noted. |
-| README, local setup and Codex path | PARTIAL | Local stdio quickstart and host setup are documented; final online HTTP client steps and rehearsal remain. |
-| Online demo or no-deploy reason plus local instructions | GAP — deployment | User authorized AITC deployment. HTTP transport and local auth smoke pass; human installation, public route and remote MCP smoke are still needed. |
-| Public GitHub repository | PASS | [voicon324/gamota-research-mcp](https://github.com/voicon324/gamota-research-mcp), commit `ae0d982` on `main`; public visibility verified and remote commit matches local. |
+| README, local setup and Codex path | PARTIAL | Local stdio quickstart and host setup are documented; hosted endpoint and sanitized verification are now documented. Evaluator credential delivery still depends on an approved private channel. |
+| Online demo or no-deploy reason plus local instructions | PASS — hosted endpoint | [Hosted MCP](https://52.64.163.35/mcp) is bearer-protected. External smoke: no bearer `401`, wrong bearer `401`, authenticated initialize passed, and 15 tools discovered. Sanitized evidence: `mission2-deployment-verification.md`. Evaluator credentials must use an approved private channel if available; never place them in public material. |
+| Public GitHub repository | PASS | [voicon324/gamota-research-mcp](https://github.com/voicon324/gamota-research-mcp), public `main`. Final-tree verification is required after the submission-only updates. |
 | No API key/password/sensitive data in public material | PARTIAL — local audit | Filename and content-pattern scan of current repo files found no key/env/database candidates or credential-shaped values; manually review findings before public push and verify the remote tree afterward. |
-| ≤5-minute presentation covering required flow | PASS | 80-second Remotion render at `artifacts/submission/mission2-presentation.mp4`; source and lockfile in `presentation/remotion/`. It states that production hosting is pending. |
+| ≤5-minute presentation covering required flow | PASS — separate artifact | Corrected 80-second MP4 is delivered locally as a separate submission artifact. It reflects the verified hosted endpoint. MP4 and Remotion source are excluded from the public repository. |
 | Submission through HR/Gamota | NOT APPLICABLE at H2 | Check during final pre-submit audit; no submission was made. |
 
-H2 remains **GAP** until production hosting/remote smoke and the owner-dependent Mission 1 rationale are resolved. The two research runs, public repository and Remotion video are complete. The exact Mission 1 scope-change rationale remains unverified and is not inferred. The detailed case inventory is in `docs/mission2-evaluation-report.md`; AI usage is in `docs/ai-evidence-log.md`.
+H2 remains **GAP** because the owner-dependent Mission 1 rationale and final submission audit are unresolved. Production hosting and remote MCP smoke are complete. The exact Mission 1 scope-change rationale remains unverified and is not inferred. The finished presentation is a separate local submission artifact, not a public repository file. The detailed case inventory is in `docs/mission2-evaluation-report.md`; AI usage is in `docs/ai-evidence-log.md`.
 
 ## Remaining verification
 
 | Gate | Remaining evidence |
 |---|---|
 | H1 | Official requirements mapped to current repository evidence |
-| H2 | Official rubric read; R1/R2, public repository and video recorded; AITC deployment and owner-provided Q2 remain |
-| I | Reproducible stdio runbook and AITC HTTP deployment handoff are in `docs/mission2-runbook.md` and `deploy/README_DEPLOY.md` |
+| H2 | Official rubric read; R1/R2, public repository and separate video artifact recorded; hosting verified; owner-provided Q2 and final submission audit remain |
+| I | Reproducible stdio runbook, hosted deployment evidence and operations guide are in `docs/mission2-runbook.md`, `docs/mission2-deployment-verification.md` and `deploy/README_DEPLOY.md` |
 | J1–J3 | Pre-HTTP locked environment/wheel checks passed at 94 tests; the post-HTTP wheel was installed in a clean environment and passed 97/97 tests and 8/8 evals. Local HTTP verification covered no/wrong-token 401, authenticated initialize, 15-tool discovery and a separate authenticated create/readback smoke. |
-| J4–J5 | Codex fixture smoke/reconnect and real R1/R2 artifacts are recorded; authenticated HTTP local smoke passes; remote deployment smoke and final integrity/status audit remain |
+| J4–J5 | Codex fixture smoke/reconnect and real R1/R2 artifacts are recorded; authenticated local and hosted HTTP smoke pass. Re-run secret, repository-tree and endpoint checks after the submission-only updates. |
 
 Do not mark H, J or the overall mission complete until every mandatory rubric item has evidence, H2 is GREEN, and the final J checks pass.
