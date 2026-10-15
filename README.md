@@ -44,7 +44,7 @@ For hosted use, set `GAMOTA_TRANSPORT=streamable-http` with a bearer token and p
 - **Q3 (current limitation and next priority):** R2 exposes strict numeric grounding and required-slot safe stopping; next priorities are deployed HTTP transport and final remote smoke. The HTTP transport is implemented and locally verified, while AITC installation and remote smoke remain pending the operator's production workflow. The report distinguishes actual hard-case evidence from synthetic tests.
 - **AI Evidence Log:** see [`docs/ai-evidence-log.md`](docs/ai-evidence-log.md); entries distinguish recorded facts from items that still need owner confirmation.
 - **Online demo:** AITC Streamable HTTP implementation and deployment handoff are ready; server installation and remote smoke still require the operator's guarded workflow. A URL will be added only after remote MCP verification. Local stdio instructions remain available above.
-- **Presentation video:** not recorded. The required ≤5-minute video should cover the problem, chosen proof, demo, hard case and limitation after actual run evidence is ready.
+- **Presentation video:** [80-second Remotion MP4](artifacts/submission/mission2-presentation.mp4), with reproducible source in [`presentation/remotion/`](presentation/remotion/). It covers the evidence problem, host/MCP flow, R1 success, R2 safe-stop case, verification results and explicitly pending production deployment.
 - **Public repository:** no public remote/URL is configured in this checkout yet. Do not treat this local directory as a public submission.
 
 SQLite uses Python's standard library. Tests use temporary databases; commands above keep manual demo state in `/tmp` rather than the workspace root.
