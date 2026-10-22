@@ -3,6 +3,7 @@ from __future__ import annotations
 import os
 import secrets
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from mcp.server import MCPServer
 from mcp.server.auth.provider import AccessToken, TokenVerifier
@@ -14,6 +15,8 @@ from .domain.apple_rss_provider import AppleRssStoreProvider
 from .domain.fixture_provider import FixtureStoreProvider
 from .domain.store_service import StoreService
 from .mcp_tools import register_research_tools
+from .oauth_auth import CompositeTokenVerifier, ToolScopeMiddleware
+from .oauth_provider import OAuthAccessTokenVerifier, OAuthStore
 from .repository import ResearchRepository
 from .reports import ReportService
 from .service import ResearchService
@@ -38,18 +41,30 @@ class StaticBearerTokenVerifier(TokenVerifier):
         )
 
 
-def _http_auth_settings(token: str | None, resource_url: str | None):
+def _http_auth_settings(
+    token: str | None,
+    resource_url: str | None,
+    *,
+    oauth_verifier: OAuthAccessTokenVerifier | None = None,
+    issuer_url: str | None = None,
+):
     if not token and not resource_url:
         return None, None
     if not token or not resource_url:
         raise ValueError(
             "GAMOTA_MCP_BEARER_TOKEN and GAMOTA_PUBLIC_MCP_URL must both be configured"
         )
-    verifier = StaticBearerTokenVerifier(token, resource_url)
+    parsed_resource = urlsplit(resource_url)
+    issuer = issuer_url or f"{parsed_resource.scheme}://{parsed_resource.netloc}"
+    verifier = (
+        CompositeTokenVerifier(token, oauth_verifier, resource_url)
+        if oauth_verifier is not None
+        else StaticBearerTokenVerifier(token, resource_url)
+    )
     settings = AuthSettings(
-        issuer_url=AnyHttpUrl("https://auth.example.com"),
+        issuer_url=AnyHttpUrl(issuer),
         resource_server_url=AnyHttpUrl(resource_url),
-        required_scopes=["gamota:research"],
+        required_scopes=None,
         validate_token_resource=True,
     )
     return verifier, settings
@@ -62,13 +77,31 @@ def create_mcp_server(
     http_bearer_token: str | None = None,
     public_mcp_url: str | None = None,
     report_service: ReportService | None = None,
+    oauth_verifier: OAuthAccessTokenVerifier | None = None,
+    oauth_issuer_url: str | None = None,
 ) -> MCPServer:
-    verifier, auth = _http_auth_settings(http_bearer_token, public_mcp_url)
+    verifier, auth = _http_auth_settings(
+        http_bearer_token,
+        public_mcp_url,
+        oauth_verifier=oauth_verifier,
+        issuer_url=oauth_issuer_url,
+    )
     server = MCPServer(
         name="gamota-research",
         version="0.1.0",
         token_verifier=verifier,
         auth=auth,
+        middleware=(
+            [
+                ToolScopeMiddleware(
+                    f"{urlsplit(public_mcp_url).scheme}://{urlsplit(public_mcp_url).netloc}"
+                    "/.well-known/oauth-protected-resource"
+                    f"{urlsplit(public_mcp_url).path}"
+                )
+            ]
+            if verifier is not None and public_mcp_url
+            else None
+        ),
         instructions=(
             "Use the host's native web search for public-source discovery; this MCP "
             "stores and validates research evidence rather than providing generic web search. "
@@ -141,6 +174,20 @@ def main() -> None:
         / "store_fixture.json"
     )
     store_service = StoreService(repository, _build_store_provider(fixture_path))
+    oauth_db = os.environ.get("GAMOTA_OAUTH_DB") if transport == "streamable-http" else None
+    oauth_issuer_url = os.environ.get("GAMOTA_OAUTH_ISSUER_URL")
+    oauth_verifier = None
+    if oauth_db:
+        if not os.environ.get("GAMOTA_PUBLIC_MCP_URL"):
+            raise ValueError("GAMOTA_PUBLIC_MCP_URL is required when OAuth is enabled")
+        resource_url = os.environ["GAMOTA_PUBLIC_MCP_URL"]
+        parsed_resource = urlsplit(resource_url)
+        oauth_issuer_url = oauth_issuer_url or f"{parsed_resource.scheme}://{parsed_resource.netloc}"
+        oauth_verifier = OAuthAccessTokenVerifier(
+            OAuthStore(Path(oauth_db).expanduser()),
+            issuer=oauth_issuer_url,
+            resource=resource_url,
+        )
     server = create_mcp_server(
         service,
         store_service,
@@ -151,6 +198,8 @@ def main() -> None:
         if transport == "streamable-http"
         else None,
         report_service=report_service,
+        oauth_verifier=oauth_verifier,
+        oauth_issuer_url=oauth_issuer_url,
     )
     try:
         if transport == "streamable-http":

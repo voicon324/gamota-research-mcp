@@ -39,19 +39,31 @@ Create a root-readable environment file from `env.example` on the server and set
 
 Do not copy a development `.env`, SQLite DB, key, or bearer token into this bundle or Git. Do not pass the token as a command-line argument. Protect the environment file with owner-only read permissions.
 
-### Authentication metadata limitation
+### ChatGPT OAuth and legacy bearer authentication
 
-The MCP SDK requires an `issuer_url` when configuring its bearer-verification middleware. This deployment uses the SDK's documented placeholder `https://auth.example.com`; it does **not** deploy an OAuth authorization server. Clients must be configured with the pre-shared bearer token directly. OAuth discovery/authorization clients are not supported by this static-token setup. The token value is never logged by the application.
+The MCP endpoint continues to accept the existing static bearer token for Codex/Claude and other configured clients. The ChatGPT integration runs a separate OAuth authorization service on loopback port `8001`; it issues independent, short-lived OAuth tokens using Authorization Code + PKCE S256. OAuth tokens are stored in the persistent OAuth SQLite database only by digest and are bound to the exact MCP resource.
+
+Set these values in the protected server environment file:
+
+- `GAMOTA_OAUTH_DB=/var/lib/gamota-research-mcp/oauth.sqlite3`
+- `GAMOTA_OAUTH_ISSUER_URL=https://<public-host>/` (canonical issuer, including the trailing slash)
+- `GAMOTA_CHATGPT_REDIRECT_URI` to the exact callback displayed in the active ChatGPT connector form
+- `GAMOTA_OAUTH_HOST=127.0.0.1` and `GAMOTA_OAUTH_PORT=8001`
+
+The OAuth login uses `GAMOTA_MCP_BEARER_TOKEN` as the temporary single-owner login credential. The credential is compared in constant time, never stored by the OAuth service, and never sent to ChatGPT. The login page requires explicit scope selection. OAuth scopes are `research:read`, `research:write`, and `report:publish`; every MCP tool call is checked server-side. Do not use this shared-credential bridge for multiple users; replace it with a dedicated identity provider before broad access.
+
+Install `gamota-research-oauth.service` alongside the MCP unit. Include [`nginx-oauth-locations.conf`](nginx-oauth-locations.conf) inside the existing HTTPS server block before the SPA fallback. Keep the current `/mcp`, UI, report, certificate, and port 80 locations intact. The well-known routes must return JSON, not `index.html`. Check the active ChatGPT callback before changing the environment value.
 
 ## Install and operate
 
 1. Review the repository revision and deployment files, then transfer the approved source/bundle using the server skill.
 2. Install Python 3.13 and `uv` if not already present; create the service environment and run `uv sync --frozen --no-dev` from the install directory.
 3. Create the persistent DB parent directory and `/var/lib/gamota-research-mcp/published-reports` owned by the service user, readable by Nginx, and writable by the service. Set up the environment file as described above.
-4. Adapt `gamota-research-mcp.service` to the verified paths, user and port; install it with the operator's approved systemd procedure, reload systemd, enable and start it.
-5. Configure the approved TLS ingress for `/mcp` to the local listener. Keep the bearer secret out of proxy access logs and diagnostic output.
-6. Run `verify.sh` with the public URL and token supplied through a protected environment (never shell history). Confirm unauthenticated `401`, authenticated MCP initialization and tool discovery.
-7. Capture only nonsecret evidence: service active, bound address/port, public URL, unauthenticated `401`, authenticated initialize pass, tool discovery pass. Never capture an Authorization header or token.
+4. Adapt `gamota-research-mcp.service` and `gamota-research-oauth.service` to the verified paths, service identity, and ports. Both units need the existing persistent-data directory in `ReadWritePaths`.
+5. Configure the approved TLS ingress for `/mcp` and OAuth routes using the reviewed Nginx snippet. Keep Authorization headers and owner credentials out of proxy logs and diagnostic output.
+6. Run `verify.sh` with the public URL and token supplied through a protected environment, then run `verify-oauth.sh` without `curl -k`. Confirm bearer initialization, the 18-tool manifest, JSON discovery metadata, and a 401 challenge that advertises the Protected Resource Metadata URL.
+7. Complete the browser OAuth flow with the exact ChatGPT callback. Verify a read-only token cannot write or publish before granting those scopes for a specific research run.
+8. Capture only nonsecret evidence: both services active, loopback listeners, public URL, metadata JSON, unauthenticated `401`, legacy bearer initialize and tool discovery, and ChatGPT OAuth tool discovery. Never capture an Authorization header or token.
 
 ## Rollback
 

@@ -28,14 +28,14 @@ def test_static_bearer_rejects_partial_credentials():
         _http_auth_settings(None, "https://mcp.example.test/mcp")
 
 
-def test_http_auth_settings_use_resource_url_and_placeholder_issuer():
+def test_http_auth_settings_use_public_issuer_and_resource_url():
     verifier, settings = _http_auth_settings(
         "secret-token", "https://mcp.example.test/mcp"
     )
 
     assert isinstance(verifier, StaticBearerTokenVerifier)
     assert settings is not None
-    assert settings.issuer_url == AnyHttpUrl("https://auth.example.com")
+    assert settings.issuer_url == AnyHttpUrl("https://mcp.example.test")
     assert settings.resource_server_url == AnyHttpUrl("https://mcp.example.test/mcp")
-    assert settings.required_scopes == ["gamota:research"]
+    assert settings.required_scopes is None
     assert settings.validate_token_resource is True
