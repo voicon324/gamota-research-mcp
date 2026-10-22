@@ -65,6 +65,7 @@ cd web && npm run build
 
 ## More detail
 
+- [Mission 3 A1 — conflicting sources: change, evidence and answers](docs/mission3-a1.md)
 - [Codex smoke and research lifecycle runbook](docs/mission2-runbook.md)
 - [Deployment and operations](deploy/README_DEPLOY.md)
 - [Mission 2 evidence map](docs/mission2-evidence-map.md)

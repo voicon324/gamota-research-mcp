@@ -88,7 +88,10 @@ def validate_game_decision_brief(report: dict[str, Any]) -> list[str]:
 
     evidence = report.get("evidence")
     evidence_items = evidence if isinstance(evidence, list) else []
-    evidence_ids = {item.get("id") for item in evidence_items if isinstance(item, dict)}
+    evidence_ids = {
+        item.get("id") for item in evidence_items
+        if isinstance(item, dict) and isinstance(item.get("id"), str)
+    }
     source_ids = {
         item.get("id") for item in report.get("sources", []) if isinstance(item, dict)
     }
@@ -134,6 +137,83 @@ def validate_game_decision_brief(report: dict[str, Any]) -> list[str]:
         refs = metric.get("evidence_ids", []) if isinstance(metric, dict) else []
         if not isinstance(refs, list) or not refs or any(ref not in evidence_ids for ref in refs):
             errors.append(f"metrics[{index}] references missing evidence")
+    unknown_items = report.get("unknowns", [])
+    unknown_ids: set[str] = set()
+    unknown_resolutions: dict[str, str] = {}
+    for index, unknown in enumerate(unknown_items):
+        if not isinstance(unknown, dict):
+            errors.append(f"unknowns[{index}] must be an object")
+            continue
+        issue_id = unknown.get("id")
+        if isinstance(issue_id, str):
+            unknown_ids.add(issue_id)
+            if isinstance(unknown.get("resolution"), str):
+                unknown_resolutions[issue_id] = unknown["resolution"]
+        refs = unknown.get("evidence_ids")
+        if refs is not None:
+            if not isinstance(refs, list):
+                errors.append(f"unknowns[{index}].evidence_ids must be an array")
+                refs = []
+            for evidence_id in refs:
+                if not isinstance(evidence_id, str) or evidence_id not in evidence_ids:
+                    errors.append(
+                        f"unknowns[{index}] references missing evidence {evidence_id}"
+                    )
+        directions = unknown.get("directions")
+        if directions is not None:
+            if not isinstance(directions, dict):
+                errors.append(f"unknowns[{index}].directions must be an object")
+            else:
+                for evidence_id, direction in directions.items():
+                    if evidence_id not in (refs or []):
+                        errors.append(
+                            f"unknowns[{index}].directions references unlinked evidence {evidence_id}"
+                        )
+                    if not isinstance(direction, str) or direction not in {"UP", "DOWN"}:
+                        errors.append(
+                            f"unknowns[{index}].directions.{evidence_id} must be UP or DOWN"
+                        )
+        unavailable = unknown.get("unavailable_evidence_ids")
+        if unavailable is not None and (
+            not isinstance(unavailable, list)
+            or any(not isinstance(item, str) or not item for item in unavailable)
+        ):
+            errors.append(f"unknowns[{index}].unavailable_evidence_ids must be an array of IDs")
+        resolution = unknown.get("resolution")
+        if resolution is not None and (
+            not isinstance(resolution, str)
+            or resolution not in {"ABSTAIN", "NOT_COMPARABLE"}
+        ):
+            errors.append(f"unknowns[{index}].resolution is not supported")
+        comparability = unknown.get("comparability")
+        if comparability is not None and (
+            not isinstance(comparability, str)
+            or comparability not in {"COMPARABLE", "NOT_COMPARABLE"}
+        ):
+            errors.append(f"unknowns[{index}].comparability is not supported")
+    decision = summary.get("directional_decision") if isinstance(summary, dict) else None
+    if decision is not None:
+        if not isinstance(decision, dict):
+            errors.append("summary.directional_decision.outcome is not supported")
+        else:
+            outcome = decision.get("outcome")
+            if not isinstance(outcome, str) or outcome not in {"ABSTAIN", "NOT_COMPARABLE"}:
+                errors.append("summary.directional_decision.outcome is not supported")
+            if not isinstance(decision.get("reason"), str) or not decision["reason"].strip():
+                errors.append("summary.directional_decision.reason is required")
+            issue_ids = decision.get("issue_ids")
+            if not isinstance(issue_ids, list) or not issue_ids:
+                errors.append("summary.directional_decision.issue_ids must be an array")
+            else:
+                for issue_id in issue_ids:
+                    if not isinstance(issue_id, str) or issue_id not in unknown_ids:
+                        errors.append(
+                            f"summary.directional_decision.issue_ids references missing issue {issue_id}"
+                        )
+                    elif unknown_resolutions.get(issue_id) != outcome:
+                        errors.append(
+                            f"summary.directional_decision.issue_ids outcome does not match issue {issue_id}"
+                        )
     return errors
 
 
@@ -191,18 +271,69 @@ def render_report_markdown(report: dict[str, Any]) -> str:
         )
     else:
         lines.append("No evidence-linked recommendations were recorded.")
+    decision = summary.get("directional_decision")
+    if decision:
+        lines.extend([
+            "",
+            "## Directional assessment",
+            "",
+            f"**{decision['outcome']}** — {decision['reason']}",
+            "",
+        ])
     lines.extend(["", "## Unknowns and issues", ""])
     if report["unknowns"]:
-        lines.extend(f"- {item['description']}" for item in report["unknowns"])
+        for item in report["unknowns"]:
+            lines.append(f"- **{item['severity']} · {item['type']}** — {item['description']}")
+            if item.get("resolution"):
+                lines.append(
+                    f"  - Resolution: {item['resolution']} ({item.get('comparability', 'scope unresolved')})"
+                )
+            if item.get("explanation"):
+                lines.append(f"  - {item['explanation']}")
+            if item.get("evidence_ids"):
+                directions = item.get("directions", {})
+                refs = [
+                    f"{evidence_id} ({directions[evidence_id]})"
+                    if evidence_id in directions else evidence_id
+                    for evidence_id in item["evidence_ids"]
+                ]
+                lines.append(f"  - Evidence: {', '.join(refs)}")
+            if item.get("unavailable_evidence_ids"):
+                lines.append(
+                    f"  - Evidence references unavailable in this report: {', '.join(item['unavailable_evidence_ids'])}"
+                )
+            if item.get("reasons"):
+                lines.append(f"  - Comparison reasons: {', '.join(item['reasons'])}")
+            if item.get("comparison_signature"):
+                lines.append(f"  - Comparison signature: {item['comparison_signature']}")
     else:
         lines.append("No open unknowns were recorded.")
     lines.extend(["", "## Sources and evidence", ""])
     source_map = {source["id"]: source for source in report["sources"]}
+    direction_by_evidence = {
+        evidence_id: direction
+        for issue in report["unknowns"]
+        for evidence_id, direction in issue.get("directions", {}).items()
+    }
     for item in report["evidence"]:
         source = source_map[item["source_id"]]
+        direction = direction_by_evidence.get(item["id"])
+        context = [
+            f"metric: {item.get('metric') or 'unspecified'}",
+            f"value: {item.get('value') if item.get('value') is not None else 'unspecified'} {item.get('unit') or ''}".strip(),
+            f"market: {item.get('market') or 'unspecified'}",
+            f"period: {item.get('period_start') or '?'} to {item.get('period_end') or '?'}",
+        ]
+        if item.get("scope"):
+            context.append(f"scope: {item['scope']}")
+        if item.get("method"):
+            context.append(f"method: {item['method']}")
+        if direction:
+            context.insert(0, f"direction: {direction}")
         lines.extend([
             f"- **{source.get('title') or source['url']}** — {item['excerpt']}",
-            f"  - [{source['url']}]({source['url']}); accessed {source.get('accessed_at') or 'date unknown'}; locator: {item.get('locator') or 'not specified'}",
+            f"  - {'; '.join(context)}",
+            f"  - [{source['url']}]({source['url']}); {source.get('publisher') or 'publisher unavailable'}; published {source.get('published_at') or 'date unknown'}; accessed {source.get('accessed_at') or 'date unknown'}; provenance {source.get('provenance_status') or 'unknown'}; locator: {item.get('locator') or 'not specified'}",
         ])
     lines.extend(["", "## Methodology", "", "Research conducted by the host agent using its native search/fetch tools. The MCP records claims and evidence and applies deterministic validation; it does not perform general web search or infer causality.", ""])
     return "\n".join(lines)
@@ -253,15 +384,10 @@ class ReportService:
         findings: list[dict[str, Any]] = []
         recommendations: list[dict[str, Any]] = []
         unknowns: list[dict[str, Any]] = []
-        for issue in self.repository.list_issues(run_id):
-            if _enum(issue.status) == "OPEN":
-                unknowns.append({
-                    "id": issue.id,
-                    "type": issue.code,
-                    "severity": _enum(issue.severity),
-                    "description": issue.message,
-                    "related_claim_id": issue.related_claim_id,
-                })
+        open_issues = [
+            issue for issue in self.repository.list_issues(run_id)
+            if _enum(issue.status) == "OPEN"
+        ]
 
         for claim_id, trace in trace_by_claim.items():
             claim = trace["claim"]
@@ -347,6 +473,64 @@ class ReportService:
                     "implication": claim.get("metadata", {}).get("implication"),
                 })
 
+        for issue in open_issues:
+            unknown = {
+                "id": issue.id,
+                "type": issue.code,
+                "severity": _enum(issue.severity),
+                "description": issue.message,
+                "related_claim_id": issue.related_claim_id,
+            }
+            issue_metadata = issue.metadata if isinstance(issue.metadata, dict) else {}
+            if issue.code in {"CONFLICT", "NOT_COMPARABLE"}:
+                candidate_ids = issue_metadata.get("evidence_ids", [])
+                if not isinstance(candidate_ids, list):
+                    candidate_ids = []
+                linked_ids = list(dict.fromkeys(
+                    evidence_id for evidence_id in candidate_ids
+                    if isinstance(evidence_id, str) and evidence_id in all_evidence
+                ))
+                unavailable_ids = list(dict.fromkeys(
+                    evidence_id for evidence_id in candidate_ids
+                    if isinstance(evidence_id, str) and evidence_id not in all_evidence
+                ))
+                directions = issue_metadata.get("directions", {})
+                if not isinstance(directions, dict):
+                    directions = {}
+                unknown.update({
+                    "evidence_ids": linked_ids,
+                    "unavailable_evidence_ids": unavailable_ids,
+                    "directions": {
+                        evidence_id: direction
+                        for evidence_id, direction in directions.items()
+                        if evidence_id in linked_ids and direction in {"UP", "DOWN"}
+                    },
+                    "comparability": issue_metadata.get(
+                        "comparability",
+                        "COMPARABLE" if issue.code == "CONFLICT" else "NOT_COMPARABLE",
+                    ),
+                    "resolution": "ABSTAIN" if issue.code == "CONFLICT" else "NOT_COMPARABLE",
+                })
+                if issue.code == "CONFLICT":
+                    unknown["comparison_signature"] = issue_metadata.get("signature")
+                    direction_text = " and ".join(sorted(set(unknown["directions"].values()))) or "opposite"
+                    unknown["explanation"] = (
+                        f"Comparable evidence points in {direction_text} directions. "
+                        "The available evidence does not establish which direction is reliable, "
+                        "so the report abstains from selecting a winner."
+                    )
+                else:
+                    reasons = issue_metadata.get("reasons", [])
+                    unknown["reasons"] = (
+                        [reason for reason in reasons if isinstance(reason, str)]
+                        if isinstance(reasons, list) else []
+                    )
+                    unknown["explanation"] = (
+                        "These observations have different measurement scopes and should not "
+                        "be treated as opposing results."
+                    )
+            unknowns.append(unknown)
+
         coverage = self.repository.get_research_evidence_slot_coverage(run_id)
         for slot in coverage.get("missing", []):
             unknowns.append({
@@ -379,6 +563,24 @@ class ReportService:
         )
         digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:8]
         identifier = f"{_slug(game)}-{_slug(title)}-{run_id[:8].lower()}-{digest}"[:120].strip("-")
+        conflict_issues = [item for item in unknowns if item["type"] == "CONFLICT"]
+        not_comparable_issues = [item for item in unknowns if item["type"] == "NOT_COMPARABLE"]
+        summary = {
+            "verdict": verdict.strip(),
+            "confidence": _CONFIDENCE.get(self._run_confidence(run_id), "low"),
+        }
+        if conflict_issues:
+            summary["directional_decision"] = {
+                "outcome": "ABSTAIN",
+                "reason": "Comparable evidence reports opposite directions; the available evidence does not establish a reliable winner.",
+                "issue_ids": [item["id"] for item in conflict_issues],
+            }
+        elif not_comparable_issues:
+            summary["directional_decision"] = {
+                "outcome": "NOT_COMPARABLE",
+                "reason": "The directional observations do not share a comparable scope, so no conflict decision can be made.",
+                "issue_ids": [item["id"] for item in not_comparable_issues],
+            }
         report = {
             "schema_version": "1.0",
             "report": {
@@ -401,10 +603,7 @@ class ReportService:
                 "platforms": platforms or [],
                 "assumptions": contract.get("assumptions", []),
             },
-            "summary": {
-                "verdict": verdict.strip(),
-                "confidence": _CONFIDENCE.get(self._run_confidence(run_id), "low"),
-            },
+            "summary": summary,
             "findings": findings,
             "recommendations": recommendations,
             "unknowns": unknowns,
