@@ -11,7 +11,7 @@ Date: 2026-10-23 (ICT)
 - MCP: <https://52.64.163.35/mcp>
 - Backend module updated: `/opt/gamota-research-mcp/src/gamota_research/reports.py`
 - Previous module preserved at `/opt/gamota-research-mcp/src/gamota_research/reports.py.before-mission3-01b2e1a`
-- Static frontend files updated under `/var/www/gamota-research-ui/`; published report data was not changed.
+- Static frontend files updated under `/var/www/gamota-research-ui/`.
 - The live `index.html` before the final label refresh was preserved at `/var/www/gamota-research-ui/index.html.before-mission3-1de3dec`.
 - `gamota-research-mcp.service` was restarted and is active. Nginx remained active; its configuration was not changed or reloaded.
 
@@ -28,7 +28,18 @@ Date: 2026-10-23 (ICT)
 | Browser displays `RESEARCH OPERATIONS · MISSION 03 / A1` | PASS |
 | MCP service and Nginx | Active |
 
-The browser loaded the new site and its report list. The library still contains the existing Pokémon TCG Pocket brief; no synthetic A1 report was inserted into production. The A1 examples in the automated tests and video are explicitly synthetic fixtures, not market research findings. The A1 conflict panel is shown when a connected agent publishes a report containing a comparable conflict.
+The browser loaded the updated site and confirmed the A1 review panel renders source excerpts and comparison reasons. A live sourced report was later published through the authenticated MCP lifecycle; see the evidence below. The conflict test fixtures and video example remain synthetic and are labeled as such.
+
+## Authenticated MCP and live research run
+
+- No bearer: initialize returned HTTP 401; wrong bearer: HTTP 401.
+- Server-side credential: authenticated initialize passed; `list_tools` returned 18 tools. Credential and authorization headers are not recorded.
+- Run `7b5bf83a-5be3-4f7b-9b55-0a6a6e9e21ad`: COMPLETE, MODERATE confidence; 3/3 claims VALID; 2/2 evidence slots covered; zero store-domain calls.
+- The live research recorded Sensor Tower's 2023 global mobile-game consumer spend estimate (−2% YoY) and Unity's 2023 worldwide DAU growth (+4.1% in its measured game-app cohort). The sources measure different metrics and sample populations.
+- Validator outcome: **NOT_COMPARABLE**, reasons `metric_mismatch` and `sample_scope_mismatch`; it did not characterize this as a true conflict.
+- Published brief: [`2023 Mobile Games: Spending and Activity Signals`](https://52.64.163.35/reports/global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682/report.json) (2 sources, 2 evidence records, 1 recommendation, 1 open NOT_COMPARABLE issue).
+- Browser verified the report in the live library, including both quoted excerpts, publication dates, provenance labels, clickable source URLs and the NOT_COMPARABLE explanation.
+- No application code or service restart was needed for this report; it used the already deployed release and updated the production report library through MCP.
 
 ## Local verification
 
