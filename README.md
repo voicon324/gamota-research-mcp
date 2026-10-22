@@ -36,6 +36,22 @@ Then ask Codex to research a question like:
 
 For the live [report library](https://52.64.163.35/#published), connect your agent to the hosted MCP at [`https://52.64.163.35/mcp`](https://52.64.163.35/mcp). It requires a bearer token. Keep the token private; it is not stored in the website.
 
+## Connect ChatGPT
+
+In ChatGPT, open **Plugins → Add → Add custom MCP server** and enter:
+
+- Name: `Gamota Research`
+- Server URL: `https://52.64.163.35/mcp`
+- Authentication: `OAuth`
+- OAuth client ID: `gamota-chatgpt` (no client secret)
+- Authorization server: `https://52.64.163.35/`
+- Authorization endpoint: `https://52.64.163.35/authorize`
+- Token endpoint: `https://52.64.163.35/token`
+- MCP resource: `https://52.64.163.35/mcp`
+- PKCE: `S256`
+
+Use the callback URL shown in the ChatGPT form. On the server, the owner approves the requested scopes (`research:read`, `research:write`, `report:publish`) with the private bearer credential. The credential is sent only to the HTTPS login page and is not issued to ChatGPT. The connector can then use ChatGPT's native web search together with the MCP's research, validation and report tools.
+
 ## Run locally
 
 The Codex configuration above starts the local MCP automatically. To run it manually for another MCP client, use stdio mode with a disposable database and synthetic store data:
