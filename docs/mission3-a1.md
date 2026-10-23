@@ -21,15 +21,16 @@ This label describes the MCP server's own actions; it does not assert that a sou
 At the original A1 release, `tests/test_mission3_a1.py` covered the assigned change request, a metric-scope edge case, malformed or missing references, legacy schema compatibility, a supported-report regression, and missing evidence. The follow-up adds a forged/legacy metadata edge case, a report projection check, and a regression check for traces without the optional field. Results on this tree:
 
 - `uv run pytest tests/test_mission3_a1.py -q` — **9 passed at original A1 release**; the follow-up report tests are included in the full suite below.
-- `uv run pytest -q` — **131 passed** at the current checkout, including the Mission 3, OAuth, and public MCP origin checks.
+- `uv run pytest -q` — **131 passed** at the original A1 release checkout, including the Mission 3, OAuth, and public MCP origin checks.
 - `cd web && npm run build` — **passed** (TypeScript and Vite production build).
 - `git diff --check` — **passed**.
 
 ### Final verification on 2026-10-24
 
-Verified on the Mission 3 A1.1 worktree, based on Mission 2 commit `47ccfb2`:
+Verified on the Mission 3 A1.1 release commit `d01f260`. Its technical branch point is `47ccfb2` (`Record final Mission 3 verification`); the Mission 2 submission baseline remains `ae0d982` (`Complete Mission 2 submission package`):
 
-- `uv run pytest tests/test_mission3_a1.py -q` — **9 passed**.
+- `uv run pytest --collect-only -q tests/test_mission3_a1.py` — **11 tests collected**.
+- `uv run pytest tests/test_mission3_a1.py -q` — **11 passed**.
 - `uv run pytest -q` — **135 passed**, 0 failed, 0 skipped.
 - `cd web && npm run build` — **passed** (TypeScript and Vite production build).
 - Public app `/`, report index, and the published Honor of Kings report JSON — **HTTP 200** over the canonical HTTPS hostname.
