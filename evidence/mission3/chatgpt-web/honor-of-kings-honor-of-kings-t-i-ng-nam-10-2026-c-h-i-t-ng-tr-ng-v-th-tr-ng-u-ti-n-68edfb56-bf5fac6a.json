@@ -1,0 +1,763 @@
+{
+  "schema_version": "1.0",
+  "report": {
+    "id": "honor-of-kings-honor-of-kings-t-i-ng-nam-10-2026-c-h-i-t-ng-tr-ng-v-th-tr-ng-u-ti-n-68edfb56-bf5fac6a",
+    "type": "game_decision_brief",
+    "title": "Honor of Kings tại Đông Nam Á (10/2026): Cơ hội tăng trưởng và thị trường ưu tiên",
+    "game": "Honor of Kings",
+    "as_of": "2026-10-23",
+    "status": "published",
+    "research_run_id": "68edfb56-d2b2-4273-b7f6-4be909cf4bd4",
+    "research_status": "COMPLETE",
+    "created_at": "2026-10-23T15:37:43.972573+00:00",
+    "finalized_at": "2026-10-23T15:41:02.124890+00:00"
+  },
+  "scope": {
+    "question": "Honor of Kings còn cơ hội tăng trưởng tại Đông Nam Á đến 23/10/2026 không? Thị trường ưu tiên nào, bằng chứng mới, phân biệt dữ kiện và nhận định, thiếu dữ liệu gì?",
+    "decision_goal": "Decision brief ưu tiên thị trường Honor of Kings mobile SEA: Indonesia cho quy mô, Malaysia và Philippines cho esports/value, Thailand và Vietnam validation. Dữ kiện và suy luận được dán nhãn, thiếu số HoK country-specific.",
+    "period": "2025 tới 23/10/2026",
+    "markets": [
+      "Indonesia",
+      "Malaysia",
+      "Philippines",
+      "Thailand",
+      "Vietnam"
+    ],
+    "platforms": [
+      "iOS",
+      "Android"
+    ],
+    "assumptions": [
+      "Market-wide installs/IAP is not HoK performance",
+      "Esports viewership and medals don't prove MAU/revenue",
+      "Publisher forecasts aren't actual event results"
+    ]
+  },
+  "summary": {
+    "verdict": "Có cơ hội tăng trưởng có điều kiện, rõ nhất ở Indonesia về mở rộng tệp người chơi/esports; Malaysia nổi bật về năng lực thi đấu và tiềm năng kiểm thử monetization; Philippines mạnh về phát triển cộng đồng. Thailand đáng theo dõi vì mức chi tiêu game mobile toàn ngành; Việt Nam nên thử nghiệm chọn lọc do Liên Quân hiện hữu. Chưa có cơ sở kết luận HoK sắp vượt MLBB hay đầu tư scale sẽ có ROI dương: thiếu dữ liệu HoK theo từng nước về DAU/retention, net IAP, CAC/LTV. Tín hiệu thị trường toàn ngành, thành tích esports và kế hoạch campus không được nhầm với KPI HoK.",
+    "confidence": "medium",
+    "directional_decision": {
+      "outcome": "NOT_COMPARABLE",
+      "reason": "The directional observations do not share a comparable scope, so no conflict decision can be made.",
+      "issue_ids": [
+        "75ab1a85-7470-42de-9f4c-c0b80d90c752",
+        "56108150-2b45-4609-b9f6-34336f4318cd"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "id": "bc81aa9a-0673-41d2-bbb6-b8ea337499b4",
+      "statement": "Sensor Tower đánh giá Honor of Kings là động lực tăng trưởng nổi bật của dòng mobile esports Đông Nam Á.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "84e7afe3-b4c0-48f6-942a-5ca3f77b9cdd"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "54ec55f1-4c37-4ed2-bc54-a32b8c4b4751",
+      "statement": "Esports Insider dẫn dữ liệu Esports Charts cho biết Indonesia đóng góp 34.9% lượt xem esports Honor of Kings trong phạm vi đo không được mô tả đầy đủ.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "20b766e4-8b2a-4f13-819e-2a9189174538"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "a63289d8-d565-487c-9396-30283a20567f",
+      "statement": "Theo bảng lượt tải Google Play cho game mobile chiến thuật Indonesia do Statista tổng hợp từ 42matters, Honor of Kings đứng ngay sau Mobile Legends Bang Bang.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "9897f76d-4773-41d3-b41b-1754b59442a5"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "ddd8cc52-575e-449f-a831-9513468864d8",
+      "statement": "Indonesia dẫn đầu lượt tải game mobile tại các nước Đông Nam Á được báo cáo SocialPeta và Gamota khảo sát, nhưng con số là của toàn thị trường chứ không phải Honor of Kings.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "962eefa6-0056-4307-bcbc-625798f218eb"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "85a7b671-380a-4f1a-adfa-650e100b92b3",
+      "statement": "Thái Lan dẫn đầu doanh thu IAP game mobile trong các nước Đông Nam Á được báo cáo SocialPeta và Gamota khảo sát, không phải doanh thu Honor of Kings.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "64540e66-47ca-41d3-bde6-5c30da229770"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "eef4ed23-fd35-4f18-bf07-54940d8ad08d",
+      "statement": "Báo cáo SocialPeta và Gamota cho thấy IAP game mobile Malaysia tăng trưởng nhẹ; đây là tín hiệu toàn ngành chứ không phải kết quả của Honor of Kings.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "d6ff1de5-eb73-4700-86f7-be1162b3f1cf"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "1f809797-0642-47ca-acf3-ec51bb1f9429",
+      "statement": "Nhà phát hành duy trì các giải Honor of Kings chuyên nghiệp tại Indonesia, Malaysia và Philippines đồng thời công bố mục tiêu mở rộng Campus Series; số người tham gia vẫn là dự kiến.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "4c7c4309-35f6-4339-96aa-cf9f14e4721e",
+        "be5ece99-8d10-4454-befb-7f8084f2d9af"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "a9e312d9-6ba0-4b67-8d62-eacb1d13a7b9",
+      "statement": "Malaysia giành huy chương bạc Honor of Kings tại Asian Games Aichi-Nagoya, xác nhận năng lực thi đấu cấp quốc gia.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "d442c9a2-5f87-4a9e-8ba5-ffbae7ea3e79"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "b2c2c9fc-b7fa-4eef-bc9e-23f8d498f285",
+      "statement": "Philippines giành huy chương đồng Honor of Kings tại Asian Games Aichi-Nagoya.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "f0610d55-1817-4461-a282-7dfd5c713d3f"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "87397682-137d-49d0-9a7f-32bc7d84c1e2",
+      "statement": "Đại diện Level Infinite tự báo cáo cộng đồng esports Philippines tăng về khán giả và số đội quan tâm HoK, nhưng bài phỏng vấn không cung cấp định lượng được kiểm toán.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "28904a3f-b06f-4362-b752-7c37ed4c2f1f"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "c5a4c46c-1b87-4295-9daf-4503806e23b7",
+      "statement": "Việt Nam có hệ sinh thái Đấu Trường Danh Vọng của Liên Quân Mobile lâu năm, là cạnh tranh thực tế với khả năng mở rộng Honor of Kings.",
+      "type": "fact",
+      "confidence": "medium",
+      "evidence_ids": [
+        "8bd14534-2768-4501-99dc-58678f5a7865"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "4def504a-044d-48d2-b325-9d1376821d2b",
+      "statement": "Indonesia là ưu tiên hàng đầu cho tăng trưởng tệp người chơi Honor of Kings: tín hiệu tải game, khán giả esports, nền thị trường rộng và giải đấu địa phương cùng ủng hộ, nhưng chưa chứng minh unit economics.",
+      "type": "inference",
+      "confidence": "medium",
+      "evidence_ids": [
+        "093204c5-ebf3-4d5f-9804-4d37b094f7da",
+        "962eefa6-0056-4307-bcbc-625798f218eb",
+        "b4ea2c2e-f986-4499-9d82-8170d9a40777",
+        "be5ece99-8d10-4454-befb-7f8084f2d9af"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "59aa4448-274c-48e6-b0f9-ef5759932db1",
+      "statement": "Malaysia đáng ưu tiên cho esports và kiểm thử kiếm tiền vì có đội tuyển mạnh, giải chuyên nghiệp và tín hiệu sức mua toàn ngành, song chưa có dữ liệu retention hay chi tiêu riêng của game.",
+      "type": "inference",
+      "confidence": "medium",
+      "evidence_ids": [
+        "be5ece99-8d10-4454-befb-7f8084f2d9af",
+        "d442c9a2-5f87-4a9e-8ba5-ffbae7ea3e79",
+        "d6ff1de5-eb73-4700-86f7-be1162b3f1cf"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "a29ec056-7ef6-40d2-86a5-f6a6091a10b9",
+      "statement": "Philippines có cơ hội phát triển cộng đồng Honor of Kings nhờ thành tích thi đấu, giải nội địa và hoạt động hỗ trợ từ nhà phát hành; chưa có bằng chứng vững về chuyển đổi sang người chơi trả phí.",
+      "type": "inference",
+      "confidence": "medium",
+      "evidence_ids": [
+        "28904a3f-b06f-4362-b752-7c37ed4c2f1f",
+        "be5ece99-8d10-4454-befb-7f8084f2d9af",
+        "f0610d55-1817-4461-a282-7dfd5c713d3f"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "c5b37ca1-df8f-4696-ad2e-f7dafa0eeb16",
+      "statement": "Thái Lan đáng theo dõi vì có thị trường chi tiêu game mobile lớn, nhưng không thể suy ra Honor of Kings khai thác tốt tiềm năng chi tiêu ấy.",
+      "type": "inference",
+      "confidence": "medium",
+      "evidence_ids": [
+        "64540e66-47ca-41d3-bde6-5c30da229770"
+      ],
+      "validation": "valid",
+      "implication": null
+    },
+    {
+      "id": "19d40d67-b581-4b0c-ad2d-0273c1846201",
+      "statement": "Việt Nam nên tiếp cận bằng thử nghiệm có chọn lọc do thị trường tải game lớn nhưng Liên Quân đã có cộng đồng và giải đấu mạnh; thiếu số liệu HoK riêng.",
+      "type": "inference",
+      "confidence": "medium",
+      "evidence_ids": [
+        "8bd14534-2768-4501-99dc-58678f5a7865",
+        "c50fbe83-6bdb-4003-aada-46424f368173"
+      ],
+      "validation": "valid",
+      "implication": null
+    }
+  ],
+  "recommendations": [
+    {
+      "id": "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb",
+      "text": "Ưu tiên thí điểm Honor of Kings ở Indonesia để đo scale; Malaysia và Philippines để kiểm thử esports và payer conversion; Thái Lan cùng Việt Nam thuộc nhóm theo dõi. Chỉ quyết định mở rộng dựa trên dữ liệu title-specific retention, doanh thu thuần, chi phí thu hút người chơi và đối chứng cạnh tranh.",
+      "confidence": "high",
+      "evidence_ids": [
+        "093204c5-ebf3-4d5f-9804-4d37b094f7da",
+        "64540e66-47ca-41d3-bde6-5c30da229770",
+        "84e7afe3-b4c0-48f6-942a-5ca3f77b9cdd",
+        "8bd14534-2768-4501-99dc-58678f5a7865",
+        "b4ea2c2e-f986-4499-9d82-8170d9a40777",
+        "be5ece99-8d10-4454-befb-7f8084f2d9af",
+        "d442c9a2-5f87-4a9e-8ba5-ffbae7ea3e79",
+        "f0610d55-1817-4461-a282-7dfd5c713d3f"
+      ]
+    }
+  ],
+  "unknowns": [
+    {
+      "id": "acd40e8f-c6d6-415d-a4d6-c6e71c1505dd",
+      "type": "MISSING_EVIDENCE",
+      "severity": "WARNING",
+      "description": "Không có dữ liệu title-specific HoK theo Indonesia/Malaysia/Philippines/Thailand/Vietnam: DAU, MAU, cohort retention, revenue IAP theo quốc gia, payer conversion, UA CAC/LTV. Vì thế không ước tính TAM hay ROI HoK.",
+      "related_claim_id": null
+    },
+    {
+      "id": "75ab1a85-7470-42de-9f4c-c0b80d90c752",
+      "type": "NOT_COMPARABLE",
+      "severity": "WARNING",
+      "description": "Số liệu tải và IAP từ SocialPeta × Gamota phản ánh toàn ngành mobile game, không đo riêng Honor of Kings. Thứ hạng tải trong Statista phản ánh Google Play Indonesia trong hạng mục strategy, không phải toàn bộ SEA.",
+      "related_claim_id": null,
+      "evidence_ids": [],
+      "unavailable_evidence_ids": [],
+      "directions": {},
+      "comparability": "NOT_COMPARABLE",
+      "resolution": "NOT_COMPARABLE",
+      "reasons": [],
+      "explanation": "These observations have different measurement scopes and should not be treated as opposing results."
+    },
+    {
+      "id": "5a482ef2-6d93-448c-ac81-cb8013f8ae08",
+      "type": "AMBIGUITY",
+      "severity": "WARNING",
+      "description": "Tỷ trọng viewership Indonesia dẫn từ Esports Charts qua Esports Insider không mô tả rõ thời gian/các nền tảng; không suy ra người chơi, lượt tải hay doanh thu.",
+      "related_claim_id": null
+    },
+    {
+      "id": "f1e44757-4551-42d5-bf39-34a43388729d",
+      "type": "GAP",
+      "severity": "WARNING",
+      "description": "Con số người tham gia Campus Series là kế hoạch nhà phát hành, không phải kết quả thực tế. Cần xác nhận tuyển mới, tái chơi và engagement sau event.",
+      "related_claim_id": null
+    },
+    {
+      "id": "42afb15f-97c1-4830-9a13-50234637b109",
+      "type": "GAP",
+      "severity": "WARNING",
+      "description": "Thị trường Thailand/Vietnam cần phân tách HoK global với RoV/Arena of Valor/Liên Quân và phiên bản thi đấu Asian Games trước khi đo cannibalization.",
+      "related_claim_id": null
+    },
+    {
+      "id": "56108150-2b45-4609-b9f6-34336f4318cd",
+      "type": "NOT_COMPARABLE",
+      "severity": "INFO",
+      "description": "Lấy huy chương esports và sở hữu pro league không chứng minh doanh thu IAP HoK hoặc lượng người dùng trả phí ở thị trường đó.",
+      "related_claim_id": null,
+      "evidence_ids": [],
+      "unavailable_evidence_ids": [],
+      "directions": {},
+      "comparability": "NOT_COMPARABLE",
+      "resolution": "NOT_COMPARABLE",
+      "reasons": [],
+      "explanation": "These observations have different measurement scopes and should not be treated as opposing results."
+    }
+  ],
+  "metrics": [
+    {
+      "metric": "HoK esports viewing share",
+      "value": 34.9,
+      "unit": "%",
+      "data_type": "reported",
+      "market": "Indonesia",
+      "period": null,
+      "scope": "Context for game opportunity analysis",
+      "evidence_ids": [
+        "20b766e4-8b2a-4f13-819e-2a9189174538"
+      ]
+    },
+    {
+      "metric": "HoK Indonesia strategy game installs rank",
+      "value": 2,
+      "unit": "rank",
+      "data_type": "reported",
+      "market": "Indonesia",
+      "period": null,
+      "scope": "Context for game opportunity analysis",
+      "evidence_ids": [
+        "9897f76d-4773-41d3-b41b-1754b59442a5"
+      ]
+    }
+  ],
+  "sources": [
+    {
+      "id": "53376093-baae-46fa-a263-53402b16e4b2",
+      "url": "https://sensortower.com/blog/southeast-asia-esports-market",
+      "title": "Southeast Asia Esports 2025 Market Snapshot",
+      "publisher": "Sensor Tower",
+      "published_at": null,
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "53376093-baae-46fa-a263-53402b16e4b2"
+    },
+    {
+      "id": "585e656a-94b6-474b-ab0f-06a497499396",
+      "url": "https://esportsinsider.com/2026/08/honor-of-kings-growth-versus-league-of-legends",
+      "title": "HoK and MLBB Viewership in Southeast Asia",
+      "publisher": "Esports Insider",
+      "published_at": "2026-08-21",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "DERIVED",
+      "root_source_id": "585e656a-94b6-474b-ab0f-06a497499396"
+    },
+    {
+      "id": "b96f6683-ab3a-4fbf-b0aa-2bcb64d44105",
+      "url": "https://www.statista.com/statistics/1448172/indonesia-leading-strategy-mobile-games-from-google-play-by-downloads/",
+      "title": "Indonesia Strategy Game Downloads H1 2026",
+      "publisher": "Statista/42matters",
+      "published_at": "2026-07-09",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "DERIVED",
+      "root_source_id": "b96f6683-ab3a-4fbf-b0aa-2bcb64d44105"
+    },
+    {
+      "id": "9b9cf032-4253-498d-8f52-3a081c55e9eb",
+      "url": "https://investgame.net/wp-content/uploads/2026/09/2026-09-03-socialpetaxgamato_2026_southeast_asia_mobile_game_marketing_report_wp.pdf",
+      "title": "2026 Southeast Asia Mobile Game Marketing Report",
+      "publisher": "SocialPeta × Gamota",
+      "published_at": null,
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "9b9cf032-4253-498d-8f52-3a081c55e9eb"
+    },
+    {
+      "id": "10d33962-e38f-4ac0-9968-ca54e097cddb",
+      "url": "https://www.prnewswire.com/news-releases/kuaishou-gaming-wins-at-the-honor-of-kings-world-cup-at-esports-world-cup-2026-as-packed-global-esports-season-hits-full-swing-302846859.html",
+      "title": "Official Honor of Kings Esports Calendar H2 2026",
+      "publisher": "Level Infinite",
+      "published_at": "2026-08-10",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "10d33962-e38f-4ac0-9968-ca54e097cddb"
+    },
+    {
+      "id": "b2176d72-4a52-4857-a804-1d3879906b0b",
+      "url": "https://www.bernama.com/en/news.php?id=2612833",
+      "title": "Malaysia HoK Silver Aichi Nagoya",
+      "publisher": "Bernama",
+      "published_at": "2026-09-28",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "b2176d72-4a52-4857-a804-1d3879906b0b"
+    },
+    {
+      "id": "8e309723-0ad4-4dfb-914e-d4f2e766c526",
+      "url": "https://www.gmanetwork.com/news/sports/othersports/1003948/asian-games-sibol-bags-honor-of-kings-bronze-falls-to-powerhouse-china-in-semis/story/",
+      "title": "Philippines HoK Bronze Aichi Nagoya",
+      "publisher": "GMA News",
+      "published_at": "2026-09-28",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "8e309723-0ad4-4dfb-914e-d4f2e766c526"
+    },
+    {
+      "id": "c9373093-1709-4a9e-ba4d-4b03b889a6e6",
+      "url": "https://qa.philstar.com/sports/2026/01/07/2499390/honor-kings-eyes-continued-growth-philippines",
+      "title": "Honor of Kings Philippines Local Community",
+      "publisher": "Philstar",
+      "published_at": "2026-01-07",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "c9373093-1709-4a9e-ba4d-4b03b889a6e6"
+    },
+    {
+      "id": "fac9b154-323c-42f0-b061-87eacab2893f",
+      "url": "https://vnexpress.net/esports-viet-nam-mo-rong-mlbb-tang-hien-dien-trong-nuoc-5122950.html",
+      "title": "Vietnam MOBA Esports Incumbents",
+      "publisher": "VnExpress",
+      "published_at": "2026-09-21",
+      "accessed_at": "2026-10-23",
+      "provenance_status": "ORIGINAL",
+      "root_source_id": "fac9b154-323c-42f0-b061-87eacab2893f"
+    }
+  ],
+  "evidence": [
+    {
+      "id": "84e7afe3-b4c0-48f6-942a-5ca3f77b9cdd",
+      "source_id": "53376093-baae-46fa-a263-53402b16e4b2",
+      "excerpt": "Honor of Kings (HoK) stands out as the key growth driver",
+      "locator": "SEA 2025 Market Snapshot",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": null,
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "bc81aa9a-0673-41d2-bbb6-b8ea337499b4",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "20b766e4-8b2a-4f13-819e-2a9189174538",
+      "source_id": "585e656a-94b6-474b-ab0f-06a497499396",
+      "excerpt": "Indonesia accounts for 34.9 percent of the title’s viewership",
+      "locator": "Southeast Asia’s mobile monopoly",
+      "retrieved_at": "2026-10-23",
+      "metric": "HoK esports viewing share",
+      "value": 34.9,
+      "unit": "%",
+      "market": "Indonesia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "54ec55f1-4c37-4ed2-bc54-a32b8c4b4751"
+      ]
+    },
+    {
+      "id": "9897f76d-4773-41d3-b41b-1754b59442a5",
+      "source_id": "b96f6683-ab3a-4fbf-b0aa-2bcb64d44105",
+      "excerpt": "This was followed by Honor of Kings.",
+      "locator": "Indonesian Google Play strategy category ranked behind MLBB in Jan-Jun 2026",
+      "retrieved_at": "2026-10-23",
+      "metric": "HoK Indonesia strategy game installs rank",
+      "value": 2,
+      "unit": "rank",
+      "market": "Indonesia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "a63289d8-d565-487c-9396-30283a20567f"
+      ]
+    },
+    {
+      "id": "962eefa6-0056-4307-bcbc-625798f218eb",
+      "source_id": "9b9cf032-4253-498d-8f52-3a081c55e9eb",
+      "excerpt": "Indonesia leads downloads",
+      "locator": "p.6, all-games downloads",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Indonesia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Market-wide context, not HoK-specific monetization/downloads",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "ddd8cc52-575e-449f-a831-9513468864d8",
+        "4def504a-044d-48d2-b325-9d1376821d2b"
+      ]
+    },
+    {
+      "id": "64540e66-47ca-41d3-bde6-5c30da229770",
+      "source_id": "9b9cf032-4253-498d-8f52-3a081c55e9eb",
+      "excerpt": "Thailand leads IAP revenue",
+      "locator": "p.6, all-games IAP",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Thailand",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Market-wide context, not HoK-specific monetization/downloads",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "85a7b671-380a-4f1a-adfa-650e100b92b3",
+        "c5b37ca1-df8f-4696-ad2e-f7dafa0eeb16",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "d6ff1de5-eb73-4700-86f7-be1162b3f1cf",
+      "source_id": "9b9cf032-4253-498d-8f52-3a081c55e9eb",
+      "excerpt": "Malaysia +1.4%",
+      "locator": "p.6, IAP revenue YoY of all mobile games",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Malaysia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Market-wide context, not HoK-specific monetization/downloads",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "eef4ed23-fd35-4f18-bf07-54940d8ad08d",
+        "59aa4448-274c-48e6-b0f9-ef5759932db1"
+      ]
+    },
+    {
+      "id": "4c7c4309-35f6-4339-96aa-cf9f14e4721e",
+      "source_id": "10d33962-e38f-4ac0-9968-ca54e097cddb",
+      "excerpt": "more than 30,000 participants expected",
+      "locator": "Official campus series target across ID/MY/PH",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": null,
+      "period_start": null,
+      "period_end": null,
+      "scope": "Publisher forecast, not observed results",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "1f809797-0642-47ca-acf3-ec51bb1f9429"
+      ]
+    },
+    {
+      "id": "be5ece99-8d10-4454-befb-7f8084f2d9af",
+      "source_id": "10d33962-e38f-4ac0-9968-ca54e097cddb",
+      "excerpt": "Indonesia Kings Laga (IKL), Malaysia Honor of Kings League (MKL), Philippine Kings League (PKL)",
+      "locator": "Official regional leagues calendar",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": null,
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "1f809797-0642-47ca-acf3-ec51bb1f9429",
+        "4def504a-044d-48d2-b325-9d1376821d2b",
+        "59aa4448-274c-48e6-b0f9-ef5759932db1",
+        "a29ec056-7ef6-40d2-86a5-f6a6091a10b9",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "d442c9a2-5f87-4a9e-8ba5-ffbae7ea3e79",
+      "source_id": "b2176d72-4a52-4857-a804-1d3879906b0b",
+      "excerpt": "Malaysia's Honor Of Kings Squad Clinches Silver",
+      "locator": "Asian Games Aichi-Nagoya result",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Malaysia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "a9e312d9-6ba0-4b67-8d62-eacb1d13a7b9",
+        "59aa4448-274c-48e6-b0f9-ef5759932db1",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "f0610d55-1817-4461-a282-7dfd5c713d3f",
+      "source_id": "8e309723-0ad4-4dfb-914e-d4f2e766c526",
+      "excerpt": "the Honor of Kings squad settled for bronze",
+      "locator": "Asian Games Aichi-Nagoya result",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Philippines",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "b2c2c9fc-b7fa-4eef-bc9e-23f8d498f285",
+        "a29ec056-7ef6-40d2-86a5-f6a6091a10b9",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "28904a3f-b06f-4362-b752-7c37ed4c2f1f",
+      "source_id": "c9373093-1709-4a9e-ba4d-4b03b889a6e6",
+      "excerpt": "growth not only in the viewership and offline audience but also in the number of teams interested",
+      "locator": "Level Infinite interview in Philstar",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Philippines",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "87397682-137d-49d0-9a7f-32bc7d84c1e2",
+        "a29ec056-7ef6-40d2-86a5-f6a6091a10b9"
+      ]
+    },
+    {
+      "id": "8bd14534-2768-4501-99dc-58678f5a7865",
+      "source_id": "fac9b154-323c-42f0-b061-87eacab2893f",
+      "excerpt": "Đấu Trường Danh Vọng của Liên Quân Mobile",
+      "locator": "Vietnam esports background",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Vietnam",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "c5a4c46c-1b87-4295-9daf-4503806e23b7",
+        "19d40d67-b581-4b0c-ad2d-0273c1846201",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "093204c5-ebf3-4d5f-9804-4d37b094f7da",
+      "source_id": "b96f6683-ab3a-4fbf-b0aa-2bcb64d44105",
+      "excerpt": "This was followed by Honor of Kings.",
+      "locator": "Indonesian Google Play strategy category Jan-Jun 2026",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Indonesia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "4def504a-044d-48d2-b325-9d1376821d2b",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "b4ea2c2e-f986-4499-9d82-8170d9a40777",
+      "source_id": "585e656a-94b6-474b-ab0f-06a497499396",
+      "excerpt": "Indonesia accounts for 34.9 percent of the title’s viewership",
+      "locator": "Southeast Asia’s mobile monopoly",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Indonesia",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Context for game opportunity analysis",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "4def504a-044d-48d2-b325-9d1376821d2b",
+        "d7b9f2d4-3769-4aaa-bd1b-79c0e908a3cb"
+      ]
+    },
+    {
+      "id": "c50fbe83-6bdb-4003-aada-46424f368173",
+      "source_id": "9b9cf032-4253-498d-8f52-3a081c55e9eb",
+      "excerpt": "Share of selected SEA downloads 18.3%",
+      "locator": "p.12 Vietnam market lens, all mobile games",
+      "retrieved_at": "2026-10-23",
+      "metric": null,
+      "value": null,
+      "unit": null,
+      "market": "Vietnam",
+      "period_start": null,
+      "period_end": null,
+      "scope": "Market-wide context, not HoK-specific monetization/downloads",
+      "method": null,
+      "source_mode": "LIVE",
+      "data_type": "reported",
+      "validation": "supported",
+      "claim_ids": [
+        "19d40d67-b581-4b0c-ad2d-0273c1846201"
+      ]
+    }
+  ]
+}

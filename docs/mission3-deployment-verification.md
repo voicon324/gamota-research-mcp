@@ -44,7 +44,7 @@ The browser loaded the updated site and confirmed the A1 review panel renders so
 ## Local verification
 
 - `uv run pytest tests/test_mission3_a1.py -q` — 9 passed.
-- `uv run pytest -q` — 110 passed.
+- `uv run pytest -q` — 110 passed at the deployment checkout. A fresh run against the current working tree on 2026-10-23 passed all 131 tests.
 - `cd web && npm run build` — passed.
 - Remotion composition/lint — passed; MP4 rendered at 1280×720, 30 fps, 95 seconds.
 - `git diff --check` — passed.

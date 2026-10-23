@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "reports": [
+    {
+      "id": "pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-launch-scale-and-us-q4-downloads-8fae31bb-17b0788f",
+      "title": "Pokémon TCG Pocket: global launch scale and US Q4 downloads",
+      "game": "Pokémon TCG Pocket",
+      "as_of": "2026-10-23",
+      "confidence": "medium",
+      "research_status": "COMPLETE",
+      "path": "./pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-launch-scale-and-us-q4-downloads-8fae31bb-17b0788f/report.json"
+    },
+    {
+      "id": "wuthering-waves-wuthering-waves-mobile-launch-scale-and-what-early-revenue-can-and-cannot-prove-a848d10b-7697d852",
+      "title": "Wuthering Waves: Mobile Launch Scale and What Early Revenue Can (and Cannot) Prove",
+      "game": "Wuthering Waves",
+      "as_of": "2026-10-23",
+      "confidence": "medium",
+      "research_status": "COMPLETE",
+      "path": "./wuthering-waves-wuthering-waves-mobile-launch-scale-and-what-early-revenue-can-and-cannot-prove-a848d10b-7697d852/report.json"
+    },
+    {
+      "id": "honor-of-kings-honor-of-kings-t-i-ng-nam-10-2026-c-h-i-t-ng-tr-ng-v-th-tr-ng-u-ti-n-68edfb56-bf5fac6a",
+      "title": "Honor of Kings tại Đông Nam Á (10/2026): Cơ hội tăng trưởng và thị trường ưu tiên",
+      "game": "Honor of Kings",
+      "as_of": "2026-10-23",
+      "confidence": "medium",
+      "research_status": "COMPLETE",
+      "path": "./honor-of-kings-honor-of-kings-t-i-ng-nam-10-2026-c-h-i-t-ng-tr-ng-v-th-tr-ng-u-ti-n-68edfb56-bf5fac6a/report.json"
+    },
+    {
+      "id": "global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682",
+      "title": "2023 Mobile Games: Spending and Activity Signals",
+      "game": "Global Mobile Games Market",
+      "as_of": "2026-10-22",
+      "confidence": "medium",
+      "research_status": "COMPLETE",
+      "path": "./global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682/report.json"
+    },
+    {
+      "id": "pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-traction-brief-8b431e81-33ffa0f7",
+      "title": "Pokémon TCG Pocket · Global Traction Brief",
+      "game": "Pokémon TCG Pocket",
+      "as_of": "2026-10-15",
+      "confidence": "low",
+      "research_status": "COMPLETE",
+      "path": "./pok-mon-tcg-pocket-pok-mon-tcg-pocket-global-traction-brief-8b431e81-33ffa0f7/report.json"
+    }
+  ]
+}
