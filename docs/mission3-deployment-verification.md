@@ -65,3 +65,17 @@ The canonical hostname is `52-64-163-35.sslip.io`; the numeric IP does not match
 | Current deployed JS asset | HTTP 200; includes `ABSTAIN`, `NOT_COMPARABLE`, and `directional_decision` review UI |
 
 The current live Sensor Tower/Unity example classifies its opposing-looking observations as `NOT_COMPARABLE` because metric and sample scope differ. It is a real scope-mismatch example, not a same-scope conflict. The comparable opposite-evidence `ABSTAIN` path is covered by the deterministic synthetic fixture and is labeled as such in the demo.
+
+## Final submission verification (2026-10-24)
+
+These checks were rerun while the code checkout was at `8b95cad292979d706c57935eaa2593f7809c5c55`, which matched `origin/main`. The only repository change after that verification is this documentation update.
+
+| Check | Result |
+|---|---|
+| `uv run pytest -q` | 131 passed in 38.33s |
+| `cd web && npm run build` | PASS (`tsc -b` and Vite production build) |
+| Live app `/` | HTTP 200 |
+| Published Honor of Kings report JSON | HTTP 200 |
+| Demo MP4 | H.264/AAC, 1280×720, 165.653s (2:45.653) |
+
+The final MP4 and Vietnamese SRT are delivered outside this repository. The portal's video URL remains blank for the user's YouTube upload.
