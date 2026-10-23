@@ -8,6 +8,7 @@ from urllib.parse import urlsplit
 from mcp.server import MCPServer
 from mcp.server.auth.provider import AccessToken, TokenVerifier
 from mcp.server.auth.settings import AuthSettings
+from mcp.server.transport_security import TransportSecuritySettings
 from pydantic import AnyHttpUrl
 
 from .db import Database
@@ -143,6 +144,36 @@ def _database_path() -> Path:
     return Path.home() / ".local" / "share" / "gamota-research-mcp" / "research.sqlite3"
 
 
+def _http_transport_security_settings() -> TransportSecuritySettings:
+    configured_origins = [
+        origin.strip()
+        for origin in os.environ.get("GAMOTA_MCP_ALLOWED_ORIGINS", "").split(",")
+        if origin.strip()
+    ]
+    return TransportSecuritySettings(
+        enable_dns_rebinding_protection=True,
+        allowed_hosts=["127.0.0.1:*", "localhost:*", "[::1]:*"],
+        allowed_origins=[
+            "http://127.0.0.1:*",
+            "http://localhost:*",
+            "http://[::1]:*",
+            *configured_origins,
+        ],
+    )
+
+
+def _http_auth_mode() -> str:
+    """Return the configured HTTP auth mode, requiring an explicit public-write opt-in."""
+    mode = os.environ.get("GAMOTA_MCP_HTTP_AUTH", "bearer").strip().casefold()
+    if mode not in {"bearer", "none"}:
+        raise ValueError("GAMOTA_MCP_HTTP_AUTH must be 'bearer' or 'none'")
+    if mode == "none" and os.environ.get("GAMOTA_MCP_PUBLIC_WRITES") != "true":
+        raise ValueError(
+            "GAMOTA_MCP_PUBLIC_WRITES=true is required to expose write tools without authentication"
+        )
+    return mode
+
+
 def _build_store_provider(fixture_path: Path):
     provider_name = os.environ.get("GAMOTA_STORE_PROVIDER", "fixture").strip().casefold()
     if provider_name == "fixture":
@@ -158,6 +189,7 @@ def main() -> None:
     transport = os.environ.get("GAMOTA_TRANSPORT", "stdio").strip().casefold()
     if transport not in {"stdio", "streamable-http"}:
         raise ValueError("GAMOTA_TRANSPORT must be 'stdio' or 'streamable-http'")
+    auth_mode = _http_auth_mode() if transport == "streamable-http" else "bearer"
     database = Database(_database_path())
     repository = ResearchRepository(database)
     service = ResearchService(repository)
@@ -192,10 +224,10 @@ def main() -> None:
         service,
         store_service,
         http_bearer_token=os.environ.get("GAMOTA_MCP_BEARER_TOKEN")
-        if transport == "streamable-http"
+        if transport == "streamable-http" and auth_mode == "bearer"
         else None,
         public_mcp_url=os.environ.get("GAMOTA_PUBLIC_MCP_URL")
-        if transport == "streamable-http"
+        if transport == "streamable-http" and auth_mode == "bearer"
         else None,
         report_service=report_service,
         oauth_verifier=oauth_verifier,
@@ -203,14 +235,15 @@ def main() -> None:
     )
     try:
         if transport == "streamable-http":
-            if not os.environ.get("GAMOTA_MCP_BEARER_TOKEN"):
+            if auth_mode == "bearer" and not os.environ.get("GAMOTA_MCP_BEARER_TOKEN"):
                 raise ValueError("GAMOTA_MCP_BEARER_TOKEN is required for HTTP transport")
-            if not os.environ.get("GAMOTA_PUBLIC_MCP_URL"):
+            if auth_mode == "bearer" and not os.environ.get("GAMOTA_PUBLIC_MCP_URL"):
                 raise ValueError("GAMOTA_PUBLIC_MCP_URL is required for HTTP transport")
             server.run(
                 transport="streamable-http",
                 host=os.environ.get("GAMOTA_HOST", "127.0.0.1"),
-                port=int(os.environ.get("PORT", "8000")),
+                port=int(os.environ.get("GAMOTA_MCP_PORT", os.environ.get("PORT", "8000"))),
+                transport_security=_http_transport_security_settings(),
             )
         else:
             server.run(transport="stdio")

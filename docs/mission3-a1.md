@@ -13,7 +13,7 @@ The report remains schema `1.0`; Mission 3 fields are optional, preserving old r
 `tests/test_mission3_a1.py` covers the assigned change request, a metric-scope edge case, malformed or missing references, legacy schema compatibility, a supported-report regression, and missing evidence. Results on this tree:
 
 - `uv run pytest tests/test_mission3_a1.py -q` — **9 passed**.
-- `uv run pytest -q` — **126 passed** at the current checkout, including the Mission 3 and OAuth integration coverage.
+- `uv run pytest -q` — **131 passed** at the current checkout, including the Mission 3, OAuth, and public MCP origin checks.
 - `cd web && npm run build` — **passed** (TypeScript and Vite production build).
 - `git diff --check` — **passed**.
 

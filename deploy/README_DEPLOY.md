@@ -4,9 +4,10 @@ This bundle enables Streamable HTTP while preserving stdio. It also documents th
 
 ## Current deployment status (2026-10-15)
 
-- Public MCP endpoint: `https://52.64.163.35/mcp` (bearer authentication required).
+- Public MCP endpoint: `https://52-64-163-35.sslip.io/mcp` (bearer authentication required).
+- Public unauthenticated MCP endpoint: `https://52-64-163-35.sslip.io/mcp-public` (all tools, including write and publish, are exposed without authentication at the owner's request).
 - The systemd application service and Nginx reverse proxy are active; the application binds to loopback behind Nginx.
-- HTTPS is enabled with a Let's Encrypt IP certificate; automated renewal is configured.
+- TLS is valid on the `52-64-163-35.sslip.io` hostname. The raw IP does not match the certificate hostname.
 - The original deployment baseline had 15 tools. After the MVP report pipeline release on 2026-10-15, public checks report unauthenticated `/mcp` `401`, authenticated initialize `PASS`, and authenticated discovery `18 tools`.
 - The deployed checkout was read-only verified at revision `415e59513596fabd375cff2fbcc73817eb23375a` before the MVP release. Service and Nginx remain active.
 - The bearer value, private key, environment contents and Authorization headers are intentionally omitted. See [`../docs/mission2-deployment-verification.md`](../docs/mission2-deployment-verification.md) for sanitized evidence.
@@ -39,9 +40,9 @@ Create a root-readable environment file from `env.example` on the server and set
 
 Do not copy a development `.env`, SQLite DB, key, or bearer token into this bundle or Git. Do not pass the token as a command-line argument. Protect the environment file with owner-only read permissions.
 
-### ChatGPT OAuth and legacy bearer authentication
+### Public ChatGPT MCP and legacy bearer authentication
 
-The MCP endpoint continues to accept the existing static bearer token for Codex/Claude and other configured clients. The ChatGPT integration runs a separate OAuth authorization service on loopback port `8001`; it issues independent, short-lived OAuth tokens using Authorization Code + PKCE S256. OAuth tokens are stored in the persistent OAuth SQLite database only by digest and are bound to the exact MCP resource.
+The original `/mcp` endpoint continues to require the existing bearer token for Codex/Claude and other configured clients. ChatGPT uses `/mcp-public`, proxied to a second loopback MCP service on port `8002`. That endpoint exposes every tool, including create/update/publish, to any caller that can reach the public HTTPS host. Treat it as a public write API; do not use it for private research or confidential source material. The OAuth endpoints remain available but are not used by `/mcp-public`.
 
 Set these values in the protected server environment file:
 
@@ -52,7 +53,7 @@ Set these values in the protected server environment file:
 
 The OAuth login uses `GAMOTA_MCP_BEARER_TOKEN` as the temporary single-owner login credential. The credential is compared in constant time, never stored by the OAuth service, and never sent to ChatGPT. The login page requires explicit scope selection. OAuth scopes are `research:read`, `research:write`, and `report:publish`; every MCP tool call is checked server-side. Do not use this shared-credential bridge for multiple users; replace it with a dedicated identity provider before broad access.
 
-Install `gamota-research-oauth.service` alongside the MCP unit. Include [`nginx-oauth-locations.conf`](nginx-oauth-locations.conf) inside the existing HTTPS server block before the SPA fallback. Keep the current `/mcp`, UI, report, certificate, and port 80 locations intact. The well-known routes must return JSON, not `index.html`. Check the active ChatGPT callback before changing the environment value.
+Install `gamota-research-oauth.service` and [`gamota-research-mcp-public.service`](gamota-research-mcp-public.service). Include [`nginx-oauth-locations.conf`](nginx-oauth-locations.conf) inside the existing HTTPS server block before the SPA fallback. Keep the current `/mcp`, UI, report, certificate, and port 80 locations intact.
 
 ## Install and operate
 
@@ -111,8 +112,8 @@ sudo systemctl reload nginx
 UI smoke checks:
 
 ```bash
-curl -fsS -o /dev/null -w 'root=%{http_code}\n' https://52.64.163.35/
-curl -sS -o /dev/null -w 'mcp=%{http_code}\n' https://52.64.163.35/mcp
+curl -fsS -o /dev/null -w 'root=%{http_code}\n' https://52-64-163-35.sslip.io/
+curl -sS -o /dev/null -w 'mcp=%{http_code}\n' https://52-64-163-35.sslip.io/mcp
 ```
 
 Expected: `/` is `200`; unauthenticated `/mcp` remains `401`; `/reports/index.json` is `200`. Open the root and verify the published-report reader and evidence links. Then run `./deploy/verify.sh` with the bearer token in the protected operator environment to confirm authenticated initialization and 18-tool discovery. A frontend-only release must not restart `gamota-research-mcp.service`.

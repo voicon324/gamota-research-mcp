@@ -46,7 +46,10 @@ def _secure_html(content: str, *, status_code: int = 200) -> HTMLResponse:
             "Referrer-Policy": "no-referrer",
             "X-Content-Type-Options": "nosniff",
             "X-Frame-Options": "DENY",
-            "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+            # The consent form posts back to this service, then receives a
+            # 303 to ChatGPT's OAuth callback. Allow that redirect destination
+            # in form-action or browsers may block the callback after consent.
+            "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; form-action 'self' https://chatgpt.com; base-uri 'none'; frame-ancestors 'none'",
         },
     )
 
@@ -142,7 +145,7 @@ def create_oauth_app(
             "</style><main><h1>Connect ChatGPT to Gamota Research</h1>"
             "<p>Authenticate with your owner credential, then choose exactly which research actions ChatGPT may use."
             " The credential is sent only to this HTTPS service and is never issued to ChatGPT.</p>"
-            "<form method='post' action='/login'>"
+            "<form method='post' action='/login' target='_top'>"
             f"<input type='hidden' name='ticket' value='{escape(ticket, quote=True)}'>"
             f"<input type='hidden' name='csrf_token' value='{escape(csrf, quote=True)}'>"
             "<label for='owner_secret'>Owner credential</label>"
@@ -163,7 +166,10 @@ def create_oauth_app(
         if not login_request:
             return _error_page("This authorization request is invalid or expired.", status_code=400)
         origin = request.headers.get("origin")
-        if origin != issuer_origin:
+        # Browser-mediated OAuth form posts may carry the opaque origin "null".
+        # The per-request CSRF token below remains mandatory; reject any other
+        # supplied origin that does not match this service.
+        if origin not in (None, "null", issuer_origin):
             return _error_page("The authorization form must be submitted from this service.", status_code=403)
         identity = request.headers.get("x-real-ip") or (request.client.host if request.client else "unknown")
         if not limiter.allowed(identity):
@@ -192,7 +198,14 @@ def create_oauth_app(
         if approved["state"] is not None:
             query["state"] = str(approved["state"])
         callback = urlunsplit((parsed.scheme, parsed.netloc, parsed.path, urlencode(query), ""))
-        return RedirectResponse(callback, status_code=302, headers={"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"})
+        # OAuth authorization responses must redirect the user agent to the
+        # registered client callback. A 303 converts this form POST into the
+        # callback GET expected by ChatGPT's authorization-code flow.
+        return RedirectResponse(
+            callback,
+            status_code=303,
+            headers={"Cache-Control": "no-store", "Referrer-Policy": "no-referrer"},
+        )
 
     async def revoke_token(request: Request) -> Response:
         form = await request.form()

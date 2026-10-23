@@ -55,7 +55,7 @@ const cases = {
 export default function App() {
   const [caseId, setCaseId] = useState<CaseId>('R2');
   const [showTrace, setShowTrace] = useState(true);
-  const [mcpStatus, setMcpStatus] = useState<'idle'|'checking'|'protected'|'error'>('idle');
+  const [mcpStatus, setMcpStatus] = useState<'idle'|'checking'|'online'|'error'>('idle');
   const [copied, setCopied] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [publishedReports, setPublishedReports] = useState<ReportIndexItem[]>([]);
@@ -102,12 +102,21 @@ export default function App() {
   async function checkEndpoint() {
     setMcpStatus('checking');
     try {
-      const response = await fetch('/mcp', { method: 'GET', headers: { Accept: 'application/json' }, cache: 'no-store' });
-      setMcpStatus(response.status === 401 ? 'protected' : 'error');
+      const response = await fetch('/mcp-public', {
+        method: 'POST',
+        headers: { Accept: 'application/json, text/event-stream', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          jsonrpc: '2.0', id: 1, method: 'initialize',
+          params: { protocolVersion: '2025-03-26', capabilities: {}, clientInfo: { name: 'fieldnotes-status-check', version: '1.0.0' } },
+        }),
+        cache: 'no-store',
+      });
+      const body = await response.text();
+      setMcpStatus(response.ok && body.includes('protocolVersion') ? 'online' : 'error');
     } catch { setMcpStatus('error'); }
   }
   async function copyConfig() {
-    await navigator.clipboard.writeText('[mcp_servers.gamota-research]\nurl = "https://52.64.163.35/mcp"\nheaders = { Authorization = "Bearer <YOUR_TOKEN>" }');
+    await navigator.clipboard.writeText('[mcp_servers.gamota-research]\nurl = "https://52-64-163-35.sslip.io/mcp-public"');
     setCopied(true); window.setTimeout(() => setCopied(false), 1800);
   }
   async function copyResearchFollowup(issue: ReportIssue) {
@@ -215,7 +224,7 @@ export default function App() {
 
         <section className="method-section" id="method"><div className="method-title"><div className="section-kicker">THE RESEARCH LOOP</div><h2>Your agent explores.<br/>The system checks.</h2><p>The host agent uses its native search and fetch tools. MCP preserves the audit trail and applies deterministic checks.</p><a className="text-link" href="https://github.com/voicon324/gamota-research-mcp" target="_blank" rel="noreferrer">Read the implementation <ExternalLink size={14}/></a></div><div className="loop-steps"><div className="loop-step"><span className="step-icon agent-step"><Search size={17}/></span><div><b>Agent researches</b><p>Codex or Claude searches with its own web tools and records URLs, quotes, and evidence.</p></div><span className="step-tag">HOST AGENT</span></div><div className="step-rule"/><div className="loop-step"><span className="step-icon mcp-step"><Clipboard size={17}/></span><div><b>MCP records &amp; publishes</b><p>Contracts, sources, claims, reports, and evidence persist with traceable links.</p></div><span className="step-tag">18 MCP TOOLS</span></div><div className="step-rule"/><div className="loop-step"><span className="step-icon check-step"><Activity size={17}/></span><div><b>Validator challenges</b><p>Grounding, freshness, metrics, scope, conflicts, and independent origins are checked.</p></div><span className="step-tag">DETERMINISTIC</span></div></div></section>
 
-        <section className="connect-section" id="connect"><div><div className="section-kicker">READY FOR YOUR AGENT</div><h2>Bring the tools<br/>to your workflow.</h2><p>Connect the hosted MCP endpoint in Codex or Claude. The web UI never needs the bearer token.</p><div className="endpoint-line"><span className="endpoint-dot"/> https://52.64.163.35/mcp <button onClick={copyConfig} aria-label="Copy Codex configuration">{copied?<Check size={14}/>:<Clipboard size={14}/>} {copied?'COPIED':'COPY CONFIG'}</button></div><div className="disclaimer">A bearer token is required. Deliver it to reviewers only through an approved private channel.</div></div><div className="connect-card"><div className="connect-card-top"><span className="code-badge">&lt;/&gt;</span><div><b>Hosted MCP</b><small>Streamable HTTP · bearer protected</small></div><span className={`status-live ${mcpStatus==='protected'?'online':''}`}/></div><div className="connect-line"><span>Endpoint</span><code>/mcp</code></div><div className="connect-line"><span>Transport</span><code>Streamable HTTP</code></div><div className="connect-line"><span>Authentication</span><code>Bearer token</code></div><button className="check-button" onClick={checkEndpoint} disabled={mcpStatus==='checking'}>{mcpStatus==='checking'?'Checking endpoint…':mcpStatus==='protected'?'Endpoint protected · check again':'Check endpoint status'} <ArrowUpRight size={15}/></button>{mcpStatus==='error'&&<div className="status-error">Could not reach /mcp from this browser. The site may still load normally.</div>}{mcpStatus==='protected'&&<div className="status-ok">Unauthenticated request received 401. The protected endpoint is responding.</div>}</div></section>
+        <section className="connect-section" id="connect"><div><div className="section-kicker">READY FOR YOUR AGENT</div><h2>Bring the tools<br/>to your workflow.</h2><p>Connect the public MCP endpoint in ChatGPT, Codex, or Claude. Use the host agent’s own web search to research, then call Gamota Research to validate and publish the report.</p><div className="endpoint-line"><span className="endpoint-dot"/> https://52-64-163-35.sslip.io/mcp-public <button onClick={copyConfig} aria-label="Copy Codex configuration">{copied?<Check size={14}/>:<Clipboard size={14}/>} {copied?'COPIED':'COPY CONFIG'}</button></div><div className="disclaimer">No authentication. Anyone with this URL can read, create, change, or publish research. Use public information only.</div></div><div className="connect-card"><div className="connect-card-top"><span className="code-badge">&lt;/&gt;</span><div><b>Hosted MCP</b><small>Streamable HTTP · public access</small></div><span className={`status-live ${mcpStatus==='online'?'online':''}`}/></div><div className="connect-line"><span>Endpoint</span><code>/mcp-public</code></div><div className="connect-line"><span>Transport</span><code>Streamable HTTP</code></div><div className="connect-line"><span>Authentication</span><code>None</code></div><button className="check-button" onClick={checkEndpoint} disabled={mcpStatus==='checking'}>{mcpStatus==='checking'?'Checking endpoint…':mcpStatus==='online'?'MCP connected · check again':'Check MCP connection'} <ArrowUpRight size={15}/></button>{mcpStatus==='error'&&<div className="status-error">Could not initialize /mcp-public. The endpoint may be temporarily unavailable.</div>}{mcpStatus==='online'&&<div className="status-ok">Unauthenticated MCP initialize succeeded. Tools are ready to discover.</div>}</div></section>
 
         <footer className="footer"><a className="footer-brand" href="#top"><Waypoints size={17}/> Fieldnotes</a><span>Evidence-first research for mobile games</span><a href="https://github.com/voicon324/gamota-research-mcp" target="_blank" rel="noreferrer">Open source on GitHub <ExternalLink size={13}/></a></footer>
       </div>

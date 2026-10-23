@@ -1,0 +1,28 @@
+[Unit]
+Description=Gamota Research MCP (public unauthenticated endpoint)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gamota
+Group=gamota
+WorkingDirectory=/opt/gamota-research-mcp-oauth
+EnvironmentFile=/etc/gamota-research-mcp/environment
+Environment=GAMOTA_TRANSPORT=streamable-http
+Environment=GAMOTA_MCP_HTTP_AUTH=none
+Environment=GAMOTA_MCP_PUBLIC_WRITES=true
+Environment=GAMOTA_MCP_ALLOWED_ORIGINS=https://52-64-163-35.sslip.io
+Environment=GAMOTA_HOST=127.0.0.1
+Environment=GAMOTA_MCP_PORT=8002
+ExecStart=/opt/gamota-research-mcp-oauth/.venv/bin/python -m gamota_research.mcp_server
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/gamota-research-mcp
+
+[Install]
+WantedBy=multi-user.target

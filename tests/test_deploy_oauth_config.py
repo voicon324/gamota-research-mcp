@@ -6,6 +6,8 @@ ROOT = Path(__file__).parents[1]
 
 def test_oauth_nginx_routes_bypass_spa_and_use_loopback_services():
     config = (ROOT / "deploy" / "nginx-oauth-locations.conf").read_text()
+    assert "location = /mcp-public {" in config
+    assert "proxy_pass http://127.0.0.1:8002/mcp;" in config
     expected = {
         "/.well-known/oauth-protected-resource/mcp": 8000,
         "/.well-known/oauth-authorization-server": 8001,
@@ -37,3 +39,10 @@ def test_public_oauth_verifier_uses_trusted_tls_without_secrets():
     assert "GAMOTA_MCP_BEARER_TOKEN" not in script
     assert "resource_metadata=" in script
     assert "code_challenge_methods_supported" in script
+
+
+def test_public_mcp_service_requires_explicit_unauthenticated_write_mode():
+    service = (ROOT / "deploy" / "gamota-research-mcp-public.service").read_text()
+    assert "GAMOTA_MCP_HTTP_AUTH=none" in service
+    assert "GAMOTA_MCP_PUBLIC_WRITES=true" in service
+    assert "GAMOTA_MCP_PORT=8002" in service

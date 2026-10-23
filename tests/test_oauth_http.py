@@ -73,6 +73,7 @@ def test_oauth_authorization_requires_owner_login_consent_and_pkce(tmp_path):
 
     login_page = client.get(f"/login?ticket={ticket}")
     assert login_page.status_code == 200
+    assert "form-action 'self' https://chatgpt.com" in login_page.headers["content-security-policy"]
     assert "report:publish" in login_page.text
     assert "name='owner_secret'" in login_page.text
     assert "owner-secret" not in login_page.text
@@ -97,7 +98,7 @@ def test_oauth_authorization_requires_owner_login_consent_and_pkce(tmp_path):
         headers={"origin": ISSUER.rstrip("/")},
         follow_redirects=False,
     )
-    assert approved.status_code == 302
+    assert approved.status_code == 303
     callback = approved.headers["location"]
     assert callback.startswith(CALLBACK + "?")
     assert "state=state-123" in callback

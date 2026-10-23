@@ -34,23 +34,26 @@ Then ask Codex to research a question like:
 
 > Research whether **[game]** shows **[market signal]** in **[market]** on **[platform]** during **[period]**. Use your native web search and fetch tools. Create a research run and contract; save each source and quoted evidence before claims; label facts, estimates and inferences; record gaps or conflicts; validate and finalize; then publish a Game Decision Brief. Do not fill missing evidence with guesses.
 
-For the live [report library](https://52.64.163.35/#published), connect your agent to the hosted MCP at [`https://52.64.163.35/mcp`](https://52.64.163.35/mcp). It requires a bearer token. Keep the token private; it is not stored in the website.
+For the live [report library](https://52-64-163-35.sslip.io/#published), connect to the hosted MCP at `https://52-64-163-35.sslip.io/mcp-public`. No login or bearer token is required.
 
-## Connect ChatGPT
+## Connect ChatGPT, Codex, or Claude
 
-In ChatGPT, open **Plugins → Add → Add custom MCP server** and enter:
+In ChatGPT, use the **Gamota Research Public** connector. To add it to another ChatGPT profile, add a custom MCP server with this endpoint and choose no authentication:
 
-- Name: `Gamota Research`
-- Server URL: `https://52.64.163.35/mcp`
-- Authentication: `OAuth`
-- OAuth client ID: `gamota-chatgpt` (no client secret)
-- Authorization server: `https://52.64.163.35/`
-- Authorization endpoint: `https://52.64.163.35/authorize`
-- Token endpoint: `https://52.64.163.35/token`
-- MCP resource: `https://52.64.163.35/mcp`
-- PKCE: `S256`
+```text
+https://52-64-163-35.sslip.io/mcp-public
+```
 
-Use the callback URL shown in the ChatGPT form. On the server, the owner approves the requested scopes (`research:read`, `research:write`, `report:publish`) with the private bearer credential. The credential is sent only to the HTTPS login page and is not issued to ChatGPT. The connector can then use ChatGPT's native web search together with the MCP's research, validation and report tools.
+For Codex or Claude, add the same endpoint to the client's MCP settings with authentication disabled:
+
+```toml
+[mcp_servers.gamota-research]
+url = "https://52-64-163-35.sslip.io/mcp-public"
+```
+
+Your agent uses its own web search and fetch tools; Gamota Research stores sources and evidence, checks the report, and publishes it to the shared library.
+
+**Public access:** this endpoint exposes every MCP tool, including creating and updating research and publishing reports. Anyone with the URL can use those tools. Use public information only; do not send private or confidential data.
 
 ## Run locally
 
