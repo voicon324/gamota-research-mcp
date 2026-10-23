@@ -23,6 +23,10 @@ from .enums import (
 )
 from .models import Claim, ClaimEvidence, Evidence, ResearchIssue, ResearchRun, Source
 from .provenance import build_claim_lineage_audit
+from .source_assurance import (
+    sanitize_untrusted_metadata,
+    source_assurance_for_host_supplied_source,
+)
 
 E = TypeVar("E", bound=Enum)
 
@@ -317,6 +321,8 @@ class ResearchRepository:
         elif fields:
             raise TypeError("Pass either a Source or keyword fields, not both")
 
+        source = replace(source, metadata=sanitize_untrusted_metadata(source.metadata))
+
         if source.parent_source_id:
             parent = self.get_source(source.parent_source_id)
             if parent is None:
@@ -375,7 +381,7 @@ class ResearchRepository:
             parent_source_id=row["parent_source_id"],
             root_source_id=row["root_source_id"],
             provenance_status=_enum(ProvenanceStatus, row["provenance_status"]),
-            metadata=_metadata(row["metadata_json"]),
+            metadata=sanitize_untrusted_metadata(_metadata(row["metadata_json"])),
         )
 
     def save_evidence(self, evidence: Evidence | None = None, **fields: Any) -> Evidence:
@@ -383,6 +389,10 @@ class ResearchRepository:
             evidence = Evidence(**fields)
         elif fields:
             raise TypeError("Pass either an Evidence or keyword fields, not both")
+
+        evidence = replace(
+            evidence, metadata=sanitize_untrusted_metadata(evidence.metadata)
+        )
 
         source = self.get_source(evidence.source_id)
         if source is None:
@@ -453,7 +463,7 @@ class ResearchRepository:
             scope=row["scope"],
             method=row["method"],
             source_mode=_enum(SourceMode, row["source_mode"]),
-            metadata=_metadata(row["metadata_json"]),
+            metadata=sanitize_untrusted_metadata(_metadata(row["metadata_json"])),
         )
 
     def save_store_chart_snapshot(
@@ -822,7 +832,9 @@ class ResearchRepository:
                 "scope": row["scope"],
                 "method": row["method"],
                 "source_mode": row["source_mode"],
-                "metadata": _metadata(row["evidence_metadata_json"]),
+                "metadata": sanitize_untrusted_metadata(
+                    _metadata(row["evidence_metadata_json"])
+                ),
             }
             source = {
                 "id": row["source_id_value"],
@@ -836,10 +848,17 @@ class ResearchRepository:
                 "parent_source_id": row["parent_source_id"],
                 "root_source_id": row["root_source_id"],
                 "provenance_status": row["provenance_status"],
-                "metadata": _metadata(row["source_metadata_json"]),
+                "metadata": sanitize_untrusted_metadata(
+                    _metadata(row["source_metadata_json"])
+                ),
             }
             evidence_items.append(
-                {"relation": row["relation"], "evidence": evidence, "source": source}
+                {
+                    "relation": row["relation"],
+                    "evidence": evidence,
+                    "source": source,
+                    "source_assurance": source_assurance_for_host_supplied_source(),
+                }
             )
         return {"claim": claim, "evidence": evidence_items}
 

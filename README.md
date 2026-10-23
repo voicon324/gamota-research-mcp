@@ -7,7 +7,7 @@
 1. Ask a focused question: game, market, platform, metric and time period.
 2. The agent searches and reads public sources using its native web tools.
 3. It records source details, quoted evidence and claims in the MCP.
-4. The MCP checks evidence links, scope, dates, metrics, conflicts and source independence. If evidence is missing, the result can remain partial; the agent should not guess.
+4. The MCP checks evidence links, scope, dates, metrics and conflicts. It records source provenance, but the URL and quote come from the host agent and are not independently fetched by the MCP. If evidence is missing, the result can remain partial; the agent should not guess.
 5. The agent publishes the brief. Open it in the report library and inspect the evidence behind each finding.
 
 The MCP does **not** perform general web search or call an LLM. It is the research record, validator and report publisher.

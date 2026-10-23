@@ -102,6 +102,39 @@ def test_scope_mismatch_is_not_falsely_published_as_conflict(repository, tmp_pat
     assert report["summary"]["directional_decision"]["outcome"] == "NOT_COMPARABLE"
 
 
+def test_published_evidence_exposes_server_assurance(repository, tmp_path):
+    report = _publish_directional_pair(repository, tmp_path)
+
+    for item in report["evidence"]:
+        assert item["source_assurance"] == {
+            "status": "NOT_INDEPENDENTLY_VERIFIED",
+            "url_origin": "HOST_SUPPLIED",
+            "quote_origin": "HOST_SUPPLIED",
+            "source_retrieved_by_server": False,
+            "message": (
+                "The connected research agent supplied the source URL and quotation; "
+                "the MCP server did not independently retrieve the source."
+            ),
+        }
+
+
+def test_publish_remains_compatible_with_trace_without_assurance(repository, tmp_path):
+    original_get_trace = repository.get_claim_trace
+
+    def legacy_trace(claim_id):
+        trace = original_get_trace(claim_id)
+        if trace:
+            for link in trace["evidence"]:
+                link.pop("source_assurance", None)
+        return trace
+
+    repository.get_claim_trace = legacy_trace
+    report = _publish_directional_pair(repository, tmp_path)
+
+    assert report["evidence"]
+    assert all("source_assurance" not in item for item in report["evidence"])
+
+
 def test_report_validation_rejects_unknown_conflict_evidence_id(repository, tmp_path):
     report = _publish_directional_pair(repository, tmp_path)
     conflict = next(item for item in report["unknowns"] if item["type"] == "CONFLICT")
