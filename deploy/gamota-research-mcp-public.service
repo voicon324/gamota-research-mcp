@@ -13,6 +13,7 @@ Environment=GAMOTA_TRANSPORT=streamable-http
 Environment=GAMOTA_MCP_HTTP_AUTH=none
 Environment=GAMOTA_MCP_PUBLIC_WRITES=true
 Environment=GAMOTA_MCP_ALLOWED_ORIGINS=https://52-64-163-35.sslip.io
+Environment=GAMOTA_PUBLIC_SITE_URL=https://52-64-163-35.sslip.io
 Environment=GAMOTA_HOST=127.0.0.1
 Environment=GAMOTA_MCP_PORT=8002
 ExecStart=/opt/gamota-research-mcp-oauth/.venv/bin/python -m gamota_research.mcp_server

@@ -34,6 +34,7 @@ Create a root-readable environment file from `env.example` on the server and set
 - `GAMOTA_PUBLIC_MCP_URL` to the final HTTPS MCP endpoint ending in `/mcp`
 - `GAMOTA_RESEARCH_DB` to the persistent database path
 - `GAMOTA_REPORTS_DIR=/var/lib/gamota-research-mcp/published-reports` for immutable public report artifacts
+- `GAMOTA_PUBLIC_SITE_URL=https://<public-host>` so MCP returns a direct report-page link
 - `GAMOTA_HOST` to `127.0.0.1` behind a reverse proxy (default)
 - `PORT` to the locally reserved application port
 - `GAMOTA_STORE_PROVIDER=fixture` for deterministic demo data, or explicitly choose `apple_rss` if live Apple Vietnam Top Free/Top Paid data is desired

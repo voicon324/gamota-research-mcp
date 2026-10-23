@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict, is_dataclass
 from enum import Enum
 from typing import Any
+from urllib.parse import quote
 
 from mcp.server import MCPServer
 from mcp.server.mcpserver.exceptions import ToolError
@@ -40,6 +41,7 @@ def register_research_tools(
     validator: Validator,
     store_service: StoreService | None = None,
     report_service: ReportService | None = None,
+    public_site_url: str | None = None,
 ) -> None:
     """Register MCP adapters for the existing research service and validator."""
 
@@ -383,7 +385,13 @@ def register_research_tools(
                 "Publish an immutable Game Decision Brief from a finalized research run. "
                 "The verdict is host-authored; findings and recommendations are built "
                 "only from validated, evidence-linked claims. The report is written to "
-                "the configured public reports directory for the website to read."
+                "the configured public reports directory for the website to read. "
+                "Use the returned report_id internally to read the report back with "
+                "get_published_report. In the same conversation, summarize the verdict, "
+                "key findings, confidence, and limits in the user's language, then include "
+                "a natural Markdown link using the exact returned public_url. Do not ask "
+                "the user for report_id or public_url, and do not expose internal IDs unless "
+                "asked."
             )
         )
         def publish_game_decision_brief(
@@ -405,10 +413,24 @@ def register_research_tools(
                 )
             except (TypeError, ValueError, KeyError) as error:
                 raise ToolError(str(error)) from error
+            report_id = report["report"]["id"]
+            encoded_report_id = quote(report_id, safe="")
+            public_url = (
+                f"{public_site_url.rstrip('/')}/?report={encoded_report_id}#published"
+                if public_site_url
+                else None
+            )
+            report_json_url = (
+                f"{public_site_url.rstrip('/')}/reports/{encoded_report_id}/report.json"
+                if public_site_url
+                else None
+            )
             return {
-                "report_id": report["report"]["id"],
-                "report_path": f"{report['report']['id']}/report.json",
-                "markdown_path": f"{report['report']['id']}/report.md",
+                "report_id": report_id,
+                "report_path": f"{report_id}/report.json",
+                "markdown_path": f"{report_id}/report.md",
+                "public_url": public_url,
+                "report_json_url": report_json_url,
                 "published": True,
                 "research_status": report["report"]["research_status"],
                 "finding_count": len(report["findings"]),
@@ -417,19 +439,45 @@ def register_research_tools(
                 "evidence_count": len(report["evidence"]),
             }
 
-        @server.tool(description="List published Game Decision Brief metadata for the report library.")
+        @server.tool(
+            description=(
+                "Find published Game Decision Briefs by title, game, or date. Use this to "
+                "locate a report when the user asks about a previously published report; "
+                "choose the matching report and use its ID internally with get_published_report. "
+                "Do not ask the user to provide an internal report ID."
+            )
+        )
         def list_published_reports() -> dict[str, Any]:
             try:
                 return report_service.list_reports()
             except (OSError, ValueError) as error:
                 raise ToolError(f"Could not read published report manifest: {error}") from error
 
-        @server.tool(description="Read a published report, including findings, sources, and evidence excerpts.")
+        @server.tool(
+            description=(
+                "Read a published report, including findings, sources, evidence excerpts, "
+                "and its direct public page URL. Use the report ID returned by publish_game_decision_brief "
+                "or list_published_reports internally; summarize the report in the user's "
+                "language and link to public_url naturally."
+            )
+        )
         def get_published_report(report_id: str) -> dict[str, Any]:
             try:
-                return report_service.get_report(report_id)
+                report = report_service.get_report(report_id)
             except (OSError, ValueError, KeyError) as error:
                 raise ToolError(str(error)) from error
+            encoded_report_id = quote(report_id, safe="")
+            report["public_url"] = (
+                f"{public_site_url.rstrip('/')}/?report={encoded_report_id}#published"
+                if public_site_url
+                else None
+            )
+            report["report_json_url"] = (
+                f"{public_site_url.rstrip('/')}/reports/{encoded_report_id}/report.json"
+                if public_site_url
+                else None
+            )
+            return report
 
     if store_service is not None:
 

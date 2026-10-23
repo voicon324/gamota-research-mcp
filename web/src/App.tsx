@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Activity, ArrowDownRight, ArrowUpRight, Check, ChevronDown, CircleHelp, Clipboard, ExternalLink, Eye, FileSearch, Fingerprint, FlaskConical, GitBranch, Menu, Search, ShieldCheck, Sparkles, Waypoints, X } from 'lucide-react';
 
 type CaseId = 'R1' | 'R2';
@@ -82,7 +82,7 @@ export default function App() {
     return publishedReports.filter(item => !needle || `${item.game} ${item.title}`.toLocaleLowerCase().includes(needle));
   }, [publishedReports, reportQuery]);
 
-  async function openReport(item: ReportIndexItem) {
+  const openReport = useCallback(async (item: ReportIndexItem) => {
     setReportLoading(true);
     setReportError('');
     setActiveReport(null);
@@ -97,7 +97,15 @@ export default function App() {
     } finally {
       setReportLoading(false);
     }
-  }
+  }, []);
+
+  useEffect(() => {
+    if (reportsLoading || publishedReports.length === 0) return;
+    const reportId = new URLSearchParams(window.location.search).get('report');
+    if (!reportId) return;
+    const report = publishedReports.find(item => item.id === reportId);
+    if (report) void openReport(report);
+  }, [reportsLoading, publishedReports, openReport]);
 
   async function checkEndpoint() {
     setMcpStatus('checking');

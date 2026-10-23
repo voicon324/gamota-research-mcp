@@ -53,6 +53,8 @@ url = "https://52-64-163-35.sslip.io/mcp-public"
 
 Your agent uses its own web search and fetch tools; Gamota Research stores sources and evidence, checks the report, and publishes it to the shared library.
 
+Just ask for research in normal language, such as “What do we know about Wuthering Waves' launch in Japan?” The agent searches with its own web tools, uses the MCP to record and check evidence, and publishes a report when the evidence supports one. It then summarizes the conclusion and key limits in the same chat and adds a natural link to the full report. You do not need to know tool names or provide internal report IDs.
+
 **Public access:** this endpoint exposes every MCP tool, including creating and updating research and publishing reports. Anyone with the URL can use those tools. Use public information only; do not send private or confidential data.
 
 ## Run locally

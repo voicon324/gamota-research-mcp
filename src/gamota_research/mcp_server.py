@@ -77,6 +77,7 @@ def create_mcp_server(
     *,
     http_bearer_token: str | None = None,
     public_mcp_url: str | None = None,
+    public_site_url: str | None = None,
     report_service: ReportService | None = None,
     oauth_verifier: OAuthAccessTokenVerifier | None = None,
     oauth_issuer_url: str | None = None,
@@ -104,13 +105,28 @@ def create_mcp_server(
             else None
         ),
         instructions=(
-            "Use the host's native web search for public-source discovery; this MCP "
-            "stores and validates research evidence rather than providing generic web search. "
-            "Workflow: create_research_run, set_research_contract, search/fetch with host tools, "
-            "save_research_source, save_research_evidence, then save_research_claim with linked "
-            "evidence. Use claim_type ESTIMATE for third-party estimates and RECOMMENDATION "
-            "for evidence-linked actions. Record gaps/conflicts, call finalize_research_run, "
-            "then publish_game_decision_brief with a concise host-authored verdict. Partial or "
+            "Treat the user's ordinary, plain-language game-market research request as "
+            "enough to begin; do not require them to name MCP tools, provide a run_id or "
+            "report_id, or write a URL placeholder. Infer the game, market, platform, metric, "
+            "and period from their request and conversation; ask only for a missing detail "
+            "that would materially change the answer. Use the host's native web search and "
+            "fetch tools for public-source discovery; this MCP stores and validates research "
+            "evidence rather than providing generic web search. Create a run and contract, "
+            "save sources and quoted evidence before claims, link claims to evidence, and "
+            "record gaps or conflicts. Use claim_type ESTIMATE for third-party estimates and "
+            "RECOMMENDATION for evidence-linked actions. Finalize the run, then publish a "
+            "Game Decision Brief when the evidence supports a useful report. After publishing, "
+            "use the returned report_id internally to call get_published_report and confirm "
+            "the exact findings and limits. For a request to revisit an existing report, find "
+            "it through list_published_reports and use its ID internally. In the same chat, "
+            "answer naturally in the user's language with the verdict, 2–3 key findings, "
+            "confidence, and important unknowns. Include a friendly Markdown link such as "
+            "'Mở báo cáo đầy đủ' using the exact public_url returned by the MCP. Keep run IDs, "
+            "report IDs, tool names, and URL field names out of the user-facing answer unless "
+            "the user asks for them. Never invent a URL; if the MCP did not return a public "
+            "link, briefly say that the report is saved but a web link was not returned. Do "
+            "not claim publication succeeded unless publish and read-back succeed. "
+            "Partial or "
             "insufficient-data findings are valid; never fill missing evidence with guesses. "
             "Read published reports with list_published_reports/get_published_report. "
             "Persist sources and evidence before saving claims. The store provider defaults "
@@ -132,6 +148,12 @@ def create_mcp_server(
                 "GAMOTA_REPORTS_DIR",
                 str(Path.cwd() / "web" / "public" / "reports"),
             ),
+        ),
+        public_site_url=public_site_url
+        or (
+            f"{urlsplit(public_mcp_url).scheme}://{urlsplit(public_mcp_url).netloc}"
+            if public_mcp_url
+            else None
         ),
     )
     return server
@@ -232,6 +254,7 @@ def main() -> None:
         report_service=report_service,
         oauth_verifier=oauth_verifier,
         oauth_issuer_url=oauth_issuer_url,
+        public_site_url=os.environ.get("GAMOTA_PUBLIC_SITE_URL"),
     )
     try:
         if transport == "streamable-http":
