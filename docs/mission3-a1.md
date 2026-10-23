@@ -1,5 +1,7 @@
 # Mission 3 — A1: conflicting sources
 
+The Mission 2 submission baseline is commit `ae0d982` (`Complete Mission 2 submission package`). The A1 implementation was introduced in `01b2e1a` (`Improve conflict review for Mission 3 A1`) and preserved the original repository history.
+
 ## Change and decision
 
 Mission 2 already detected opposite signals and reduced confidence, but the published brief showed a generic open issue. A reviewer could not see which sources conflicted, what each source measured, or why the report stopped short of choosing a direction.
@@ -16,6 +18,21 @@ The report remains schema `1.0`; Mission 3 fields are optional, preserving old r
 - `uv run pytest -q` — **131 passed** at the current checkout, including the Mission 3, OAuth, and public MCP origin checks.
 - `cd web && npm run build` — **passed** (TypeScript and Vite production build).
 - `git diff --check` — **passed**.
+
+### Final verification on 2026-10-24
+
+Verified against repository `main` at `97310bd` before this documentation/evidence update:
+
+- `uv run pytest tests/test_mission3_a1.py -q` — **9 passed**.
+- `uv run pytest -q` — **131 passed**, 0 failed, 0 skipped.
+- `cd web && npm run build` — **passed** (TypeScript and Vite production build).
+- Public app `/`, report index, and the published Honor of Kings report JSON — **HTTP 200** over the canonical HTTPS hostname.
+- Public MCP `/mcp-public` — `initialize` **HTTP 200**, followed by `tools/list` with **18 tools**.
+- The deployed JavaScript asset referenced by the public page contains the A1 `ABSTAIN`, `NOT_COMPARABLE`, and `directional_decision` review behavior. The deployed asset filename matched the successful local production build.
+- The live mobile-games report is a scope-mismatch example, with a published `NOT_COMPARABLE` directional assessment. It is not evidence of two sources disagreeing on the same metric and scope; same-scope `ABSTAIN` is demonstrated by the deterministic A1 fixture and is explicitly labeled synthetic in the demo.
+- `gamota-mission3-demo-final.mp4` — **165.653 seconds** (2m 45.653s), below the 5-minute limit. The current local file is prepared for the user's YouTube upload.
+
+Use the canonical HTTPS host `https://52-64-163-35.sslip.io/` for the app, MCP, and report links. The direct-IP URL `https://52.64.163.35/` fails TLS hostname validation in current clients.
 
 The automated fixtures use `example.test` sources and synthetic evidence. A separate live end-to-end run was completed through the authenticated hosted MCP using original Sensor Tower and Unity report pages. It records a real-world pair of opposite-looking signals: Sensor Tower estimates global 2023 mobile-game consumer spend fell 2%, while Unity reports mobile DAU rose 4.1% in its measured cohort. The validator returned **NOT_COMPARABLE** because the metric and sampled population differ; it did not call this a source conflict or choose a winner. All three claims validated, both evidence slots were covered, and the COMPLETE run was published to the live report library. This demonstrates handling a real scope mismatch, not that the sources disagree on the same market outcome.
 
@@ -37,11 +54,11 @@ The host agent can still misread a web page or enter an inaccurate quote or dire
 
 ## Release evidence
 
-The host's smoke returned `/` 200, unauthenticated and wrong-bearer `/mcp` 401, authenticated initialize PASS, and discovery of 18 tools. The live brief is `global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682` from run `7b5bf83a-5be3-4f7b-9b55-0a6a6e9e21ad`; its public JSON is available at `https://52.64.163.35/reports/global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682/report.json`. The browser UI was refreshed and confirmed to show the report, source quotes, clickable citations and NOT_COMPARABLE explanation. Deployment checks are recorded in `docs/mission3-deployment-verification.md`.
+The live brief is `global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682` from run `7b5bf83a-5be3-4f7b-9b55-0a6a6e9e21ad`; its public JSON is available at [`report.json`](https://52-64-163-35.sslip.io/reports/global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682/report.json), and its [review page](https://52-64-163-35.sslip.io/?report=global-mobile-games-market-2023-mobile-games-spending-and-activity-signals-7b5bf83a-67c10682#published) opens in the web app. The browser UI was refreshed and confirmed to show the report, source quotes, clickable citations and NOT_COMPARABLE explanation. Deployment checks are recorded in `docs/mission3-deployment-verification.md`.
 
 ## ChatGPT Web → MCP → public report demonstration
 
-A separate ordinary-language ChatGPT Web session researched Honor of Kings' growth opportunity in Southeast Asia and asked Gamota Research to save the report. ChatGPT searched 41 pages, used the connected public MCP, received one-time approval for publication, and returned a report card and public URL in the same conversation. The published run is COMPLETE with 16 findings, 15 evidence records, 9 sources and 6 unknowns; confidence is MEDIUM. The validator returned NOT_COMPARABLE because the observations do not share a common metric and scope. The report recommends conditional market tests and explicitly says public evidence does not establish country-level DAU, retention, net IAP, CAC/LTV, or positive ROI.
+A separate ordinary-language ChatGPT Web session researched Honor of Kings' growth opportunity in Southeast Asia and asked Gamota Research to save the report. ChatGPT's visible research trace records searches of 41 pages and a later 12-page search; it returned the published report card and public URL in the same conversation. The published run is COMPLETE with 16 findings, 15 evidence records, 9 sources and 6 unknowns; confidence is MEDIUM. The validator returned NOT_COMPARABLE because the observations do not share a common metric and scope. The report recommends conditional market tests and explicitly says public evidence does not establish country-level DAU, retention, net IAP, CAC/LTV, or positive ROI.
 
 - ChatGPT conversation: <https://chatgpt.com/c/6adb7c3c-81dc-83ec-a937-b0a59942905b>
 - Published report: <https://52-64-163-35.sslip.io/?report=honor-of-kings-honor-of-kings-t-i-ng-nam-10-2026-c-h-i-t-ng-tr-ng-v-th-tr-ng-u-ti-n-68edfb56-bf5fac6a#published>
@@ -49,3 +66,4 @@ A separate ordinary-language ChatGPT Web session researched Honor of Kings' grow
 - Research run: `68edfb56-d2b2-4273-b7f6-4be909cf4bd4`
 - Current public index, report JSON and Markdown were fetched from the hosted service and returned HTTP 200; snapshots are in `evidence/mission3/chatgpt-web/`.
 - The ChatGPT response and published report page were reopened in the signed-in browser and visually checked. Several reported sources were spot-checked independently; this was not an exhaustive audit of all nine sources.
+- Fresh ChatGPT and public-report captures are in `evidence/mission3/demo-stills/honor-*.jpg`. They are authentic screenshots animated with zoom/pan in the updated local video `gamota-mission3-demo-final.mp4`; the video itself is delivered outside this repository. The video URL field on the Mission 3 portal is intentionally left blank for the user's YouTube upload.
