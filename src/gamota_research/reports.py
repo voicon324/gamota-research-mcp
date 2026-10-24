@@ -360,14 +360,22 @@ def render_report_markdown(report: dict[str, Any]) -> str:
                 {},
             )
             review = item.get("review", {})
+            if not isinstance(review, dict):
+                review = {}
             cutoff = review.get("freshness_cutoff")
+            publication_date = review.get("publication_date") or source.get("published_at")
+            observation_date = (
+                review.get("observation_date")
+                or item.get("observed_at")
+                or item.get("period_end")
+            )
             lines.append(
                 f"- **{item['id']}** — freshness: {review.get('freshness_status', 'NOT_ASSESSED')} — "
-                f"published {review.get('publication_date') or 'unknown'}; "
-                f"observed {review.get('observation_date') or 'unknown'}"
+                f"published {publication_date or 'unknown'}; "
+                f"observed {observation_date or 'unknown'}"
                 f"{f' (cutoff {cutoff})' if cutoff else ''}; "
                 f"source type {review.get('source_type') or source.get('source_type') or 'WEB'}; "
-                f"provenance: {review.get('provenance_status') or 'UNKNOWN'}; "
+                f"provenance: {review.get('provenance_status') or source.get('provenance_status') or 'UNKNOWN'}; "
                 "not independently verified by the MCP."
             )
             for reason in review.get("review_reasons", []):
@@ -385,6 +393,8 @@ def render_report_markdown(report: dict[str, Any]) -> str:
                 )
             if item.get("explanation"):
                 lines.append(f"  - {item['explanation']}")
+            if item.get("related_claim_text"):
+                lines.append(f"  - Affected claim: {item['related_claim_text']}")
             if item.get("evidence_ids"):
                 directions = item.get("directions", {})
                 refs = [
@@ -401,6 +411,8 @@ def render_report_markdown(report: dict[str, Any]) -> str:
                 lines.append(f"  - Comparison reasons: {', '.join(item['reasons'])}")
             if item.get("comparison_signature"):
                 lines.append(f"  - Comparison signature: {item['comparison_signature']}")
+            for step in item.get("next_steps", []):
+                lines.append(f"  - Next: {step}")
         lines.append("")
     lines.extend(["## Findings", ""])
     for finding in report["findings"]:
@@ -577,6 +589,11 @@ class ReportService:
                     "severity": "WARNING",
                     "description": f"Excluded from findings because validation status is {_enum(claim['status'])}: {claim['text']}",
                     "related_claim_id": claim_id,
+                    "related_claim_text": claim["text"],
+                    "evidence_ids": claim_evidence_ids,
+                    "next_steps": _issue_next_steps(
+                        "INVALID_CLAIM", f"Claim validation status is {_enum(claim['status'])}"
+                    ),
                 })
                 continue
             confidence = _CONFIDENCE.get(_enum(claim["confidence_level"]), "low")
@@ -616,10 +633,39 @@ class ReportService:
                 "next_steps": _issue_next_steps(issue.code, issue.message),
             }
             issue_metadata = issue.metadata if isinstance(issue.metadata, dict) else {}
+            related_trace = trace_by_claim.get(issue.related_claim_id or "")
+            if related_trace:
+                related_claim = related_trace["claim"]
+                unknown["related_claim_text"] = related_claim["text"]
+                unknown["evidence_ids"] = list(dict.fromkeys(
+                    link["evidence"]["id"]
+                    for link in related_trace["evidence"]
+                    if link["evidence"]["id"] in all_evidence
+                ))
+            if issue.source_id:
+                unknown["source_id"] = issue.source_id
+            if issue.evidence_id:
+                unknown["evidence_ids"] = list(dict.fromkeys([
+                    *unknown.get("evidence_ids", []), issue.evidence_id
+                ]))
+                if issue.evidence_id not in all_evidence:
+                    unknown["unavailable_evidence_ids"] = [issue.evidence_id]
+                elif not related_trace:
+                    affected_claims = [
+                        trace_by_claim[claim_id]["claim"]
+                        for claim_id in all_evidence[issue.evidence_id].get("claim_ids", [])
+                        if claim_id in trace_by_claim
+                    ]
+                    if len(affected_claims) == 1:
+                        unknown["related_claim_id"] = affected_claims[0]["id"]
+                        unknown["related_claim_text"] = affected_claims[0]["text"]
+                    elif affected_claims:
+                        unknown["related_claim_texts"] = [claim["text"] for claim in affected_claims]
             if issue.code in {"CONFLICT", "NOT_COMPARABLE"}:
                 candidate_ids = issue_metadata.get("evidence_ids", [])
                 if not isinstance(candidate_ids, list):
                     candidate_ids = []
+                candidate_ids = [*unknown.get("evidence_ids", []), *candidate_ids]
                 linked_ids = list(dict.fromkeys(
                     evidence_id for evidence_id in candidate_ids
                     if isinstance(evidence_id, str) and evidence_id in all_evidence

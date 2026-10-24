@@ -71,7 +71,7 @@ The report and issue cards now offer context-preserving follow-up prompts for ch
 
 Coverage remains scoped to the assigned A1 Change Request plus the common requirements. A1 handles same-scope conflicts with `ABSTAIN` and scope mismatch with `NOT_COMPARABLE`; A2–A5 are alternative bank requests, not simultaneous requirements. Current limits are explicit: the server does not retrieve source pages or verify quotation truth, and an agent may still misread a page. Reviewers can open the exact linked source and continue the investigation through the generated prompt.
 
-This implementation passed **17 targeted A1/report tests**, the **144-test full Python suite**, and the production frontend build. The live deployment commit and HTTP checks are recorded in `docs/mission3-deployment-verification.md` after release.
+The evidence-review follow-up now also preserves affected claim/source context in freshness issues, retains dates and provenance when rendering legacy Markdown, and prints issue-specific next steps. This implementation passed **19 targeted A1/report tests**, the **146-test full Python suite**, and the production frontend build. Deployment checks for this revision are recorded in `docs/mission3-deployment-verification.md` after release.
 
 Use the canonical HTTPS host `https://52-64-163-35.sslip.io/` for the app, MCP, and report links. The direct-IP URL `https://52.64.163.35/` fails TLS hostname validation in current clients.
 
@@ -87,7 +87,7 @@ I prioritized making a conflict explainable and reviewable: show both directions
 
 ### What changed most from Mission 2, and what evidence shows it is better?
 
-The largest change from Mission 2 is that a directional issue now changes the reader's decision view: it displays **ABSTAIN** for comparable opposite signals or **NOT_COMPARABLE** for mismatched scope, beside the evidence and source links. The reader now also shows source type/provenance, publication and observation dates, freshness, verification limits, and targeted follow-up prompts. Evidence includes **17 targeted tests**, **144 passing full-suite tests**, a successful production frontend build, and post-deploy endpoint checks. The published live run above is COMPLETE with 3/3 valid claims, 2/2 evidence slots, and one NOT_COMPARABLE issue. The live run demonstrates a real metric/sample mismatch; synthetic fixtures separately cover a true same-scope conflict.
+The largest change from Mission 2 is that a directional issue now changes the reader's decision view: it displays **ABSTAIN** for comparable opposite signals or **NOT_COMPARABLE** for mismatched scope, beside the evidence and source links. The reader now also shows source type/provenance, publication and observation dates, freshness, verification limits, and targeted follow-up prompts. Evidence includes **19 targeted tests**, **146 passing full-suite tests**, a successful production frontend build, and post-deploy endpoint checks. The published live run above is COMPLETE with 3/3 valid claims, 2/2 evidence slots, and one NOT_COMPARABLE issue. The live run demonstrates a real metric/sample mismatch; synthetic fixtures separately cover a true same-scope conflict.
 
 ### What is the largest remaining risk, and what would you do next?
 

@@ -4,7 +4,11 @@ import json
 
 import pytest
 
-from gamota_research.reports import ReportService, validate_game_decision_brief
+from gamota_research.reports import (
+    ReportService,
+    render_report_markdown,
+    validate_game_decision_brief,
+)
 from gamota_research.service import ResearchService
 from gamota_research.validator import Validator
 
@@ -231,6 +235,38 @@ def test_report_issues_include_targeted_next_research_steps(repository, tmp_path
         "Search for additional sources that measure the same metric, market, platform, period, and population.",
         "Compare methods and dates; keep the result unresolved when evidence remains conflicting or out of scope.",
     ]
+
+
+def test_stale_issue_retains_affected_evidence_and_claim_for_followup(repository, tmp_path):
+    report = _publish_directional_pair(
+        repository,
+        tmp_path,
+        freshness_cutoff="2025-01-01",
+        source_published_at="2023-01-01",
+    )
+    stale = next(item for item in report["unknowns"] if item["type"] == "STALE_EVIDENCE")
+
+    assert stale["evidence_ids"]
+    assert stale["related_claim_text"] == "The available sources indicate a directional revenue trend."
+    evidence = next(item for item in report["evidence"] if item["id"] == stale["evidence_ids"][0])
+    assert evidence["source_id"] == stale["source_id"]
+    markdown = (tmp_path / report["report"]["id"] / "report.md").read_text()
+    assert "Search for a newer source and separately record publication and observation dates." in markdown
+
+
+def test_legacy_markdown_uses_saved_source_dates_and_provenance(repository, tmp_path):
+    report = _publish_directional_pair(repository, tmp_path)
+    report["scope"].pop("freshness_cutoff", None)
+    for source in report["sources"]:
+        source.pop("source_type", None)
+    for evidence in report["evidence"]:
+        evidence.pop("review", None)
+
+    markdown = render_report_markdown(report)
+
+    assert "freshness: NOT_ASSESSED" in markdown
+    assert "published 2025-05-15; observed 2025-06-30" in markdown
+    assert "provenance: UNKNOWN" in markdown
 
 
 def test_publish_remains_compatible_with_trace_without_assurance(repository, tmp_path):

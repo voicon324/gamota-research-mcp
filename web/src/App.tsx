@@ -5,6 +5,7 @@ type CaseId = 'R1' | 'R2';
 type ReportIndexItem = { id: string; title: string; game: string; as_of: string; confidence: string; research_status: string; path: string };
 type ReportIssue = {
   id: string; type: string; severity: string; description: string; related_claim_id?: string;
+  related_claim_text?: string; source_id?: string;
   evidence_ids?: string[]; unavailable_evidence_ids?: string[]; directions?: Record<string, 'UP'|'DOWN'>;
   resolution?: 'ABSTAIN'|'NOT_COMPARABLE'; comparability?: 'COMPARABLE'|'NOT_COMPARABLE';
   comparison_signature?: string; explanation?: string; reasons?: string[];
@@ -202,6 +203,7 @@ export default function App() {
       const source = evidence && activeReport.sources.find(item => item.id === evidence.source_id);
       return evidence ? `- ${id} (${issue.directions?.[id] || 'direction unavailable'}): ${evidence.excerpt}\n  Metric/scope: ${evidence.metric || 'unspecified'} · ${evidence.market || 'market unspecified'} · ${evidence.period_start || '?'} to ${evidence.period_end || '?'}\n  Source: ${source?.title || source?.url || 'source unavailable'}${source?.url ? ` — ${source.url}` : ''}\n  Source type/provenance: ${evidence.review?.source_type || source?.source_type || 'unknown'} / ${evidence.review?.provenance_status || source?.provenance_status || 'unknown'}\n  Published/observed: ${evidence.review?.publication_date || 'unknown'} / ${evidence.review?.observation_date || 'unknown'}` : `- ${id}: evidence unavailable in this report`;
     }).join('\n');
+    const relatedSource = issue.source_id && activeReport.sources.find(item => item.id === issue.source_id);
     const prompt = [
       'Continue the research in a new run. Keep the previous run and published report unchanged.',
       `Original question: ${activeReport.scope.question}`,
@@ -210,6 +212,9 @@ export default function App() {
       `Platform: ${activeReport.scope.platforms.join(', ') || 'not specified'}`,
       `Period: ${activeReport.scope.period ? (typeof activeReport.scope.period === 'string' ? activeReport.scope.period : JSON.stringify(activeReport.scope.period)) : 'not specified'}`,
       `Issue: ${issue.type} (${issue.id}) — ${issue.description}`,
+      ...(issue.related_claim_text ? [`Affected claim: ${issue.related_claim_text}`] : []),
+      ...(relatedSource ? [`Related source: ${relatedSource.title || relatedSource.url}${relatedSource.url ? ` — ${relatedSource.url}` : ''}`] : []),
+      `Freshness cutoff: ${activeReport.scope.freshness_cutoff || 'not set; ask the user what recency is required'}`,
       `Resolution so far: ${issue.resolution || 'unresolved'}; ${issue.explanation || 'additional evidence is needed'}`,
       `Evidence IDs: ${(issue.evidence_ids || []).join(', ') || 'none'}`,
       'Existing evidence and sources:', evidenceContext || '- none',
