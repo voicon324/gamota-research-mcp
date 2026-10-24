@@ -101,3 +101,9 @@ The MP4 and Vietnamese SRT are delivered outside this repository. The portal's v
 - `reports.py` compiled with the service virtualenv's Python. `gamota-research-mcp.service` restarted and reports `active`.
 - Live smoke results: `/` HTTP 200; `/reports/index.json` HTTP 200; new JS and CSS assets HTTP 200; unauthenticated `/mcp` HTTP 401; `/mcp-public` initialize HTTP 200 and `tools/list` HTTP 200 with 18 tools.
 - Nginx configuration and the published-report database were not changed. The release adds report-reader and follow-up context fields without changing the report schema or MCP tool manifest. The YouTube video upload remains for the user.
+
+### Unavailable-evidence edge-case patch
+
+- Added a regression for stale issue references whose evidence record is absent from the published report. The report now lists that ID under `unavailable_evidence_ids` only, so it cannot be mistaken for a valid linked citation or fail report validation.
+- Local checks: focused test passed; `uv run pytest tests/test_mission3_a1.py -q` — **20 passed**; `uv run pytest -q` — **147 passed**; `git diff --check` — clean. Frontend was unchanged from the already verified production build.
+- This backend-only patch was deployed to the active service checkout with a separate backup. The service remained active after restart; unauthenticated `/mcp` remained HTTP 401 and public MCP initialize plus `tools/list` remained HTTP 200 with 18 tools. Release commit and the deployed module hash are recorded with this patch after deployment.

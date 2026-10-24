@@ -9,6 +9,7 @@ from gamota_research.reports import (
     render_report_markdown,
     validate_game_decision_brief,
 )
+from gamota_research.models import ResearchIssue
 from gamota_research.service import ResearchService
 from gamota_research.validator import Validator
 
@@ -267,6 +268,36 @@ def test_legacy_markdown_uses_saved_source_dates_and_provenance(repository, tmp_
     assert "freshness: NOT_ASSESSED" in markdown
     assert "published 2025-05-15; observed 2025-06-30" in markdown
     assert "provenance: UNKNOWN" in markdown
+
+
+def test_unavailable_issue_evidence_is_not_projected_as_linked(repository, tmp_path):
+    report = _publish_directional_pair(repository, tmp_path)
+    run_id = report["report"]["research_run_id"]
+    original_list_issues = repository.list_issues
+    repository.list_issues = lambda requested_run_id: [
+        *original_list_issues(requested_run_id),
+        ResearchIssue(
+            run_id=run_id,
+            code="FRESHNESS_UNKNOWN",
+            message="A related evidence record is no longer available.",
+            evidence_id="missing-evidence-record",
+            source_id="missing-source-record",
+        ),
+    ]
+
+    projected = ReportService(repository, tmp_path).publish_game_decision_brief(
+        run_id=run_id,
+        title="Revenue direction review",
+        game="Fixture Game",
+        verdict="The evidence is insufficient to select a reliable market direction.",
+        markets=["VN"],
+        platforms=["iOS", "Android"],
+    )
+    issue = next(item for item in projected["unknowns"] if item["type"] == "FRESHNESS_UNKNOWN")
+
+    assert "evidence_ids" not in issue
+    assert issue["unavailable_evidence_ids"] == ["missing-evidence-record"]
+    assert validate_game_decision_brief(projected) == []
 
 
 def test_publish_remains_compatible_with_trace_without_assurance(repository, tmp_path):

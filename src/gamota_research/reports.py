@@ -645,12 +645,13 @@ class ReportService:
             if issue.source_id:
                 unknown["source_id"] = issue.source_id
             if issue.evidence_id:
-                unknown["evidence_ids"] = list(dict.fromkeys([
-                    *unknown.get("evidence_ids", []), issue.evidence_id
-                ]))
-                if issue.evidence_id not in all_evidence:
+                if issue.evidence_id in all_evidence:
+                    unknown["evidence_ids"] = list(dict.fromkeys([
+                        *unknown.get("evidence_ids", []), issue.evidence_id
+                    ]))
+                else:
                     unknown["unavailable_evidence_ids"] = [issue.evidence_id]
-                elif not related_trace:
+                if issue.evidence_id in all_evidence and not related_trace:
                     affected_claims = [
                         trace_by_claim[claim_id]["claim"]
                         for claim_id in all_evidence[issue.evidence_id].get("claim_ids", [])
