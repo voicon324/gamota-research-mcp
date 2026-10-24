@@ -90,3 +90,4 @@ The MP4 and Vietnamese SRT are delivered outside this repository. The portal's v
 - Public checks: homepage `/` HTTP 200; `/reports/index.json` HTTP 200 and five reports listed; new JS asset HTTP 200; unauthenticated `/mcp` HTTP 401.
 - Chrome loaded the deployed Fieldnotes site and showed the updated UI and five existing reports.
 - This release does not change the report schema or MCP API. The YouTube video URL remains for the user's upload.
+- The updated local Mission 3 video candidate is `gamota-mission3-demo-final-v3.mp4` (200.512 seconds, under the five-minute limit); its Vietnamese subtitle file is `gamota-mission3-demo-final-v3.vi.srt`. It corrects the prior 135-test narration/display to 138 and adds a clearly labeled common-requirement evidence chapter while retaining the real ChatGPT Web research footage. Both artifacts are delivered outside the repository for YouTube upload.
