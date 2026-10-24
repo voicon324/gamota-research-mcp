@@ -22,4 +22,3 @@ Make the existing MCP/report workflow state clearly which source details are sup
 3. A report without the optional field is still accepted and rendered.
 4. Existing A1 classification remains the same for comparable conflicts and mismatched scopes.
 5. Full pytest suite and web production build pass.
-
