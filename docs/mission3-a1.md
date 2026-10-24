@@ -25,7 +25,7 @@ The Mission 3 common requirement also asks the reviewer to identify stale or mis
 - Markdown and web report readers place the deterministic system assessment and evidence gaps before the publishing agent's unverified verdict and findings. The report distinguishes the validator's outcome from the host agent's editorial conclusion.
 - Follow-up research guidance is available for stale, undated, unsupported and missing evidence, alongside existing ABSTAIN and comparability cases. Deeper coverage can be guided by the existing lineage and evidence-slot audits; this change does not invent a cross-claim conflict detector.
 
-Tests added first for forged numeric metadata, old publication with recent observation, missing publication date, prominent missing-slot disclosure, and system-versus-agent assessment ordering. On the updated tree, `uv run pytest -q` passes **138 tests**; `cd web && npm run build` passes. These results describe the local candidate until a new deployment verification is recorded below.
+Tests added first for forged numeric metadata, old publication with recent observation, missing publication date, prominent missing-slot disclosure, and system-versus-agent assessment ordering. On commit `9a7a568`, `uv run pytest -q` passed **138 tests** and `cd web && npm run build` passed. That release is deployed at the canonical demo host; the post-deploy checks are recorded below.
 
 ## Verification
 
@@ -36,7 +36,9 @@ At the original A1 release, `tests/test_mission3_a1.py` covered the assigned cha
 - `cd web && npm run build` — **passed** (TypeScript and Vite production build).
 - `git diff --check` — **passed**.
 
-### Final verification on 2026-10-24
+### Historical A1.1 verification checkpoint (2026-10-24)
+
+The following results describe the earlier A1.1 release, before the common-requirement follow-up commit `9a7a568`; they are historical and are not the current test count.
 
 Verified on the Mission 3 A1.1 release commit `d01f260`. Its technical branch point is `47ccfb2` (`Record final Mission 3 verification`); the Mission 2 submission baseline remains `ae0d982` (`Complete Mission 2 submission package`):
 
@@ -49,7 +51,17 @@ Verified on the Mission 3 A1.1 release commit `d01f260`. Its technical branch po
 - The deployed JavaScript asset referenced by the public page contains the A1 `ABSTAIN`, `NOT_COMPARABLE`, and `directional_decision` review behavior. The deployed asset filename matched the successful local production build.
 - A1.1 release deployed from commit `e2ca75c`: both MCP systemd services are active; homepage and report index return HTTP 200; `/mcp` rejects an unauthenticated initialize with HTTP 401; `/mcp-public` initializes and lists 18 tools. The live JavaScript asset is `index-DePCuX8t.js` and contains the “Not independently verified” label. Existing report artifacts remain unchanged; the optional label appears in reports published by the updated service.
 - The live mobile-games report is a scope-mismatch example, with a published `NOT_COMPARABLE` directional assessment. It is not evidence of two sources disagreeing on the same metric and scope; same-scope `ABSTAIN` is demonstrated by the deterministic A1 fixture and is explicitly labeled synthetic in the demo.
-- `gamota-mission3-demo-final-v2.mp4` — **165.653 seconds** (2m 45.653s), below the 5-minute limit. The revised narration states the current 11 targeted and 135 full-suite test counts; the research and report walkthrough remains the real ChatGPT Web → MCP run. The video and matching Vietnamese subtitles are prepared locally for the user's YouTube upload; the portal's YouTube field remains for the user to fill after upload.
+- At that earlier checkpoint, `gamota-mission3-demo-final-v2.mp4` was **165.653 seconds** (2m 45.653s) and its narration reported 11 targeted and 135 full-suite tests. That video is being revised to reflect the common-requirement follow-up and current verification; the existing real ChatGPT Web → MCP research footage is retained.
+
+### Current follow-up verification (2026-10-24, commit `9a7a568`)
+
+- `uv run pytest -q` — **138 passed**.
+- `cd web && npm run build` — passed (TypeScript and Vite production build).
+- Mission 3 A1 behaviors remain covered by comparable-conflict/`ABSTAIN`, scope-mismatch/`NOT_COMPARABLE`, freshness, missing-date, numeric grounding, report-gap, and legacy compatibility tests.
+- Deployed backend modules and frontend assets match the local release by SHA-256; `gamota-research-mcp.service` is active.
+- Public homepage, report index, and the newly referenced JavaScript asset return HTTP 200. The report library still lists five reports. Unauthenticated `/mcp` remains HTTP 401.
+- The public page was opened in Chrome after deployment and displayed the Fieldnotes research UI and five published reports.
+- The report database and all existing published reports were preserved during deployment.
 
 Use the canonical HTTPS host `https://52-64-163-35.sslip.io/` for the app, MCP, and report links. The direct-IP URL `https://52.64.163.35/` fails TLS hostname validation in current clients.
 
@@ -65,7 +77,7 @@ I prioritized making a conflict explainable and reviewable: show the two directi
 
 ### What changed most from Mission 2, and what evidence shows it is better?
 
-The largest change from Mission 2 is that a directional issue now changes the reader's decision view: it displays **ABSTAIN** for comparable opposite signals or **NOT_COMPARABLE** for mismatched scope, beside the evidence and source links. The follow-up adds an explicit not-independently-verified label for host-supplied quotes and URLs. Evidence includes the A1 regression suite, new tests for reserved metadata and old report compatibility, the current full suite (**135 passed**), a successful production frontend build, the deployed live asset, active MCP services, unauthenticated public MCP initialization and discovery of 18 tools, and the published live run above (COMPLETE, 3/3 valid claims, 2/2 evidence slots, one NOT_COMPARABLE issue). The live run demonstrates a real metric/sample mismatch; synthetic fixtures separately cover a true same-scope conflict. Existing report artifacts are preserved and do not receive the new optional field retroactively.
+The largest change from Mission 2 is that a directional issue now changes the reader's decision view: it displays **ABSTAIN** for comparable opposite signals or **NOT_COMPARABLE** for mismatched scope, beside the evidence and source links. The follow-up adds an explicit not-independently-verified label for host-supplied quotes and URLs. The common-requirement follow-up tightens numeric grounding and freshness handling and surfaces evidence gaps before the agent's unverified verdict. Evidence includes the A1 regression suite, **138 passing tests**, a successful production frontend build, matching deployed assets, the active MCP service, and post-deploy HTTP checks. The published live run above is COMPLETE with 3/3 valid claims, 2/2 evidence slots, and one NOT_COMPARABLE issue. The live run demonstrates a real metric/sample mismatch; synthetic fixtures separately cover a true same-scope conflict. Existing report artifacts are preserved and do not receive the new optional field retroactively.
 
 ### What is the largest remaining risk, and what would you do next?
 

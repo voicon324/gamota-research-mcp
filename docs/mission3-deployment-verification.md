@@ -66,9 +66,9 @@ The canonical hostname is `52-64-163-35.sslip.io`; the numeric IP does not match
 
 The current live Sensor Tower/Unity example classifies its opposing-looking observations as `NOT_COMPARABLE` because metric and sample scope differ. It is a real scope-mismatch example, not a same-scope conflict. The comparable opposite-evidence `ABSTAIN` path is covered by the deterministic synthetic fixture and is labeled as such in the demo.
 
-## Final submission verification (2026-10-24)
+## Historical submission verification checkpoint (2026-10-24)
 
-These checks were rerun while the code checkout was at `8b95cad292979d706c57935eaa2593f7809c5c55`, which matched `origin/main`. The only repository change after that verification is this documentation update.
+These checks were rerun while the code checkout was at `8b95cad292979d706c57935eaa2593f7809c5c55`, which matched `origin/main`. They describe the earlier checkpoint, before the subsequent Mission 3 A1.1/common-requirement follow-ups.
 
 | Check | Result |
 |---|---|
@@ -78,4 +78,15 @@ These checks were rerun while the code checkout was at `8b95cad292979d706c57935e
 | Published Honor of Kings report JSON | HTTP 200 |
 | Demo MP4 | H.264/AAC, 1280×720, 165.653s (2:45.653) |
 
-The final MP4 and Vietnamese SRT are delivered outside this repository. The portal's video URL remains blank for the user's YouTube upload.
+The MP4 and Vietnamese SRT are delivered outside this repository. The portal's video URL remains blank for the user's YouTube upload.
+
+## Common-requirement follow-up deployment (2026-10-24)
+
+- GitHub branch: `mission3-a11-source-verification`, commit `9a7a568` (`Improve Mission 3 evidence freshness and report gaps`). It preserves the Mission 2 history and includes the Mission 3 A1/A1.1 work.
+- Local verification on that commit: `uv run pytest -q` — **138 passed**; `cd web && npm run build` — passed.
+- The code and static assets were deployed to the existing EC2 instance without changing Nginx configuration or the published-report database. Existing server-side work was preserved; backups of `validator.py`, `reports.py`, and the UI `index.html` were created alongside the originals.
+- `gamota-research-mcp.service` restarted and is active.
+- Post-deploy SHA-256 values for both backend modules, `index.html`, and the new CSS/JS assets matched the local build.
+- Public checks: homepage `/` HTTP 200; `/reports/index.json` HTTP 200 and five reports listed; new JS asset HTTP 200; unauthenticated `/mcp` HTTP 401.
+- Chrome loaded the deployed Fieldnotes site and showed the updated UI and five existing reports.
+- This release does not change the report schema or MCP API. The YouTube video URL remains for the user's upload.
