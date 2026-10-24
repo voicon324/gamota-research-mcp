@@ -31,6 +31,16 @@ Tests added first for forged numeric metadata, old publication with recent obser
 
 At the original A1 release, `tests/test_mission3_a1.py` covered the assigned change request, a metric-scope edge case, malformed or missing references, legacy schema compatibility, a supported-report regression, and missing evidence. The follow-up adds a forged/legacy metadata edge case, a report projection check, and a regression check for traces without the optional field. Results on this tree:
 
+The minimum Mission 3 test categories map to these named tests:
+
+| Requirement | Test | What it proves |
+|---|---|---|
+| Assigned Change Request A1 | `test_comparable_opposite_sources_publish_abstention_with_evidence` | Same-scope opposing evidence is published as `ABSTAIN`, with both evidence records and no winner. |
+| Edge case | `test_report_marks_missing_publication_date_as_unknown_freshness` | A missing source date stays `UNKNOWN`; it is not presented as current. |
+| Regression | `test_supported_report_keeps_existing_trace_and_has_no_directional_decision` | A supported Mission 2-style report keeps its trace and schema behavior without acquiring an irrelevant directional decision. |
+
+The unchanged Mission 2 `tests/evals` scenarios also ran in the full suite; they cover good research, ambiguity, conflicting/stale evidence, numeric grounding, shared-source lineage, source failure, and store-rank guardrails.
+
 - `uv run pytest tests/test_mission3_a1.py -q` — **9 passed at original A1 release**; the follow-up report tests are included in the full suite below.
 - `uv run pytest -q` — **131 passed** at the original A1 release checkout, including the Mission 3, OAuth, and public MCP origin checks.
 - `cd web && npm run build` — **passed** (TypeScript and Vite production build).
@@ -107,7 +117,7 @@ A separate ordinary-language ChatGPT Web session researched Honor of Kings' grow
 - Research run: `68edfb56-d2b2-4273-b7f6-4be909cf4bd4`
 - Current public index, report JSON and Markdown were fetched from the hosted service and returned HTTP 200; snapshots are in `evidence/mission3/chatgpt-web/`.
 - The ChatGPT response and published report page were reopened in the signed-in browser and visually checked. Several reported sources were spot-checked independently; this was not an exhaustive audit of all nine sources.
-- Fresh ChatGPT and public-report captures are in `evidence/mission3/demo-stills/honor-*.jpg`. They are authentic screenshots animated with zoom/pan in the local video `gamota-mission3-demo-final-v3.mp4`; the video itself is delivered outside this repository. The A1 proof frame and appended common-requirement card are also preserved as `evidence/mission3/demo-stills/mission3-a1-verification-proof.png` and `evidence/mission3/demo-stills/mission3-common-evidence.png`. The video URL field on the Mission 3 portal is intentionally left blank for the user's YouTube upload.
+- Fresh ChatGPT and public-report captures are in `evidence/mission3/demo-stills/honor-*.jpg`. They are authentic screenshots animated with zoom/pan in the local video `gamota-mission3-demo-final-v4.mp4`; the video itself is delivered outside this repository. The A1 proof frame and appended common-requirement card are also preserved as `evidence/mission3/demo-stills/mission3-a1-verification-proof.png` and `evidence/mission3/demo-stills/mission3-common-evidence.png`. The video URL field on the Mission 3 portal is intentionally left blank for the user's YouTube upload.
 
 ## Updated Mission 3 video
 

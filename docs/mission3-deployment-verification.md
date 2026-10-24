@@ -108,3 +108,13 @@ The MP4 and Vietnamese SRT are delivered outside this repository. The portal's v
 - Local checks: focused test passed; `uv run pytest tests/test_mission3_a1.py -q` — **20 passed**; `uv run pytest -q` — **147 passed**; `git diff --check` — clean. Frontend was unchanged from the already verified production build.
 - Backend-only patch `01cce66` (`Handle unavailable evidence in issue projections`) was deployed to the active service checkout. The previous module is preserved at `/opt/gamota-research-mcp-oauth/src/gamota_research/reports.py.before-01cce66`; the deployed module SHA-256 is `f96e0f929de6a417c07f2ccd6d25527848bf7189930ad3b30cc3bf1431e21cbf`, matching the pushed commit. The file compiled with the service virtualenv's Python, and the service is active after restart.
 - Post-patch public checks: `/` HTTP 200; `/reports/index.json` HTTP 200; unauthenticated `/mcp` HTTP 401; `/mcp-public` initialize HTTP 200; `tools/list` HTTP 200 with 18 tools. No report artifacts or Nginx configuration were changed.
+
+
+## Final submission audit (2026-10-24)
+
+- Current GitHub branch head: `0db3f05`; Mission 2 baseline `ae0d982` remains an ancestor in the same history.
+- Fresh local verification on the submission tree: `uv run pytest -q` — **147 passed**; `cd web && npm run build` — **passed**; `git diff --check` — **passed**.
+- Mission 2 evaluation cases remain in the full suite; current A1 tests include an assigned-conflict case, a missing-date edge case, and a supported-report regression case (see `mission3-a1.md`).
+- Fresh hosted smoke: app `/` and `/reports/index.json` returned HTTP 200; `/mcp-public` initialized and listed 18 tools, including write/publish tools; the canonical mobile-games report remains in the five-entry public report index. `/mcp` remains authenticated.
+- Final video artifact outside the repository: `gamota-mission3-demo-final-v4.mp4`, H.264/AAC, 1280×720, 25 fps, **200.704 seconds**. Full decode and keyframe inspection passed. Updated Vietnamese captions: `gamota-mission3-demo-final-v4.vi.srt`.
+- The portal has the updated repository/demo links and all three revised answers saved as a draft. Its video URL field remains empty for the user's YouTube upload; the submission has not been finalized.
