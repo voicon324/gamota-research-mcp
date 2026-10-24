@@ -5,12 +5,13 @@ import hashlib
 import os
 import re
 import tempfile
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any
 
 from .enums import ClaimType, RunStatus
 from .repository import ResearchRepository
+from .source_assurance import source_assurance_for_host_supplied_source
 
 
 _ID_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,119}$")
@@ -37,6 +38,91 @@ def _typed_value(value: Any) -> Any:
         return value
     number = float(value) if "." in value else int(value)
     return int(number) if isinstance(number, float) and number.is_integer() else number
+
+
+def _source_review(source: dict[str, Any], evidence: dict[str, Any], cutoff: str | None) -> dict[str, Any]:
+    """Summarize recorded source facts without treating host metadata as verified."""
+    publication_date = source.get("published_at")
+    observation_date = evidence.get("observed_at") or evidence.get("period_end")
+
+    def day(value: Any) -> date | None:
+        if not isinstance(value, str) or not value.strip():
+            return None
+        try:
+            return date.fromisoformat(value[:10])
+        except ValueError:
+            return None
+
+    reasons: list[str] = []
+    if source.get("provenance_status") == "UNKNOWN":
+        reasons.append("Source provenance is unknown.")
+    elif source.get("provenance_status") == "DERIVED":
+        reasons.append("Evidence is derived from another source.")
+
+    if cutoff is None:
+        freshness = "NOT_ASSESSED"
+        reasons.append("No freshness cutoff was set for this research run.")
+    else:
+        cutoff_day = day(cutoff)
+        published_day = day(publication_date)
+        observed_day = day(observation_date)
+        if published_day is None:
+            reasons.append("Source publication date is unknown.")
+        if observed_day is None:
+            reasons.append("Metric observation date is unknown.")
+        if cutoff_day is None:
+            freshness = "UNKNOWN"
+            reasons.append("Freshness cutoff is not a valid date.")
+        elif any(value is not None and value < cutoff_day for value in (published_day, observed_day)):
+            freshness = "STALE"
+            reasons.append("A recorded publication or observation date predates the freshness cutoff.")
+        elif published_day is None or observed_day is None:
+            freshness = "UNKNOWN"
+        else:
+            freshness = "CURRENT"
+
+    assurance = source_assurance_for_host_supplied_source()
+    next_steps = [
+        "Open the source link and confirm the saved quotation at its locator.",
+        "Compare the source's metric, market, platform, period, and method with the claim.",
+    ]
+    if source.get("provenance_status") == "UNKNOWN":
+        next_steps.append("Trace this citation to an original publisher or dataset and record its source lineage.")
+    elif source.get("provenance_status") == "DERIVED":
+        next_steps.append("Find and cite the original document or dataset behind this derived source.")
+    if freshness == "STALE":
+        next_steps.append("Search for a newer publication while retaining the metric's actual observation period.")
+    elif freshness == "UNKNOWN":
+        next_steps.append("Find and record both the publication date and metric observation date.")
+    elif freshness == "NOT_ASSESSED":
+        next_steps.append("Set a freshness cutoff if the decision depends on current data.")
+    return {
+        "freshness_status": freshness,
+        "freshness_cutoff": cutoff,
+        "publication_date": publication_date,
+        "observation_date": observation_date,
+        "provenance_status": source.get("provenance_status") or "UNKNOWN",
+        "source_type": source.get("source_type") or "WEB",
+        "verification_status": assurance["status"],
+        "review_reasons": reasons,
+        "next_steps": next_steps,
+    }
+
+
+def _issue_next_steps(issue_type: str, description: str) -> list[str]:
+    if issue_type in {"GAP", "MISSING_EVIDENCE_SLOT", "MISSING_EVIDENCE"}:
+        return [f"Research the exact missing evidence requirement: {description}", "If the source cannot establish it, leave the gap open and state what remains unknown."]
+    if issue_type in {"STALE_EVIDENCE"}:
+        return ["Search for a newer source and separately record publication and observation dates.", "Keep the same metric, market, platform, period, and method when comparing evidence."]
+    if issue_type in {"FRESHNESS_UNKNOWN"}:
+        return ["Find and record the source publication date and metric observation date.", "Do not treat a missing date as current evidence."]
+    if issue_type in {"CONFLICT", "NOT_COMPARABLE"}:
+        return ["Search for additional sources that measure the same metric, market, platform, period, and population.", "Compare methods and dates; keep the result unresolved when evidence remains conflicting or out of scope."]
+    if issue_type in {"INVALID_CLAIM", "UNSUPPORTED_NUMERIC_ASSERTION", "METRIC_SUPPORT_UNKNOWN", "METRIC_SUPPORT_MISMATCH"}:
+        return ["Find a direct source passage that supports the exact claim and any stated number/unit.", "If no direct evidence is available, narrow or remove the claim and report the gap."]
+    if issue_type == "SHARED_ORIGIN":
+        return ["Trace repeated coverage to its original publisher or dataset.", "Find an independent source before treating repeated reports as corroboration."]
+    return ["Inspect the linked evidence and source, then search for the specific missing confirmation.", "Record new evidence and rerun validation before updating the report."]
 
 
 def _atomic_write(path: Path, content: str) -> None:
@@ -266,6 +352,29 @@ def render_report_markdown(report: dict[str, Any]) -> str:
         f"- Period: {scope.get('period') or 'Not specified'}",
         "",
     ])
+    if report.get("evidence"):
+        lines.extend(["## Evidence review", ""])
+        for item in report["evidence"]:
+            source = next(
+                (candidate for candidate in report.get("sources", []) if candidate.get("id") == item.get("source_id")),
+                {},
+            )
+            review = item.get("review", {})
+            cutoff = review.get("freshness_cutoff")
+            lines.append(
+                f"- **{item['id']}** — freshness: {review.get('freshness_status', 'NOT_ASSESSED')} — "
+                f"published {review.get('publication_date') or 'unknown'}; "
+                f"observed {review.get('observation_date') or 'unknown'}"
+                f"{f' (cutoff {cutoff})' if cutoff else ''}; "
+                f"source type {review.get('source_type') or source.get('source_type') or 'WEB'}; "
+                f"provenance: {review.get('provenance_status') or 'UNKNOWN'}; "
+                "not independently verified by the MCP."
+            )
+            for reason in review.get("review_reasons", []):
+                lines.append(f"  - Review: {reason}")
+            for step in review.get("next_steps", []):
+                lines.append(f"  - Next: {step}")
+        lines.append("")
     if report.get("unknowns"):
         lines.extend(["## Evidence gaps and unresolved issues", ""])
         for item in report["unknowns"]:
@@ -419,6 +528,7 @@ class ReportService:
                     "published_at": source["published_at"],
                     "accessed_at": source["accessed_at"],
                     "provenance_status": source["provenance_status"],
+                    "source_type": _enum(source["source_type"]),
                     "root_source_id": source["root_source_id"],
                 }
                 item = all_evidence.setdefault(evidence_id, {
@@ -427,6 +537,7 @@ class ReportService:
                     "excerpt": evidence["quote"],
                     "locator": evidence["locator"],
                     "retrieved_at": source["accessed_at"],
+                    "observed_at": evidence["observed_at"],
                     "metric": evidence["metric"],
                     "value": _typed_value(evidence["value"]),
                     "unit": evidence["unit"],
@@ -447,6 +558,11 @@ class ReportService:
                 assurance = link.get("source_assurance")
                 if isinstance(assurance, dict):
                     item["source_assurance"] = dict(assurance)
+                item["review"] = _source_review(
+                    source,
+                    evidence,
+                    contract.get("freshness_cutoff"),
+                )
                 if claim_type == ClaimType.ESTIMATE.value:
                     item["data_type"] = "estimate"
                 if _enum(link["relation"]) == "CONTRADICTS":
@@ -497,6 +613,7 @@ class ReportService:
                 "severity": _enum(issue.severity),
                 "description": issue.message,
                 "related_claim_id": issue.related_claim_id,
+                "next_steps": _issue_next_steps(issue.code, issue.message),
             }
             issue_metadata = issue.metadata if isinstance(issue.metadata, dict) else {}
             if issue.code in {"CONFLICT", "NOT_COMPARABLE"}:
@@ -555,6 +672,9 @@ class ReportService:
                 "type": "MISSING_EVIDENCE_SLOT",
                 "severity": "BLOCKING",
                 "description": f"Required evidence slot was not covered: {slot}",
+                "next_steps": _issue_next_steps(
+                    "MISSING_EVIDENCE_SLOT", f"Required evidence slot: {slot}"
+                ),
             })
 
         published_on = datetime.now(timezone.utc).date().isoformat()
@@ -619,6 +739,7 @@ class ReportService:
                 "markets": markets if markets is not None else contract.get("geography", []),
                 "platforms": platforms or [],
                 "assumptions": contract.get("assumptions", []),
+                "freshness_cutoff": contract.get("freshness_cutoff"),
             },
             "summary": summary,
             "findings": findings,

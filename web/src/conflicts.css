@@ -39,5 +39,25 @@
 .conflict-source-link{display:inline-flex;align-items:center;gap:5px;margin-top:8px;color:var(--mint);font-size:9px;overflow-wrap:anywhere}
 .conflict-followup{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:8px 10px;border:1px solid #53695f;border-radius:4px;background:#20312e;color:#d6e9e2;font:9px var(--mono);cursor:pointer}
 .conflict-followup:hover{border-color:#89ac9b;background:#263a35}
+.evidence-review-card{margin:12px 0;padding:12px;border:1px solid #394e47;border-radius:5px;background:#1b2926;color:#c8d8d1;font-size:11px}
+.evidence-review-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.evidence-review-heading b{font-size:11px;color:#e4eee9}
+.freshness-badge{padding:4px 7px;border-radius:3px;background:#34433f;color:#c8d8d1;font:9px var(--mono);letter-spacing:.04em}
+.freshness-badge.current{background:#203c31;color:#a6dfbf}
+.freshness-badge.stale{background:#49372b;color:#f0c28f}
+.freshness-badge.unknown{background:#47393a;color:#e8b6b5}
+.freshness-badge.not-assessed{background:#343b40;color:#c0cbd0}
+.evidence-review-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px 12px;color:#8ea39a;font-size:10px}
+.evidence-review-facts b{color:#c7d7d0;font-weight:500}
+.evidence-review-boundary{margin:10px 0 6px;color:#e0c18f;font-size:10px;line-height:1.5}
+.evidence-review-card ul{margin:6px 0 8px;padding-left:16px;color:#9cafa6;font-size:10px;line-height:1.6}
+.evidence-review-link{display:inline-flex;align-items:center;gap:5px;margin-top:3px;color:#b6d1c5;text-decoration:none;font-size:10px}
+.reader-unknown ul{margin:8px 0 0;padding-left:17px;color:#94a79e;font-size:10px;line-height:1.6}
+.all-evidence-review{display:grid;gap:10px}
+.all-evidence-item{padding:14px;border:1px solid #344640;border-radius:5px;background:#182421}
+.all-evidence-title{display:flex;flex-direction:column;gap:4px;color:#d5e2dc;font-size:11px;overflow-wrap:anywhere}
+.all-evidence-title small,.all-evidence-locator{color:#8ea198;font:9px var(--mono);line-height:1.6}
+.all-evidence-item blockquote{margin:10px 0 6px;color:#c0d0c8;font-size:12px;line-height:1.6}
+@media(max-width:560px){.evidence-review-facts{grid-template-columns:1fr}}
 .conflict-missing{margin-top:9px;border-color:#92754c;background:#2c2922;color:#e2c99e}
 @media(max-width:700px){.conflict-evidence-grid{grid-template-columns:1fr}.conflict-card{padding:11px}.conflict-evidence dl{grid-template-columns:1fr 1fr}}

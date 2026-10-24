@@ -9,7 +9,16 @@ from gamota_research.service import ResearchService
 from gamota_research.validator import Validator
 
 
-def _publish_directional_pair(repository, output_dir, *, second_metric="revenue_growth"):
+def _publish_directional_pair(
+    repository,
+    output_dir,
+    *,
+    second_metric="revenue_growth",
+    freshness_cutoff=None,
+    source_published_at="2025-05-15",
+    observation_date="2025-06-30",
+    provenance_status="UNKNOWN",
+):
     service = ResearchService(repository)
     run = service.create_run("Does the game show revenue growth in Vietnam?")
     service.set_research_contract(
@@ -20,6 +29,7 @@ def _publish_directional_pair(repository, output_dir, *, second_metric="revenue_
             "geography": ["VN"],
             "metrics": ["revenue_growth"],
             "time_scope": {"start": "2025-01-01", "end": "2025-06-30"},
+            **({"freshness_cutoff": freshness_cutoff} if freshness_cutoff else {}),
         },
     )
     evidence_ids = []
@@ -32,6 +42,8 @@ def _publish_directional_pair(repository, output_dir, *, second_metric="revenue_
             title=f"Fixture source {index}",
             publisher=f"Publisher {index}",
             source_type="REPORT",
+            published_at=source_published_at,
+            provenance_status=provenance_status,
         )
         evidence = service.save_evidence(
             run_id=run.id,
@@ -43,8 +55,8 @@ def _publish_directional_pair(repository, output_dir, *, second_metric="revenue_
             unit="%",
             market="VN",
             period_start="2025-01-01",
-            period_end="2025-06-30",
-            observed_at="2025-06-30",
+            period_end=observation_date,
+            observed_at=observation_date,
             source_mode="FIXTURE",
             metadata={"direction": direction},
         )
@@ -119,6 +131,106 @@ def test_published_evidence_exposes_server_assurance(repository, tmp_path):
                 "the MCP server did not independently retrieve the source."
             ),
         }
+
+
+def test_report_exposes_source_review_facts_for_each_evidence(repository, tmp_path):
+    report = _publish_directional_pair(
+        repository, tmp_path, freshness_cutoff="2025-01-01"
+    )
+
+    assert report["scope"]["freshness_cutoff"] == "2025-01-01"
+    assert all(source["source_type"] == "REPORT" for source in report["sources"])
+    for item in report["evidence"]:
+        assert item["observed_at"] == "2025-06-30"
+        assert item["review"] == {
+            "freshness_status": "CURRENT",
+            "freshness_cutoff": "2025-01-01",
+            "publication_date": "2025-05-15",
+            "observation_date": "2025-06-30",
+            "provenance_status": "UNKNOWN",
+            "source_type": "REPORT",
+            "verification_status": "NOT_INDEPENDENTLY_VERIFIED",
+            "review_reasons": ["Source provenance is unknown."],
+            "next_steps": [
+                "Open the source link and confirm the saved quotation at its locator.",
+                "Compare the source's metric, market, platform, period, and method with the claim.",
+                "Trace this citation to an original publisher or dataset and record its source lineage.",
+            ],
+        }
+
+    markdown = (tmp_path / report["report"]["id"] / "report.md").read_text()
+    assert "## Evidence review" in markdown
+    assert "freshness: CURRENT" in markdown
+    assert "cutoff 2025-01-01" in markdown
+    assert "provenance: UNKNOWN" in markdown
+    assert "not independently verified" in markdown
+    assert "Next: Trace this citation to an original publisher" in markdown
+
+
+def test_report_marks_missing_publication_date_as_unknown_freshness(repository, tmp_path):
+    report = _publish_directional_pair(
+        repository,
+        tmp_path,
+        freshness_cutoff="2025-01-01",
+        source_published_at=None,
+        provenance_status="DERIVED",
+    )
+    review = report["evidence"][0]["review"]
+
+    assert review["freshness_status"] == "UNKNOWN"
+    assert review["publication_date"] is None
+    assert review["observation_date"] == "2025-06-30"
+    assert review["provenance_status"] == "DERIVED"
+    assert "Source publication date is unknown." in review["review_reasons"]
+    assert "Evidence is derived from another source." in review["review_reasons"]
+    assert any("original document or dataset" in step for step in review["next_steps"])
+
+
+def test_report_marks_old_publication_as_stale_even_with_recent_observation(repository, tmp_path):
+    report = _publish_directional_pair(
+        repository,
+        tmp_path,
+        freshness_cutoff="2025-01-01",
+        source_published_at="2023-01-01",
+        observation_date="2025-06-30",
+    )
+
+    assert report["evidence"][0]["review"]["freshness_status"] == "STALE"
+    assert any(
+        "newer publication" in step
+        for step in report["evidence"][0]["review"]["next_steps"]
+    )
+
+
+def test_report_requires_both_dates_to_assess_freshness(repository, tmp_path):
+    report = _publish_directional_pair(
+        repository,
+        tmp_path,
+        freshness_cutoff="2025-01-01",
+        observation_date=None,
+    )
+
+    review = report["evidence"][0]["review"]
+    assert review["freshness_status"] == "UNKNOWN"
+    assert review["publication_date"] == "2025-05-15"
+    assert review["observation_date"] is None
+    assert "Metric observation date is unknown." in review["review_reasons"]
+
+
+def test_report_without_freshness_cutoff_does_not_claim_current_data(repository, tmp_path):
+    report = _publish_directional_pair(repository, tmp_path)
+
+    assert report["evidence"][0]["review"]["freshness_status"] == "NOT_ASSESSED"
+
+
+def test_report_issues_include_targeted_next_research_steps(repository, tmp_path):
+    report = _publish_directional_pair(repository, tmp_path)
+    issue = next(item for item in report["unknowns"] if item["type"] == "CONFLICT")
+
+    assert issue["next_steps"] == [
+        "Search for additional sources that measure the same metric, market, platform, period, and population.",
+        "Compare methods and dates; keep the result unresolved when evidence remains conflicting or out of scope.",
+    ]
 
 
 def test_publish_remains_compatible_with_trace_without_assurance(repository, tmp_path):

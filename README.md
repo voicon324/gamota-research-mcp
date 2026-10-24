@@ -7,14 +7,15 @@
 1. Ask a focused question: game, market, platform, metric and time period.
 2. The agent searches and reads public sources using its native web tools.
 3. It records source details, quoted evidence and claims in the MCP.
-4. The MCP checks evidence links, scope, dates, metrics and conflicts. It records source provenance, but the URL and quote come from the host agent and are not independently fetched by the MCP. If evidence is missing, the result can remain partial; the agent should not guess.
-5. The agent publishes the brief. Open it in the report library and inspect the evidence behind each finding.
+4. The MCP checks evidence links, scope, dates, metrics, required evidence slots and conflicts. The report shows each source's declared type and provenance, publication date, metric observation date, freshness state, quote and locator. Unknown or derived provenance is a prompt to verify the original source, not an automatic quality score. URLs and quotes come from the host agent and are not independently fetched by the MCP.
+5. If a source is old, undated, derived, unsupported or in conflict, use its **Research this evidence** or **Copy research follow-up** action. Codex or Claude continues with its own web tools, records new evidence in a new run and validates again. If evidence remains missing or contradictory, keep that uncertainty visible instead of guessing.
+6. The agent publishes the brief and summarizes the result in the same chat. Open the report link to inspect the evidence behind each finding.
 
 The MCP does **not** perform general web search or call an LLM. It is the research record, validator and report publisher.
 
 ## What the report contains
 
-A Game Decision Brief includes the research question and scope, executive verdict and confidence, market signals, findings with evidence and source links, evidence-backed recommendations, unknowns and issues, methodology, and JSON/Markdown downloads. Estimates and inferences are labeled separately from facts.
+A Game Decision Brief includes the research question and scope, executive verdict and confidence, market signals, findings with evidence and source links, evidence-backed recommendations, unknowns and issues, methodology, and JSON/Markdown downloads. Estimates and inferences are labeled separately from facts. System validation is shown separately from the agent's conclusion; missing dates remain unknown and comparable opposing evidence produces an abstention.
 
 ## Try it with Codex
 

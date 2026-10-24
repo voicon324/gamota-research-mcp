@@ -53,7 +53,7 @@ Verified on the Mission 3 A1.1 release commit `d01f260`. Its technical branch po
 - The live mobile-games report is a scope-mismatch example, with a published `NOT_COMPARABLE` directional assessment. It is not evidence of two sources disagreeing on the same metric and scope; same-scope `ABSTAIN` is demonstrated by the deterministic A1 fixture and is explicitly labeled synthetic in the demo.
 - At that earlier checkpoint, `gamota-mission3-demo-final-v2.mp4` was **165.653 seconds** (2m 45.653s) and its narration reported 11 targeted and 135 full-suite tests. That video is being revised to reflect the common-requirement follow-up and current verification; the existing real ChatGPT Web → MCP research footage is retained.
 
-### Current follow-up verification (2026-10-24, commit `9a7a568`)
+### Prior follow-up verification (2026-10-24, commit `9a7a568`)
 
 - `uv run pytest -q` — **138 passed**.
 - `cd web && npm run build` — passed (TypeScript and Vite production build).
@@ -62,6 +62,16 @@ Verified on the Mission 3 A1.1 release commit `d01f260`. Its technical branch po
 - Public homepage, report index, and the newly referenced JavaScript asset return HTTP 200. The report library still lists five reports. Unauthenticated `/mcp` remains HTTP 401.
 - The public page was opened in Chrome after deployment and displayed the Fieldnotes research UI and five published reports.
 - The report database and all existing published reports were preserved during deployment.
+
+### Evidence-review workflow follow-up (2026-10-24)
+
+The common requirements are now carried into every newly published report and the report reader. Each evidence item shows the declared source type and provenance, publication date, observation date, freshness result against the run's explicit cutoff, source link, quote/locator, and the MCP's not-independently-verified boundary. Missing dates remain unknown; no cutoff means freshness is not assessed. Derived or unknown provenance raises a review prompt, but the system does not fabricate a source-trust score or assert that a source is false. Older schema 1.0 reports still render: the reader marks their freshness as not assessed and prompts direct source review.
+
+The report and issue cards now offer context-preserving follow-up prompts for checking a source, finding an original citation, finding newer data, filling a missing evidence slot, validating a claim, or researching comparable evidence. The prompts are copied for the host agent to execute with its native web tools; the MCP does not silently start a new search. Server instructions now spell out the research loop, primary-source preference, date/scope comparison, explicit uncertainty, validation, publication read-back, and a same-chat summary with the exact returned report link.
+
+Coverage remains scoped to the assigned A1 Change Request plus the common requirements. A1 handles same-scope conflicts with `ABSTAIN` and scope mismatch with `NOT_COMPARABLE`; A2–A5 are alternative bank requests, not simultaneous requirements. Current limits are explicit: the server does not retrieve source pages or verify quotation truth, and an agent may still misread a page. Reviewers can open the exact linked source and continue the investigation through the generated prompt.
+
+This implementation passed **17 targeted A1/report tests**, the **144-test full Python suite**, and the production frontend build. The live deployment commit and HTTP checks are recorded in `docs/mission3-deployment-verification.md` after release.
 
 Use the canonical HTTPS host `https://52-64-163-35.sslip.io/` for the app, MCP, and report links. The direct-IP URL `https://52.64.163.35/` fails TLS hostname validation in current clients.
 
@@ -73,11 +83,11 @@ The system records URLs and provenance supplied by the host agent, but does not 
 
 ### After the new request, what did you prioritize and what did you defer?
 
-I prioritized making a conflict explainable and reviewable: show the two directions, compare their measurement scope, link each statement to its source, and abstain when comparable evidence disagrees. In the follow-up, I made the evidence boundary explicit by marking the URL and quotation as host-supplied and not independently retrieved by the MCP. I deferred automated winner selection, a numeric source-trust score, automatic follow-up research and server-side fetching because the stored evidence alone cannot justify them and retrieval needs a separate security review.
+I prioritized making a conflict explainable and reviewable: show both directions, compare measurement scope, link each claim to its source, and abstain when comparable evidence disagrees. I then made source-verification limits explicit and added a per-evidence review of provenance, source type, publication date, observation date, freshness, and next steps. I deferred automatic source fetching and numeric trust scores because stored evidence cannot justify either; agents continue research with their native web tools.
 
 ### What changed most from Mission 2, and what evidence shows it is better?
 
-The largest change from Mission 2 is that a directional issue now changes the reader's decision view: it displays **ABSTAIN** for comparable opposite signals or **NOT_COMPARABLE** for mismatched scope, beside the evidence and source links. The follow-up adds an explicit not-independently-verified label for host-supplied quotes and URLs. The common-requirement follow-up tightens numeric grounding and freshness handling and surfaces evidence gaps before the agent's unverified verdict. Evidence includes the A1 regression suite, **138 passing tests**, a successful production frontend build, matching deployed assets, the active MCP service, and post-deploy HTTP checks. The published live run above is COMPLETE with 3/3 valid claims, 2/2 evidence slots, and one NOT_COMPARABLE issue. The live run demonstrates a real metric/sample mismatch; synthetic fixtures separately cover a true same-scope conflict. Existing report artifacts are preserved and do not receive the new optional field retroactively.
+The largest change from Mission 2 is that a directional issue now changes the reader's decision view: it displays **ABSTAIN** for comparable opposite signals or **NOT_COMPARABLE** for mismatched scope, beside the evidence and source links. The reader now also shows source type/provenance, publication and observation dates, freshness, verification limits, and targeted follow-up prompts. Evidence includes **17 targeted tests**, **144 passing full-suite tests**, a successful production frontend build, and post-deploy endpoint checks. The published live run above is COMPLETE with 3/3 valid claims, 2/2 evidence slots, and one NOT_COMPARABLE issue. The live run demonstrates a real metric/sample mismatch; synthetic fixtures separately cover a true same-scope conflict.
 
 ### What is the largest remaining risk, and what would you do next?
 

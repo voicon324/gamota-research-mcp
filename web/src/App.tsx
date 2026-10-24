@@ -8,6 +8,7 @@ type ReportIssue = {
   evidence_ids?: string[]; unavailable_evidence_ids?: string[]; directions?: Record<string, 'UP'|'DOWN'>;
   resolution?: 'ABSTAIN'|'NOT_COMPARABLE'; comparability?: 'COMPARABLE'|'NOT_COMPARABLE';
   comparison_signature?: string; explanation?: string; reasons?: string[];
+  next_steps?: string[];
 };
 type SourceAssurance = {
   status: 'NOT_INDEPENDENTLY_VERIFIED';
@@ -16,18 +17,78 @@ type SourceAssurance = {
   source_retrieved_by_server: false;
   message: string;
 };
+type EvidenceReview = {
+  freshness_status: 'CURRENT'|'STALE'|'UNKNOWN'|'NOT_ASSESSED';
+  freshness_cutoff?: string | null;
+  publication_date?: string | null;
+  observation_date?: string | null;
+  provenance_status: string;
+  source_type: string;
+  verification_status: string;
+  review_reasons: string[];
+  next_steps: string[];
+};
 type PublishedReport = {
   schema_version: string;
   report: { id: string; title: string; game: string; as_of: string; status: string; research_run_id: string; research_status: string };
-  scope: { question: string; decision_goal?: string; period?: unknown; markets: string[]; platforms: string[]; assumptions: string[] };
+  scope: { question: string; decision_goal?: string; period?: unknown; markets: string[]; platforms: string[]; assumptions: string[]; freshness_cutoff?: string | null };
   summary: { verdict: string; confidence: string; directional_decision?: { outcome: 'ABSTAIN'|'NOT_COMPARABLE'; reason: string; issue_ids: string[] } };
   findings: { id: string; statement: string; type: string; confidence: string; evidence_ids: string[]; implication?: string; validation: string }[];
   recommendations: { id: string; text: string; confidence: string; evidence_ids: string[] }[];
   unknowns: ReportIssue[];
   metrics: { evidence_ids: string[]; metric: string; value: string | number; unit?: string; data_type: string; market?: string; period?: string; scope?: string }[];
-  sources: { id: string; url: string; title?: string; publisher?: string; published_at?: string; accessed_at?: string; provenance_status?: string }[];
-  evidence: { id: string; source_id: string; excerpt: string; locator?: string; retrieved_at?: string; metric?: string; value?: string | number; unit?: string; market?: string; period_start?: string; period_end?: string; scope?: string; method?: string; validation: string; claim_ids: string[]; source_assurance?: SourceAssurance }[];
+  sources: { id: string; url: string; title?: string; publisher?: string; published_at?: string; accessed_at?: string; provenance_status?: string; source_type?: string }[];
+  evidence: { id: string; source_id: string; excerpt: string; locator?: string; retrieved_at?: string; observed_at?: string; metric?: string; value?: string | number; unit?: string; market?: string; period_start?: string; period_end?: string; scope?: string; method?: string; validation: string; claim_ids: string[]; source_assurance?: SourceAssurance; review?: EvidenceReview }[];
 };
+
+function evidenceReviewFor(evidence: PublishedReport['evidence'][number], source?: PublishedReport['sources'][number]): EvidenceReview {
+  return evidence.review || {
+    freshness_status: 'NOT_ASSESSED',
+    publication_date: source?.published_at || null,
+    observation_date: evidence.observed_at || evidence.period_end || null,
+    provenance_status: source?.provenance_status || 'UNKNOWN',
+    source_type: source?.source_type || 'UNKNOWN',
+    verification_status: 'NOT_INDEPENDENTLY_VERIFIED',
+    review_reasons: [
+      'This report has no saved freshness cutoff or source-review snapshot; verify the source directly.',
+      ...(source?.provenance_status === 'DERIVED' ? ['This source is derived; trace the citation to its original publisher or dataset.'] : []),
+      ...(!source?.provenance_status || source.provenance_status === 'UNKNOWN' ? ['Source provenance is unknown.'] : []),
+    ],
+    next_steps: [
+      'Open the source link and confirm the saved quotation at its locator.',
+      'Trace the citation to an original publisher or dataset and record source lineage.',
+      'Set an explicit freshness cutoff if the decision depends on current data.',
+    ],
+  };
+}
+
+function EvidenceReviewCard({
+  evidence,
+  source,
+  copied,
+  onFollowup,
+}: {
+  evidence: PublishedReport['evidence'][number];
+  source?: PublishedReport['sources'][number];
+  copied: boolean;
+  onFollowup: () => void;
+}) {
+  const review = evidenceReviewFor(evidence, source);
+  return <aside className="evidence-review-card">
+    <div className="evidence-review-heading"><b>Evidence review</b><span className={`freshness-badge ${review.freshness_status.toLowerCase().replaceAll('_','-')}`}>{review.freshness_status.replaceAll('_',' ')}</span></div>
+    <div className="evidence-review-facts">
+      <span>Source type <b>{review.source_type}</b></span>
+      <span>Provenance <b>{review.provenance_status}</b></span>
+      <span>Published <b>{review.publication_date || 'Unknown'}</b></span>
+      <span>Observed <b>{review.observation_date || 'Unknown'}</b></span>
+      {review.freshness_cutoff&&<span>Freshness cutoff <b>{review.freshness_cutoff}</b></span>}
+    </div>
+    <p className="evidence-review-boundary">Not independently verified: the host agent supplied the URL and quotation; the MCP did not retrieve the page.</p>
+    {review.review_reasons.length>0&&<ul>{review.review_reasons.map(reason=><li key={reason}>{reason}</li>)}</ul>}
+    {source&&<a className="evidence-review-link" href={source.url} target="_blank" rel="noreferrer">Open source to verify <ExternalLink size={12}/></a>}
+    <button className="conflict-followup" onClick={onFollowup}><Clipboard size={14}/>{copied?'Research prompt copied':'Research this evidence'}</button>
+  </aside>;
+}
 const cases = {
   R1: {
     title: 'Pokémon TCG Pocket', subtitle: 'Global downloads · first 120 days', result: 'SUPPORTED, WITH LIMITS', tone: 'good',
@@ -139,7 +200,7 @@ export default function App() {
     const evidenceContext = (issue.evidence_ids || []).map(id => {
       const evidence = activeReport.evidence.find(item => item.id === id);
       const source = evidence && activeReport.sources.find(item => item.id === evidence.source_id);
-      return evidence ? `- ${id} (${issue.directions?.[id] || 'direction unavailable'}): ${evidence.excerpt}\n  Metric/scope: ${evidence.metric || 'unspecified'} · ${evidence.market || 'market unspecified'} · ${evidence.period_start || '?'} to ${evidence.period_end || '?'}\n  Source: ${source?.title || source?.url || 'source unavailable'}${source?.url ? ` — ${source.url}` : ''}` : `- ${id}: evidence unavailable in this report`;
+      return evidence ? `- ${id} (${issue.directions?.[id] || 'direction unavailable'}): ${evidence.excerpt}\n  Metric/scope: ${evidence.metric || 'unspecified'} · ${evidence.market || 'market unspecified'} · ${evidence.period_start || '?'} to ${evidence.period_end || '?'}\n  Source: ${source?.title || source?.url || 'source unavailable'}${source?.url ? ` — ${source.url}` : ''}\n  Source type/provenance: ${evidence.review?.source_type || source?.source_type || 'unknown'} / ${evidence.review?.provenance_status || source?.provenance_status || 'unknown'}\n  Published/observed: ${evidence.review?.publication_date || 'unknown'} / ${evidence.review?.observation_date || 'unknown'}` : `- ${id}: evidence unavailable in this report`;
     }).join('\n');
     const prompt = [
       'Continue the research in a new run. Keep the previous run and published report unchanged.',
@@ -152,11 +213,38 @@ export default function App() {
       `Resolution so far: ${issue.resolution || 'unresolved'}; ${issue.explanation || 'additional evidence is needed'}`,
       `Evidence IDs: ${(issue.evidence_ids || []).join(', ') || 'none'}`,
       'Existing evidence and sources:', evidenceContext || '- none',
-      'Find new sources that measure the same market, metric, platform, and time period. Compare publication dates, methodology, and provenance. Record quotes and URLs. Do not invent data, assign an unsupported source-trust score, or choose a winner unless the new evidence justifies it.',
+      'Next research steps:',
+      ...(issue.next_steps?.map(step=>`- ${step}`) || ['- Inspect each linked source, verify the quotation and dates, then seek direct and independent evidence for the same scope.']),
+      'Use your native web research tools. Record URLs, exact quotations, locators, publisher, source type, provenance, publication date, and observation period. Do not invent facts, call host-supplied evidence independently verified, assign an unsupported trust score, or choose a winner while the evidence remains unresolved. If evidence is still missing or contradictory, leave that uncertainty explicit. Save additional work in a new run and report the result in this chat.',
     ].join('\n');
     await navigator.clipboard.writeText(prompt);
     setCopiedFollowup(issue.id);
     window.setTimeout(() => setCopiedFollowup(current => current === issue.id ? '' : current), 1800);
+  }
+
+  async function copyEvidenceFollowup(evidence: PublishedReport['evidence'][number]) {
+    if (!activeReport) return;
+    const source=activeReport.sources.find(item=>item.id===evidence.source_id);
+    const review=evidenceReviewFor(evidence, source);
+    const steps=review.next_steps;
+    const prompt=[
+      'Continue this research in a new run. Keep the existing report unchanged until new evidence has been validated.',
+      `Research question: ${activeReport.scope.question}`,
+      `Market/platform/period: ${activeReport.scope.markets.join(', ') || 'unspecified'} / ${activeReport.scope.platforms.join(', ') || 'unspecified'} / ${activeReport.scope.period ? JSON.stringify(activeReport.scope.period) : 'unspecified'}`,
+      `Evidence to review: ${evidence.id}`,
+      `Current claim links: ${evidence.claim_ids.join(', ') || 'none'}`,
+      `Quote: “${evidence.excerpt}”`,
+      `Locator: ${evidence.locator || 'unspecified'}`,
+      `Source URL: ${source?.url || 'unavailable'}; title: ${source?.title || 'unknown'}; type: ${review.source_type}; provenance: ${review.provenance_status}`,
+      `Published: ${review.publication_date || 'unknown'}; metric observed: ${review.observation_date || 'unknown'}; freshness: ${review.freshness_status}; cutoff: ${review.freshness_cutoff || activeReport.scope.freshness_cutoff || 'not set'}`,
+      'The MCP has not independently retrieved this page or verified this quotation.',
+      'Next steps:',
+      ...steps.map(step=>`- ${step}`),
+      'Use your native web search/fetch tools. Save new URLs, quotations, locators, dates, and scope; rerun validation. If verification fails or evidence remains weak/missing, preserve that uncertainty in the report and answer.',
+    ].join('\n');
+    await navigator.clipboard.writeText(prompt);
+    setCopiedFollowup(evidence.id);
+    window.setTimeout(() => setCopiedFollowup(current => current === evidence.id ? '' : current), 1800);
   }
 
   return <div className="app-shell">
@@ -194,9 +282,9 @@ export default function App() {
                 <div className="reader-verdict"><span>{activeReport.summary.directional_decision||['PARTIAL','INSUFFICIENT_DATA','NEEDS_CLARIFICATION'].includes(activeReport.report.research_status)?'PUBLISHING AGENT ASSESSMENT · UNVERIFIED':'EXECUTIVE VERDICT'}</span><p>{activeReport.summary.verdict}</p></div>
                 {activeReport.unknowns.length>0&&<section className="reader-gap-summary"><div><b>Evidence gaps &amp; unresolved issues</b><span>{activeReport.unknowns.length}</span></div><ul>{activeReport.unknowns.map(item=><li key={item.id}><strong>{item.type.replaceAll('_',' ')}</strong> — {item.description}</li>)}</ul></section>}
                 <div className="reader-subhead"><h4>Market signals</h4><span>{activeReport.metrics.length}</span></div>
-                {activeReport.metrics.length ? activeReport.metrics.map(metric=>{const metricKey=metric.evidence_ids.join(':');return <article className="metric-signal" key={metricKey}><button onClick={()=>setExpandedMetric(expandedMetric===metricKey?'':metricKey)}><span><b>{metric.metric.replaceAll('_',' ')}</b><strong>{metric.value} <small>{metric.unit}</small></strong><em>{metric.data_type} · {metric.market || 'market unspecified'}{metric.period?` · ${metric.period}`:''} · {metric.evidence_ids.length} evidence item{metric.evidence_ids.length===1?'':'s'}</em></span><ChevronDown size={16}/></button>{expandedMetric===metricKey&&metric.evidence_ids.map(id=>{const evidence=activeReport.evidence.find(item=>item.id===id);const source=evidence&&activeReport.sources.find(item=>item.id===evidence.source_id);return evidence?<div className="metric-evidence" key={id}><p>“{evidence.excerpt}”</p>{evidence.source_assurance&&<div className="source-assurance"><b>Not independently verified</b><span>{evidence.source_assurance.message}</span></div>}<small>{evidence.locator || 'Locator not specified'} · {evidence.validation}</small>{source&&<a href={source.url} target="_blank" rel="noreferrer">{source.title || source.url} <ExternalLink size={12}/></a>}</div>:null})}</article>}):<p className="reader-muted">No scoped market signals were recorded.</p>}
+                {activeReport.metrics.length ? activeReport.metrics.map(metric=>{const metricKey=metric.evidence_ids.join(':');return <article className="metric-signal" key={metricKey}><button onClick={()=>setExpandedMetric(expandedMetric===metricKey?'':metricKey)}><span><b>{metric.metric.replaceAll('_',' ')}</b><strong>{metric.value} <small>{metric.unit}</small></strong><em>{metric.data_type} · {metric.market || 'market unspecified'}{metric.period?` · ${metric.period}`:''} · {metric.evidence_ids.length} evidence item{metric.evidence_ids.length===1?'':'s'}</em></span><ChevronDown size={16}/></button>{expandedMetric===metricKey&&metric.evidence_ids.map(id=>{const evidence=activeReport.evidence.find(item=>item.id===id);const source=evidence&&activeReport.sources.find(item=>item.id===evidence.source_id);return evidence?<div className="metric-evidence" key={id}><p>“{evidence.excerpt}”</p>{evidence.source_assurance&&<div className="source-assurance"><b>Not independently verified</b><span>{evidence.source_assurance.message}</span></div>}<small>{evidence.locator || 'Locator not specified'} · {evidence.validation}</small><EvidenceReviewCard evidence={evidence} source={source} copied={copiedFollowup===evidence.id} onFollowup={()=>void copyEvidenceFollowup(evidence)}/>{source&&<a href={source.url} target="_blank" rel="noreferrer">{source.title || source.url} <ExternalLink size={12}/></a>}</div>:null})}</article>}):<p className="reader-muted">No scoped market signals were recorded.</p>}
                 <div className="reader-subhead"><h4>Findings</h4><span>{activeReport.findings.length}</span></div>
-                {activeReport.findings.map(finding=><article className="reader-finding" key={finding.id}><button className="finding-toggle" onClick={()=>setExpandedFinding(expandedFinding===finding.id?'':finding.id)}><span><i className={`finding-type ${finding.type}`}>{finding.type}</i><b>{finding.statement}</b><small>{finding.confidence} confidence · {finding.evidence_ids.length} evidence item{finding.evidence_ids.length===1?'':'s'}</small></span><ChevronDown size={17}/></button>{expandedFinding===finding.id&&<div className="finding-evidence">{finding.implication&&<p><b>Implication:</b> {finding.implication}</p>}{finding.evidence_ids.map(id=>{const item=activeReport.evidence.find(e=>e.id===id);const source=item&&activeReport.sources.find(s=>s.id===item.source_id);return item?<div className="evidence-item" key={id}><p>“{item.excerpt}”</p>{item.source_assurance&&<div className="source-assurance"><b>Not independently verified</b><span>{item.source_assurance.message}</span></div>}<small>{item.validation} · {item.locator || 'Locator not specified'}{item.retrieved_at?` · retrieved ${item.retrieved_at}`:''}</small>{source&&<a href={source.url} target="_blank" rel="noreferrer">{source.title || source.url} <ExternalLink size={12}/></a>}</div>:null})}</div>}</article>)}
+                {activeReport.findings.map(finding=><article className="reader-finding" key={finding.id}><button className="finding-toggle" onClick={()=>setExpandedFinding(expandedFinding===finding.id?'':finding.id)}><span><i className={`finding-type ${finding.type}`}>{finding.type}</i><b>{finding.statement}</b><small>{finding.confidence} confidence · {finding.evidence_ids.length} evidence item{finding.evidence_ids.length===1?'':'s'}</small></span><ChevronDown size={17}/></button>{expandedFinding===finding.id&&<div className="finding-evidence">{finding.implication&&<p><b>Implication:</b> {finding.implication}</p>}{finding.evidence_ids.map(id=>{const item=activeReport.evidence.find(e=>e.id===id);const source=item&&activeReport.sources.find(s=>s.id===item.source_id);return item?<div className="evidence-item" key={id}><p>“{item.excerpt}”</p>{item.source_assurance&&<div className="source-assurance"><b>Not independently verified</b><span>{item.source_assurance.message}</span></div>}<small>{item.validation} · {item.locator || 'Locator not specified'}{item.retrieved_at?` · retrieved ${item.retrieved_at}`:''}</small><EvidenceReviewCard evidence={item} source={source} copied={copiedFollowup===item.id} onFollowup={()=>void copyEvidenceFollowup(item)}/>{source&&<a href={source.url} target="_blank" rel="noreferrer">{source.title || source.url} <ExternalLink size={12}/></a>}</div>:null})}</div>}</article>)}
                 <div className="reader-subhead"><h4>Recommended actions</h4><span>{activeReport.recommendations.length}</span></div>
                 {activeReport.recommendations.length?activeReport.recommendations.map(item=><div className="reader-recommendation" key={item.id}><Sparkles size={15}/><span>{item.text}<small>{item.confidence} confidence · {item.evidence_ids.length} linked evidence items</small></span></div>):<p className="reader-muted">No evidence-linked recommendations were recorded.</p>}
                 <div className="reader-subhead"><h4>Unknowns &amp; issues</h4><span>{activeReport.unknowns.length}</span></div>
@@ -212,12 +300,14 @@ export default function App() {
                     <div className="conflict-evidence-grid">{linkedEvidence.map(({id,evidence})=>{
                       const source=activeReport.sources.find(s=>s.id===evidence!.source_id);
                       const direction=item.directions?.[id];
-                      return <section className={`conflict-evidence ${direction==='DOWN'?'is-down':direction==='UP'?'is-up':''}`} key={id}><div className="conflict-direction"><span>{direction||'DIRECTION UNKNOWN'}</span><small>{evidence!.metric?.replaceAll('_',' ')||'metric unspecified'} · {evidence!.market||'market unspecified'}</small></div>{evidence!.source_assurance&&<div className="source-assurance"><b>Not independently verified</b><span>{evidence!.source_assurance.message}</span></div>}<blockquote>“{evidence!.excerpt}”</blockquote><dl><div><dt>Period</dt><dd>{evidence!.period_start||'?'} – {evidence!.period_end||'?'}</dd></div><div><dt>Locator</dt><dd>{evidence!.locator||'Not specified'}</dd></div><div><dt>Published</dt><dd>{source?.published_at||'Date unknown'}</dd></div><div><dt>Provenance</dt><dd>{source?.provenance_status||'Unknown'}</dd></div></dl><small className="conflict-publisher">{source?.publisher||'Publisher unavailable'} · {evidence!.validation}</small>{source&&<a className="conflict-source-link" href={source.url} target="_blank" rel="noreferrer">{source.title||source.url}<ExternalLink size={13}/></a>}</section>;
+                      return <section className={`conflict-evidence ${direction==='DOWN'?'is-down':direction==='UP'?'is-up':''}`} key={id}><div className="conflict-direction"><span>{direction||'DIRECTION UNKNOWN'}</span><small>{evidence!.metric?.replaceAll('_',' ')||'metric unspecified'} · {evidence!.market||'market unspecified'}</small></div>{evidence!.source_assurance&&<div className="source-assurance"><b>Not independently verified</b><span>{evidence!.source_assurance.message}</span></div>}<blockquote>“{evidence!.excerpt}”</blockquote><dl><div><dt>Period</dt><dd>{evidence!.period_start||'?'} – {evidence!.period_end||'?'}</dd></div><div><dt>Locator</dt><dd>{evidence!.locator||'Not specified'}</dd></div><div><dt>Published</dt><dd>{source?.published_at||'Date unknown'}</dd></div><div><dt>Provenance</dt><dd>{source?.provenance_status||'Unknown'}</dd></div></dl><EvidenceReviewCard evidence={evidence!} source={source} copied={copiedFollowup===id} onFollowup={()=>void copyEvidenceFollowup(evidence!)}/><small className="conflict-publisher">{source?.publisher||'Publisher unavailable'} · {evidence!.validation}</small>{source&&<a className="conflict-source-link" href={source.url} target="_blank" rel="noreferrer">{source.title||source.url}<ExternalLink size={13}/></a>}</section>;
                     })}</div>
                     {unavailableEvidence.length>0&&<div className="conflict-missing">Evidence not present in this report: {unavailableEvidence.join(', ')}</div>}
-                    {(item.resolution==='ABSTAIN'||['INVALID_CLAIM','MISSING_EVIDENCE_SLOT','GAP','STALE_EVIDENCE','FRESHNESS_UNKNOWN','METRIC_SUPPORT_UNKNOWN','METRIC_SUPPORT_MISMATCH'].includes(item.type))&&<button className="conflict-followup" onClick={()=>copyResearchFollowup(item)}><Clipboard size={14}/>{copiedFollowup===item.id?'Follow-up copied':'Copy research follow-up'}</button>}
-                  </article>:<div className="reader-unknown" key={item.id}><span>{item.severity}</span>{item.description}</div>;
+                    <button className="conflict-followup" onClick={()=>copyResearchFollowup(item)}><Clipboard size={14}/>{copiedFollowup===item.id?'Follow-up copied':'Copy research follow-up'}</button>
+                  </article>:<div className="reader-unknown" key={item.id}><span>{item.severity}</span>{item.description}{item.next_steps&&<ul>{item.next_steps.map(step=><li key={step}>{step}</li>)}</ul>}<button className="conflict-followup" onClick={()=>copyResearchFollowup(item)}><Clipboard size={14}/>{copiedFollowup===item.id?'Follow-up copied':'Copy research follow-up'}</button></div>;
                 }):<p className="reader-muted">No open unknowns were recorded.</p>}
+                <div className="reader-subhead"><h4>Evidence and source review</h4><span>{activeReport.evidence.length}</span></div>
+                {activeReport.evidence.length>0?<section className="all-evidence-review">{activeReport.evidence.map(item=>{const source=activeReport.sources.find(s=>s.id===item.source_id);return <article className="all-evidence-item" key={item.id}><div className="all-evidence-title"><b>{source?.title||source?.url||item.source_id}</b><small>{item.validation} · claim links: {item.claim_ids.join(', ')||'none'}</small></div><blockquote>“{item.excerpt}”</blockquote><small className="all-evidence-locator">{item.metric||'Metric unspecified'} · {item.market||'Market unspecified'} · {item.period_start||'?'} – {item.period_end||'?'} · {item.locator||'Locator not specified'}</small><EvidenceReviewCard evidence={item} source={source} copied={copiedFollowup===item.id} onFollowup={()=>void copyEvidenceFollowup(item)}/></article>})}</section>:<p className="reader-muted">No evidence items were saved for this report.</p>}
                 <details className="reader-sources"><summary>Sources &amp; methodology · {activeReport.sources.length} sources</summary>{activeReport.sources.map(source=><a key={source.id} href={source.url} target="_blank" rel="noreferrer"><b>{source.title || source.url}</b><small>{source.publisher || 'Publisher unavailable'} · accessed {source.accessed_at || 'date unknown'}</small></a>)}{activeReport.scope.assumptions.length>0&&<ul>{activeReport.scope.assumptions.map(item=><li key={item}>{item}</li>)}</ul>}<p>Research performed by the host agent's native search/fetch tools. The MCP stores evidence and applies deterministic validation.</p><small>Run {activeReport.report.research_run_id} · schema {activeReport.schema_version}</small></details>
                 <div className="reader-downloads"><a href={`/reports/${activeReport.report.id}/report.json`} download>Download JSON <ArrowDownRight size={13}/></a><a href={`/reports/${activeReport.report.id}/report.md`} download>Download Markdown <ArrowDownRight size={13}/></a></div>
               </> : <div className="reports-empty reader-placeholder"><FileSearch size={20}/><b>Select a published report</b><span>Findings can be expanded to inspect supporting evidence and source links.</span></div>}
