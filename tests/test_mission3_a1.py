@@ -85,6 +85,9 @@ def test_comparable_opposite_sources_publish_abstention_with_evidence(repository
     assert "ABSTAIN" in markdown
     assert "Fixture source 1" in markdown and "Fixture source 2" in markdown
     assert "does not establish" in markdown
+    assert markdown.index("## System assessment") < markdown.index(
+        "## Publishing agent assessment (unverified)"
+    )
 
 
 def test_scope_mismatch_is_not_falsely_published_as_conflict(repository, tmp_path):
@@ -244,7 +247,11 @@ def test_missing_evidence_does_not_create_a_directional_decision(repository, tmp
     run = service.create_run("Is there enough evidence for the market trend?")
     service.set_research_contract(
         run.id,
-        {"question": run.question, "metrics": ["revenue_growth"]},
+        {
+            "question": run.question,
+            "metrics": ["revenue_growth"],
+            "evidence_slots": ["mobile revenue in the first 30 days"],
+        },
     )
     claim = service.save_claim(
         run_id=run.id,
@@ -265,3 +272,10 @@ def test_missing_evidence_does_not_create_a_directional_decision(repository, tmp
     assert not any(item["id"] == claim.id for item in report["findings"])
     issue = next(item for item in report["unknowns"] if item["id"] == f"claim-{claim.id}")
     assert issue["type"] == "INVALID_CLAIM"
+    assert any(item["type"] == "MISSING_EVIDENCE_SLOT" for item in report["unknowns"])
+    markdown = (tmp_path / report["report"]["id"] / "report.md").read_text()
+    assert markdown.index("## Evidence gaps") < markdown.index("## Findings")
+    assert "The market is growing." in markdown
+    assert markdown.index("## System assessment") < markdown.index(
+        "## Publishing agent assessment (unverified)"
+    )

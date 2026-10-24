@@ -221,6 +221,13 @@ def render_report_markdown(report: dict[str, Any]) -> str:
     metadata = report["report"]
     scope = report["scope"]
     summary = report["summary"]
+    decision = summary.get("directional_decision")
+    research_status = metadata.get("research_status", "unknown")
+    system_limited = research_status in {
+        RunStatus.PARTIAL.value,
+        RunStatus.INSUFFICIENT_DATA.value,
+        RunStatus.NEEDS_CLARIFICATION.value,
+    }
     lines = [
         f"# {metadata['title']}",
         "",
@@ -232,19 +239,61 @@ def render_report_markdown(report: dict[str, Any]) -> str:
         "",
         scope["question"],
         "",
-        "## Executive verdict",
-        "",
-        summary["verdict"],
-        "",
+    ]
+    if decision or system_limited:
+        lines.extend([
+            "## System assessment",
+            "",
+            f"**Research status:** {research_status}",
+            "",
+        ])
+        if decision:
+            lines.append(f"**{decision['outcome']}** — {decision['reason']}")
+            lines.append("")
+        lines.extend([
+            "## Publishing agent assessment (unverified)",
+            "",
+            summary["verdict"],
+            "",
+        ])
+    else:
+        lines.extend(["## Executive verdict", "", summary["verdict"], ""])
+    lines.extend([
         "## Scope",
         "",
         f"- Markets: {', '.join(scope.get('markets', [])) or 'Not specified'}",
         f"- Platforms: {', '.join(scope.get('platforms', [])) or 'Not specified'}",
         f"- Period: {scope.get('period') or 'Not specified'}",
         "",
-        "## Findings",
-        "",
-    ]
+    ])
+    if report.get("unknowns"):
+        lines.extend(["## Evidence gaps and unresolved issues", ""])
+        for item in report["unknowns"]:
+            lines.append(f"- **{item['severity']} · {item['type']}** — {item['description']}")
+            if item.get("resolution"):
+                lines.append(
+                    f"  - Resolution: {item['resolution']} ({item.get('comparability', 'scope unresolved')})"
+                )
+            if item.get("explanation"):
+                lines.append(f"  - {item['explanation']}")
+            if item.get("evidence_ids"):
+                directions = item.get("directions", {})
+                refs = [
+                    f"{evidence_id} ({directions[evidence_id]})"
+                    if evidence_id in directions else evidence_id
+                    for evidence_id in item["evidence_ids"]
+                ]
+                lines.append(f"  - Evidence: {', '.join(refs)}")
+            if item.get("unavailable_evidence_ids"):
+                lines.append(
+                    f"  - Evidence references unavailable in this report: {', '.join(item['unavailable_evidence_ids'])}"
+                )
+            if item.get("reasons"):
+                lines.append(f"  - Comparison reasons: {', '.join(item['reasons'])}")
+            if item.get("comparison_signature"):
+                lines.append(f"  - Comparison signature: {item['comparison_signature']}")
+        lines.append("")
+    lines.extend(["## Findings", ""])
     for finding in report["findings"]:
         lines.extend([
             f"### {finding['statement']}",
@@ -271,43 +320,6 @@ def render_report_markdown(report: dict[str, Any]) -> str:
         )
     else:
         lines.append("No evidence-linked recommendations were recorded.")
-    decision = summary.get("directional_decision")
-    if decision:
-        lines.extend([
-            "",
-            "## Directional assessment",
-            "",
-            f"**{decision['outcome']}** — {decision['reason']}",
-            "",
-        ])
-    lines.extend(["", "## Unknowns and issues", ""])
-    if report["unknowns"]:
-        for item in report["unknowns"]:
-            lines.append(f"- **{item['severity']} · {item['type']}** — {item['description']}")
-            if item.get("resolution"):
-                lines.append(
-                    f"  - Resolution: {item['resolution']} ({item.get('comparability', 'scope unresolved')})"
-                )
-            if item.get("explanation"):
-                lines.append(f"  - {item['explanation']}")
-            if item.get("evidence_ids"):
-                directions = item.get("directions", {})
-                refs = [
-                    f"{evidence_id} ({directions[evidence_id]})"
-                    if evidence_id in directions else evidence_id
-                    for evidence_id in item["evidence_ids"]
-                ]
-                lines.append(f"  - Evidence: {', '.join(refs)}")
-            if item.get("unavailable_evidence_ids"):
-                lines.append(
-                    f"  - Evidence references unavailable in this report: {', '.join(item['unavailable_evidence_ids'])}"
-                )
-            if item.get("reasons"):
-                lines.append(f"  - Comparison reasons: {', '.join(item['reasons'])}")
-            if item.get("comparison_signature"):
-                lines.append(f"  - Comparison signature: {item['comparison_signature']}")
-    else:
-        lines.append("No open unknowns were recorded.")
     lines.extend(["", "## Sources and evidence", ""])
     source_map = {source["id"]: source for source in report["sources"]}
     direction_by_evidence = {
@@ -414,7 +426,7 @@ class ReportService:
                     "source_id": source["id"],
                     "excerpt": evidence["quote"],
                     "locator": evidence["locator"],
-                    "retrieved_at": evidence["observed_at"] or source["accessed_at"],
+                    "retrieved_at": source["accessed_at"],
                     "metric": evidence["metric"],
                     "value": _typed_value(evidence["value"]),
                     "unit": evidence["unit"],

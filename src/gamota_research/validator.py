@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import re
 from dataclasses import dataclass, replace
 from datetime import date, datetime, timezone
@@ -86,7 +85,6 @@ def _evidence_numeric_tokens(item: dict) -> set[tuple[str, str | None]]:
     unit = evidence.get("unit")
     if value is not None:
         parts.append(f"{value} {unit or ''}")
-    parts.append(json.dumps(evidence.get("metadata") or {}, ensure_ascii=False, sort_keys=True))
     return _numeric_tokens(" ".join(parts))
 
 
@@ -534,13 +532,18 @@ class Validator:
             return None
         evidence = item["evidence"]
         source = item["source"]
-        observed_or_published = evidence.get("observed_at") or source.get("published_at")
-        date_value = _parse_day(observed_or_published)
-        if date_value is None:
-            return "FRESHNESS_UNKNOWN"
         cutoff = _parse_day(policy.freshness_cutoff)
-        if cutoff is not None and date_value < cutoff:
+        published_at = _parse_day(source.get("published_at"))
+        observed_at = _parse_day(evidence.get("observed_at") or evidence.get("period_end"))
+        if cutoff is not None and any(
+            value is not None and value < cutoff
+            for value in (published_at, observed_at)
+        ):
             return "STALE_EVIDENCE"
+        # Source publication and metric observation are separate clocks. A
+        # recent observation cannot establish when an undated source appeared.
+        if published_at is None or observed_at is None:
+            return "FRESHNESS_UNKNOWN"
         return None
 
     def _record_freshness_issue(
@@ -553,9 +556,9 @@ class Validator:
         evidence = item["evidence"]
         source = item["source"]
         message = (
-            "Evidence predates the explicit freshness cutoff."
+            "The source publication date or metric observation period predates the explicit freshness cutoff."
             if finding == "STALE_EVIDENCE"
-            else "Freshness was required but no usable observation/publication date was found."
+            else "Freshness was required, but the source publication date or metric observation period is unknown."
         )
         issues.append(
             self._issue(

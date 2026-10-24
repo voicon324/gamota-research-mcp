@@ -6,6 +6,11 @@
 .reader-directional.not-comparable{border-color:#526878;background:#202b34}
 .reader-directional.not-comparable>span{color:#a8c4d9}
 .reader-directional.not-comparable>strong{border-color:#577286;color:#cae6f7}
+.reader-gap-summary{margin:14px 0 4px;padding:12px 14px;border:1px solid #594d39;border-radius:5px;background:#252720;color:#d8d0bd}
+.reader-gap-summary>div{display:flex;align-items:center;gap:8px;font:600 11px var(--display);color:#e5ddc9}
+.reader-gap-summary>div span{font:8px var(--mono);padding:3px 6px;border:1px solid #5d513d;border-radius:10px;color:#e1bd78}
+.reader-gap-summary ul{display:grid;gap:6px;margin:9px 0 0;padding-left:17px;font-size:9px;line-height:1.55}
+.reader-gap-summary li strong{font:8px var(--mono);color:#e1bd78}
 .conflict-card{margin-top:8px;padding:14px;background:#1b252d;border:1px solid #4c5143;border-radius:5px}
 .conflict-card.is-abstain{border-color:#706142;background:linear-gradient(140deg,#29271f,#1c252c 65%)}
 .conflict-card.is-not-comparable{border-color:#405563}

@@ -16,6 +16,17 @@ The A1 review UI previously showed source links and quotations without making cl
 
 This label describes the MCP server's own actions; it does not assert that a source is false, low quality, or unverifiable. It does not prove that a host agent's quote matches the linked page. The MCP continues to validate recorded structure, scope, dates and claim/evidence relationships. Older reports without `source_assurance` remain valid and render without the label. Server-side URL retrieval is deferred until a separate security review and explicit approval; this increment makes no outbound source requests.
 
+### Common requirement follow-up: freshness, grounding, and readable gaps
+
+The Mission 3 common requirement also asks the reviewer to identify stale or missing evidence, verify what the system itself concluded, and see where more research is needed. This follow-up tightens those behaviors without changing the MCP API or report schema:
+
+- Numeric grounding uses quoted text and the explicit structured value/unit fields. Numbers in arbitrary metadata no longer count as evidence for a claim.
+- Source publication date and metric observation date are separate. A recent observation cannot make an old or undated source current; either known date before the freshness cutoff is stale, and missing either date is unknown.
+- Markdown and web report readers place the deterministic system assessment and evidence gaps before the publishing agent's unverified verdict and findings. The report distinguishes the validator's outcome from the host agent's editorial conclusion.
+- Follow-up research guidance is available for stale, undated, unsupported and missing evidence, alongside existing ABSTAIN and comparability cases. Deeper coverage can be guided by the existing lineage and evidence-slot audits; this change does not invent a cross-claim conflict detector.
+
+Tests added first for forged numeric metadata, old publication with recent observation, missing publication date, prominent missing-slot disclosure, and system-versus-agent assessment ordering. On the updated tree, `uv run pytest -q` passes **138 tests**; `cd web && npm run build` passes. These results describe the local candidate until a new deployment verification is recorded below.
+
 ## Verification
 
 At the original A1 release, `tests/test_mission3_a1.py` covered the assigned change request, a metric-scope edge case, malformed or missing references, legacy schema compatibility, a supported-report regression, and missing evidence. The follow-up adds a forged/legacy metadata edge case, a report projection check, and a regression check for traces without the optional field. Results on this tree:

@@ -101,6 +101,7 @@ def test_shared_origin_is_reported_without_discarding_evidence(repository):
             title=f"Article {index}",
             source_type="NEWS",
             parent_source_id=root.id,
+            published_at="2025-05-01",
         )
         evidence = repository.save_evidence(
             run_id=run.id,

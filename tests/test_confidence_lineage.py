@@ -28,6 +28,7 @@ def _claim_with_roots(repository, root_count: int, *, documents_per_root: int = 
                     url=f"https://example.test/root-{root_index}/article-{document_index}",
                     title=f"Article {root_index}-{document_index}",
                     source_type="NEWS",
+                    published_at="2025-05-01",
                     parent_source_id=root.id,
                 )
             evidence = repository.save_evidence(
