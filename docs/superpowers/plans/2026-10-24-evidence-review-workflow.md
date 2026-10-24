@@ -35,22 +35,22 @@
 
 ### Task 1: Report projection and Markdown evidence review
 
-- [ ] Add tests for projected freshness cutoff, source type, dated evidence review, unknown provenance, and legacy compatibility.
-- [ ] Run targeted tests and observe expected failures.
-- [ ] Project optional source type and freshness cutoff; render all known source/evidence facts and assurance boundaries in Markdown.
-- [ ] Run targeted tests.
+- [x] Add tests for projected freshness cutoff, source type, dated evidence review, unknown provenance, and legacy compatibility.
+- [x] Run targeted tests and observe expected failures.
+- [x] Project optional source type and freshness cutoff; render all known source/evidence facts and assurance boundaries in Markdown.
+- [x] Run targeted tests.
 
 ### Task 2: Agent workflow and web review UI
 
-- [ ] Add tests or type-safe pure helper checks for follow-up text covering stale/missing/unknown provenance and source conflict.
-- [ ] Strengthen MCP instructions for discovery, validation, uncertainty and same-chat summary.
-- [ ] Render freshness, provenance, source type, quote, locator, dates, confidence and exact link together for evidence items.
-- [ ] Let every open issue offer an appropriately scoped follow-up prompt; include source/date/provenance facts.
-- [ ] Run frontend production build.
+- [x] Add report-projection regression coverage and type-check the issue/evidence follow-up input contract.
+- [x] Strengthen MCP instructions for discovery, validation, uncertainty and same-chat summary.
+- [x] Render freshness, provenance, source type, quote, locator, dates, confidence and exact link together for evidence items.
+- [x] Let every open issue offer an appropriately scoped follow-up prompt; include source/date/provenance facts.
+- [x] Run frontend production build.
 
 ### Task 3: Regression, deploy, and documentation
 
-- [ ] Run complete Python suite, frontend build, and `git diff --check`.
-- [ ] Deploy the branch to the configured host using the repository's deploy skill and verify reports/UI/MCP endpoints.
-- [ ] Update Mission 3 coverage/limits and deployment evidence without changing video or portal fields.
-- [ ] Record exact commands/results and any remaining limitations.
+- [x] Run complete Python suite, frontend build, and `git diff --check`.
+- [x] Deploy the branch to the configured host using the repository's deploy skill and verify reports/UI/MCP endpoints.
+- [x] Update Mission 3 coverage/limits and deployment evidence without changing video or portal fields.
+- [x] Record exact commands/results and any remaining limitations.

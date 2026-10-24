@@ -91,3 +91,13 @@ The MP4 and Vietnamese SRT are delivered outside this repository. The portal's v
 - Chrome loaded the deployed Fieldnotes site and showed the updated UI and five existing reports.
 - This release does not change the report schema or MCP API. The YouTube video URL remains for the user's upload.
 - The updated local Mission 3 video candidate is `gamota-mission3-demo-final-v3.mp4` (200.512 seconds, under the five-minute limit); its Vietnamese subtitle file is `gamota-mission3-demo-final-v3.vi.srt`. It corrects the prior 135-test narration/display to 138 and adds a clearly labeled common-requirement evidence chapter while retaining the real ChatGPT Web research footage. Both artifacts are delivered outside the repository for YouTube upload.
+
+## Evidence-review workflow release (2026-10-24)
+
+- GitHub branch: `mission3-a11-source-verification`, release head `23e9d3e` (`Remove obsolete frontend bundle`), including `709e47c` (`Preserve evidence context in research follow-ups`) and the evidence-review workflow commit `8303947`.
+- Local verification: `uv run pytest tests/test_mission3_a1.py -q` — **19 passed**; `uv run pytest -q` — **146 passed**; `cd web && npm run build` — passed; `git diff --check` — clean.
+- The server checkout had unrelated uncommitted changes, so it was left untouched. The exact release `reports.py` was installed into the active OAuth checkout after preserving `/opt/gamota-research-mcp-oauth/src/gamota_research/reports.py.before-709e47c`. The old UI index was preserved at `/var/www/gamota-research-ui/index.html.before-23e9d3e`; content-addressed old assets were retained.
+- Backend module and static bundle SHA-256 values matched the local release: `reports.py` `b980e5a606061aafbb7c93eb2af21a67338e57daa8f5f213e79243e365cf323d`; UI `index.html` `7f3d03896818368150d0ab08d9e82ddcf6767dce94b6ea8031d02b04ad4ac35d`; JS `index-C8UlaRuN.js` `87a81ddd8773c6044904d71717567c0013d7c380c24a6dfc428c8ba298b14b89`; CSS `index-Di2oCKDQ.css` `4c786fee082a6e08ad6a4d55748dbeec056bcdec9702e253fe1c01220223bf8d`.
+- `reports.py` compiled with the service virtualenv's Python. `gamota-research-mcp.service` restarted and reports `active`.
+- Live smoke results: `/` HTTP 200; `/reports/index.json` HTTP 200; new JS and CSS assets HTTP 200; unauthenticated `/mcp` HTTP 401; `/mcp-public` initialize HTTP 200 and `tools/list` HTTP 200 with 18 tools.
+- Nginx configuration and the published-report database were not changed. The release adds report-reader and follow-up context fields without changing the report schema or MCP tool manifest. The YouTube video upload remains for the user.
